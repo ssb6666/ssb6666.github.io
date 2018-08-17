@@ -85,7 +85,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="kali,SQLInjection," />
 
 
 
@@ -98,16 +98,23 @@
 
 
 
-<meta name="description" content="贪财好色，一身正气">
-<meta property="og:type" content="website">
-<meta property="og:title" content="R1ght0us&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta name="description" content="BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。 抓包，复制出来打成一个txt文件 sqlmap -r test.txt -p admin_name –dbs因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。  -r  指定一个文件。  -p 指定参">
+<meta name="keywords" content="kali,SQLInjection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQLMAP-POST注入">
+<meta property="og:url" content="http://yoursite.com/2018/08/17/SQLMAP-POST注入/index.html">
 <meta property="og:site_name" content="R1ght0us&#39;s Blog">
-<meta property="og:description" content="贪财好色，一身正气">
+<meta property="og:description" content="BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。 抓包，复制出来打成一个txt文件 sqlmap -r test.txt -p admin_name –dbs因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。  -r  指定一个文件。  -p 指定参">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/08/17/SQLMAP-POST注入/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/17/SQLMAP-POST注入/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/17/SQLMAP-POST注入/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/17/SQLMAP-POST注入/4.PNG">
+<meta property="og:updated_time" content="2018-08-17T06:21:21.860Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="R1ght0us&#39;s Blog">
-<meta name="twitter:description" content="贪财好色，一身正气">
+<meta name="twitter:title" content="SQLMAP-POST注入">
+<meta name="twitter:description" content="BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。 抓包，复制出来打成一个txt文件 sqlmap -r test.txt -p admin_name –dbs因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。  -r  指定一个文件。  -p 指定参">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/17/SQLMAP-POST注入/1.png">
 
 
 
@@ -137,13 +144,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/17/SQLMAP-POST注入/"/>
 
 
 
 
 
-  <title>归档 | R1ght0us's Blog</title>
+  <title>SQLMAP-POST注入 | R1ght0us's Blog</title>
   
 
 
@@ -172,7 +179,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -310,111 +317,325 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        嗯..! 目前共计 2 篇日志。 继续努力。
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/17/SQLMAP-POST注入/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="R1ght0us">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="R1ght0us's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/08/17/SQLMAP-POST注入/" itemprop="url">
-              
-                <span itemprop="name">SQLMAP-POST注入</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">SQLMAP-POST注入</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-17T13:11:14+08:00"
-              content="2018-08-17" >
-          08-17
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-17T13:11:14+08:00">
+                2018-08-17
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/08/17/SQLMAP-POST注入/" class="leancloud_visitors" data-flag-title="SQLMAP-POST注入">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  450 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/23/hello-world/" itemprop="url">
-              
-                <span itemprop="name">Hello World</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-23T21:15:55+08:00"
-              content="2018-07-23" >
-          07-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
+      
+        <p>BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。</p>
+<p><center><strong>抓包，复制出来打成一个txt文件</strong></center><br><img src="/2018/08/17/SQLMAP-POST注入/1.png" alt="抓包内容"></p>
+<p><center><strong>sqlmap -r test.txt -p admin_name –dbs</strong></center><br>因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。<br><img src="/2018/08/17/SQLMAP-POST注入/2.png" alt=""></p>
+<ul>
+<li><p>-r  指定一个文件。</p>
+</li>
+<li><p>-p 指定参数，如图我指定提交表单中的admin_name作为参数进行注入。</p>
+</li>
+<li><p>–dbs 爆出所有的数据库。</p>
+</li>
+</ul>
+<p>点击回车运行，竟然发现无法进行sql注入！</p>
+<p><img src="/2018/08/17/SQLMAP-POST注入/3.png" alt=""><br>上图是我进行注入失败，后面继续追加了下面的参数</p>
+<ul>
+<li><p>-v  这个是展现攻击测试的详细过程的程度，一般设为3就足够。</p>
+</li>
+<li><p>–threads 这个见词知意，为线程数，博主一般将此设为10，这个根据每个人的电脑配置，酌情增加。</p>
+</li>
+</ul>
+<center><strong>sqlmap -r test.txt -p admin_name –dbs –threads 10 -v 3 –level 3</strong></center>
+
+<p><img src="/2018/08/17/SQLMAP-POST注入/4.PNG" alt=""><br>如图，发现这个SQL注入并不是平常的单引号闭合，而是双引号闭合，而sqlmap只有在level=3时才会测试双引号。</p>
+<p>解释参数：</p>
+<ul>
+<li>–level 这个参数表示sqlmap进行测试的程度，数值为1~5，一般将其设为3，因为如果你给的数值越大，代表工具会变慢，很容易影响进度。<br><center><strong>sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 –table</strong></center><br><center><strong>sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 -T flag1 -C flag1 –dump</strong></center><br>这些就是爆表，爆字段，跟平常的sqlmap使用并无区别，因此不再做详细解释。</li>
+</ul>
+<p>解释参数：</p>
+<ul>
+<li><p>-D 指定数据库。</p>
+</li>
+<li><p>-T  指定表。</p>
+</li>
+<li><p>–table  数据库爆表名。</p>
+</li>
+<li><p>–dump 显示所有字段。</p>
+</li>
+</ul>
+<hr>
+<p><a href="http://120.24.86.145:9001/sql/" target="_blank" rel="noopener">题目地址</a></p>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>我相信我的文章总有人需要，您的支持就是最大的鼓励</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="R1ght0us 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="R1ght0us 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+    <div>
+  
+    
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<img src="/images/cc.png" >
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="https://ssb6666.github.io" style="color:#258FC6">	R1ght0us's BLOG</a> by <a href="https://ssb6666.github.io" style="color:#258FC6">R1ght0us</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="https://ssb6666.github.io" style="color:#258FC6">R1ght0us</a>创作并维护的<a href="https://ssb6666.github.io" style="color:#258FC6">R1ght0us's BLOG</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="https://ssb6666.github.io" style="color:#258FC6">R1ght0us's BLOG</a> 博客（ <a href="https://ssb6666.github.io" style="color:#258FC6">https://ssb6666.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kali/" rel="tag"><i class="fa fa-tag"></i> kali</a>
+          
+            <a href="/tags/SQLInjection/" rel="tag"><i class="fa fa-tag"></i> SQLInjection</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/23/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
 
 
           </div>
@@ -422,6 +643,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zODg4Ny8xNTQxNQ=="></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -700,6 +930,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -728,6 +962,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
