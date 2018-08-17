@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title><![CDATA[SQLMAP-POST注入]]></title>
-    <url>%2F2018%2F08%2F17%2FSQLMAP-POST%E6%B3%A8%E5%85%A5%2F</url>
-    <content type="text"><![CDATA[BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。 抓包，复制出来打成一个txt文件 sqlmap -r test.txt -p admin_name –dbs因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。 -r 指定一个文件。 -p 指定参数，如图我指定提交表单中的admin_name作为参数进行注入。 –dbs 爆出所有的数据库。 点击回车运行，竟然发现无法进行sql注入！ 上图是我进行注入失败，后面继续追加了下面的参数 -v 这个是展现攻击测试的详细过程的程度，一般设为3就足够。 –threads 这个见词知意，为线程数，博主一般将此设为10，这个根据每个人的电脑配置，酌情增加。 sqlmap -r test.txt -p admin_name –dbs –threads 10 -v 3 –level 3 如图，发现这个SQL注入并不是平常的单引号闭合，而是双引号闭合，而sqlmap只有在level=3时才会测试双引号。 解释参数： –level 这个参数表示sqlmap进行测试的程度，数值为1~5，一般将其设为3，因为如果你给的数值越大，代表工具会变慢，很容易影响进度。sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 –tablesqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 -T flag1 -C flag1 –dump这些就是爆表，爆字段，跟平常的sqlmap使用并无区别，因此不再做详细解释。 解释参数： -D 指定数据库。 -T 指定表。 –table 数据库爆表名。 –dump 显示所有字段。 题目地址]]></content>
+<search> 
+  
+    
+    <entry>
+      <title>SQLMAP-POST注入</title>
+      <link href="/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/"/>
+      <url>/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/</url>
+      <content type="html"><![CDATA[<p>BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。</p><p><center><strong>抓包，复制出来打成一个txt文件</strong></center><br><img src="/2018/08/17/SQLMAP-POST注入/1.png" alt="抓包内容"></p><p><center><strong>sqlmap -r test.txt -p admin_name –dbs</strong></center><br>因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。<br><img src="/2018/08/17/SQLMAP-POST注入/2.png" alt=""></p><ul><li><p>-r  指定一个文件。</p></li><li><p>-p 指定参数，如图我指定提交表单中的admin_name作为参数进行注入。</p></li><li><p>–dbs 爆出所有的数据库。</p></li></ul><p>点击回车运行，竟然发现无法进行sql注入！</p><p><img src="/2018/08/17/SQLMAP-POST注入/3.png" alt=""><br>上图是我进行注入失败，后面继续追加了下面的参数</p><ul><li><p>-v  这个是展现攻击测试的详细过程的程度，一般设为3就足够。</p></li><li><p>–threads 这个见词知意，为线程数，博主一般将此设为10，这个根据每个人的电脑配置，酌情增加。</p></li></ul><center><strong>sqlmap -r test.txt -p admin_name –dbs –threads 10 -v 3 –level 3</strong></center><p><img src="/2018/08/17/SQLMAP-POST注入/4.PNG" alt=""><br>如图，发现这个SQL注入并不是平常的单引号闭合，而是双引号闭合，而sqlmap只有在level=3时才会测试双引号。</p><p>解释参数：</p><ul><li>–level 这个参数表示sqlmap进行测试的程度，数值为1~5，一般将其设为3，因为如果你给的数值越大，代表工具会变慢，很容易影响进度。<br><center><strong>sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 –table</strong></center><br><center><strong>sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 -T flag1 -C flag1 –dump</strong></center><br>这些就是爆表，爆字段，跟平常的sqlmap使用并无区别，因此不再做详细解释。</li></ul><p>解释参数：</p><ul><li><p>-D 指定数据库。</p></li><li><p>-T  指定表。</p></li><li><p>–table  数据库爆表名。</p></li><li><p>–dump 显示所有字段。</p></li></ul><hr><p><a href="http://120.24.86.145:9001/sql/" target="_blank" rel="noopener">题目地址</a></p>]]></content>
+      
       <categories>
-        <category>CTF</category>
+          
+          <category> CTF </category>
+          
       </categories>
-      <tags>
-        <tag>kali</tag>
-        <tag>SQLInjection</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2F2018%2F07%2F23%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> kali </tag>
+            
+            <tag> SQLInjection </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2018/07/23/hello-world/"/>
+      <url>/2018/07/23/hello-world/</url>
+      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+  
+  
 </search>
