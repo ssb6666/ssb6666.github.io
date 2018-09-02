@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-08-17T07:17:07.788Z</updated>
+  <updated>2018-09-02T07:37:58.527Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>照片里的盲水印</title>
+    <link href="http://yoursite.com/2018/09/02/%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
+    <id>http://yoursite.com/2018/09/02/照片里的盲水印/</id>
+    <published>2018-09-02T06:22:38.000Z</published>
+    <updated>2018-09-02T07:37:58.527Z</updated>
+    
+    <content type="html"><![CDATA[<p>这个题是安恒月赛里面的一道misc类型的题，在CTF中misc所谓最考验你的脑洞和检验你的<del>赛事水平</del>（赛棍？？？）<br><img src="/2018/09/02/照片里的盲水印/1.jpg" height="150px" width="150px"><br>但是这个方面还是要看一下，就当做开发脑力了。</p><p><strong>题目：暴力可解</strong><br><a href="https://pan.baidu.com/s/1GI9TlX3PtytDs0g6w-s3PQ" target="_blank" rel="noopener">题目文件</a><br>下载下来题目，打开压缩包解压发现有密码，猜测压缩包伪加密，使用010editor发现并没有伪加密，联系题目使用暴力破解，基本CTF所有让你暴力破解都是<strong>纯数字类型</strong>。<br><img src="/2018/09/02/照片里的盲水印/2.jpg" alt="暴力破解"><br>获得密码，解压得到两张相同的图片。<br><img src="/2018/09/02/照片里的盲水印/3.png" alt="解压所得图片"><br>在misc中，两张相同的图片基本上都应该是<strong>盲水印</strong>，所以使用bwm脚本（python2）。bwm脚本的<a href="https://github.com/chishaxie/BlindWaterMark" target="_blank" rel="noopener">github</a><br>运行脚本发现没有cv2这个模块，使用下面的命令安装cv2<br><code>pip install opencv-python</code><br>然后运行<code>python bwm.py decode 1.png 2.png flag.png</code>。其中1.png和2.png是解压所得图片，flag.png是所分离出来的水印。下图即为水印。<br><img src="/2018/09/02/照片里的盲水印/4.png" alt="flag"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;这个题是安恒月赛里面的一道misc类型的题，在CTF中misc所谓最考验你的脑洞和检验你的&lt;del&gt;赛事水平&lt;/del&gt;（赛棍？？？）&lt;br&gt;&lt;img src=&quot;/2018/09/02/照片里的盲水印/1.jpg&quot; height=&quot;150px&quot; width=&quot;150px&quot;&gt;
+      
+    
+    </summary>
+    
+      <category term="CTF" scheme="http://yoursite.com/categories/CTF/"/>
+    
+    
+      <category term="MISC" scheme="http://yoursite.com/tags/MISC/"/>
+    
+      <category term="盲水印" scheme="http://yoursite.com/tags/%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>SQL报错注入</title>
@@ -66,9 +93,9 @@
       <category term="CTF" scheme="http://yoursite.com/categories/CTF/"/>
     
     
-      <category term="SQLinjection" scheme="http://yoursite.com/tags/SQLinjection/"/>
-    
       <category term="kali" scheme="http://yoursite.com/tags/kali/"/>
+    
+      <category term="SQLinjection" scheme="http://yoursite.com/tags/SQLinjection/"/>
     
   </entry>
   

