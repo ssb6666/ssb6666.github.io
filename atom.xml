@@ -5,9 +5,9 @@
   <subtitle>一个Hack小子的梦想</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="https://ssb6666.github.io/"/>
   <updated>2018-09-02T07:37:58.527Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>https://ssb6666.github.io/</id>
   
   <author>
     <name>R1ght0us</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>照片里的盲水印</title>
-    <link href="http://yoursite.com/2018/09/02/%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
-    <id>http://yoursite.com/2018/09/02/照片里的盲水印/</id>
+    <link href="https://ssb6666.github.io/2018/09/02/%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
+    <id>https://ssb6666.github.io/2018/09/02/照片里的盲水印/</id>
     <published>2018-09-02T06:22:38.000Z</published>
     <updated>2018-09-02T07:37:58.527Z</updated>
     
@@ -34,19 +34,19 @@
     
     </summary>
     
-      <category term="CTF" scheme="http://yoursite.com/categories/CTF/"/>
+      <category term="CTF" scheme="https://ssb6666.github.io/categories/CTF/"/>
     
     
-      <category term="MISC" scheme="http://yoursite.com/tags/MISC/"/>
+      <category term="MISC" scheme="https://ssb6666.github.io/tags/MISC/"/>
     
-      <category term="盲水印" scheme="http://yoursite.com/tags/%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
+      <category term="盲水印" scheme="https://ssb6666.github.io/tags/%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
     
   </entry>
   
   <entry>
     <title>SQL报错注入</title>
-    <link href="http://yoursite.com/2018/08/17/SQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/"/>
-    <id>http://yoursite.com/2018/08/17/SQL报错注入/</id>
+    <link href="https://ssb6666.github.io/2018/08/17/SQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/"/>
+    <id>https://ssb6666.github.io/2018/08/17/SQL报错注入/</id>
     <published>2018-08-17T06:55:49.000Z</published>
     <updated>2018-08-17T07:17:07.788Z</updated>
     
@@ -62,19 +62,19 @@
     
     </summary>
     
-      <category term="CTF" scheme="http://yoursite.com/categories/CTF/"/>
+      <category term="CTF" scheme="https://ssb6666.github.io/categories/CTF/"/>
     
     
-      <category term="SQLinjection" scheme="http://yoursite.com/tags/SQLinjection/"/>
+      <category term="SQLinjection" scheme="https://ssb6666.github.io/tags/SQLinjection/"/>
     
-      <category term="手动注入" scheme="http://yoursite.com/tags/%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
+      <category term="手动注入" scheme="https://ssb6666.github.io/tags/%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
     
   </entry>
   
   <entry>
     <title>SQLMAP-POST注入</title>
-    <link href="http://yoursite.com/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/"/>
-    <id>http://yoursite.com/2018/08/17/SQLMAP-POST注入/</id>
+    <link href="https://ssb6666.github.io/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/"/>
+    <id>https://ssb6666.github.io/2018/08/17/SQLMAP-POST注入/</id>
     <published>2018-08-17T05:11:14.000Z</published>
     <updated>2018-08-17T07:20:17.029Z</updated>
     
@@ -90,19 +90,19 @@
     
     </summary>
     
-      <category term="CTF" scheme="http://yoursite.com/categories/CTF/"/>
+      <category term="CTF" scheme="https://ssb6666.github.io/categories/CTF/"/>
     
     
-      <category term="kali" scheme="http://yoursite.com/tags/kali/"/>
+      <category term="kali" scheme="https://ssb6666.github.io/tags/kali/"/>
     
-      <category term="SQLinjection" scheme="http://yoursite.com/tags/SQLinjection/"/>
+      <category term="SQLinjection" scheme="https://ssb6666.github.io/tags/SQLinjection/"/>
     
   </entry>
   
   <entry>
     <title>Hello World</title>
-    <link href="http://yoursite.com/2018/07/23/hello-world/"/>
-    <id>http://yoursite.com/2018/07/23/hello-world/</id>
+    <link href="https://ssb6666.github.io/2018/07/23/hello-world/"/>
+    <id>https://ssb6666.github.io/2018/07/23/hello-world/</id>
     <published>2018-07-23T13:15:55.470Z</published>
     <updated>2018-08-15T03:44:54.785Z</updated>
     
@@ -118,7 +118,7 @@
     </summary>
     
     
-      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
+      <category term="hexo" scheme="https://ssb6666.github.io/tags/hexo/"/>
     
   </entry>
   
