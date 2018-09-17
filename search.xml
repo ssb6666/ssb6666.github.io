@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[新疆首届知识技能大赛相关writeup]]></title>
+    <url>%2F2018%2F09%2F16%2F%E6%96%B0%E7%96%86%E9%A6%96%E5%B1%8A%E7%9F%A5%E8%AF%86%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E7%9B%B8%E5%85%B3writeup%2F</url>
+    <content type="text"><![CDATA[总是把比赛想的太简单，原来在哪里总是藏龙卧虎，不能小瞧任何人，也别高看了自己。但是这是第一次参加不让联网的CTF比赛！ stay foolish,stay hungry 如来十三掌通过这个题目，让我联想到与佛论禅和rot13加密，那么打开题目，下载下来一个docx文档。下面加粗的文字即是打开文档的内容。 夜哆悉諳多苦奢陀奢諦冥神哆盧穆皤三侄三即諸諳即冥迦冥隸數顛耶迦奢若吉怯陀諳怖奢智侄諸若奢數菩奢集遠俱老竟寫明奢若梵等盧皤豆蒙密離怯婆皤礙他哆提哆多缽以南哆心曰姪罰蒙呐神。舍切真怯勝呐得俱沙罰娑是怯遠得呐數罰輸哆遠薩得槃漫夢盧皤亦醯呐娑皤瑟輸諳尼摩罰薩冥大倒參夢侄阿心罰等奢大度地冥殿皤沙蘇輸奢恐豆侄得罰提哆伽諳沙楞缽三死怯摩大蘇者數一遮 首先我们打开与佛论禅，在其加密内容前加上佛曰：。如图所下：下面是这个解出来密文，显然还有一层加密。MzkuM3gvMUAwnzuvn3cgozMlMTuvqzAenJchMUAeqzWenzEmLJW9猜测base64编码，结果没有解出来。联系题目猜测为rot13加密解码出来继续base64解码，在此之后我会写相关的加密的详解。 取证内存镜像flag这道题给了hint才知道是内存取证，但是因为自己起初没在意相关工具的使用其实就是自己懒，那么这次的惨败正好弥补自己的不足。 volatility是专门进行内存取证的工具，对于windows系统比较友好，linux系统需要单独的安装相应的插件。1-f 选择所要取证的镜像文件 进行镜像识别1imageinfo 我们可以发现volatility建议我们使用WinXPSP2x86，那么继续使用查看当时的dump下来的内存中存在的进程1--profile 使用哪一种镜像进行取证 1pslist 查看当时dump下来所运行的进程 然而根据题目，我们猜测应该在是某个文件，那么扫描目录，其中为了查询相关字符，进行了管道命令以及grep进行筛选。1filescan 文件扫描 那么下面我就进行导出其相关文件。1dumpfiles 导出文件 1-Q 所要导出文件的地址 1--dump-dir 导出文件所要存在那个目录里 打开发现这个压缩包需要密码，我猜测了许多种可能，密码应该在剪切板中，于是搜索剪切板的内容1clipboard 查看剪切板的内容 于是尝试是否这个剪切板的内容就是密码，获得flag 这个是真·取证，让我感觉到这个CTF还是能够提高我在安全的其他方面的。 流量包解密02&nbsp;&nbsp;果然还是见识少，所有的比赛的束手无措只是自己平时懒所付出的代价。下载下来一看，文件是.cap结尾的格式，那么应该是WiFi所抓下来的包，而且题目提示密码就是本机的MAC地址。那么我们需要用到aircrack-ng工具解密流量。 先用wireshark打开流量包可以看到我们MAC地址（无线&gt;wlan流量） aircrack-ng解密流量，有个坑密码MAC地址大写1-w 使用密码字典 然后将key值导入进去(首选项&gt;protpcols&gt;IEEE 802.11&gt;Decryption key&gt;wpa-key)然后追踪TCP流最后查看网址找到了flag Refererhttps://blog.csdn.net/qq_28208251/article/details/48093575https://xz.aliyun.com/t/1972http://netsecurity.51cto.com/art/201105/264844.htmhttps://blog.csdn.net/dmbjzhh/article/details/79425483 如果有同学需要上述题目，请联系我]]></content>
+      <categories>
+        <category>CTF</category>
+      </categories>
+      <tags>
+        <tag>比赛wp</tag>
+        <tag>CRYPTO</tag>
+        <tag>MISC</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[照片里的盲水印]]></title>
     <url>%2F2018%2F09%2F02%2F%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0%2F</url>
     <content type="text"><![CDATA[这个题是安恒月赛里面的一道misc类型的题，在CTF中misc所谓最考验你的脑洞和检验你的赛事水平（赛棍？？？）但是这个方面还是要看一下，就当做开发脑力了。 题目：暴力可解题目文件下载下来题目，打开压缩包解压发现有密码，猜测压缩包伪加密，使用010editor发现并没有伪加密，联系题目使用暴力破解，基本CTF所有让你暴力破解都是纯数字类型。获得密码，解压得到两张相同的图片。在misc中，两张相同的图片基本上都应该是盲水印，所以使用bwm脚本（python2）。bwm脚本的github运行脚本发现没有cv2这个模块，使用下面的命令安装cv2pip install opencv-python然后运行python bwm.py decode 1.png 2.png flag.png。其中1.png和2.png是解压所得图片，flag.png是所分离出来的水印。下图即为水印。]]></content>
@@ -32,8 +45,8 @@
         <category>CTF</category>
       </categories>
       <tags>
-        <tag>kali</tag>
         <tag>SQLinjection</tag>
+        <tag>kali</tag>
       </tags>
   </entry>
   <entry>
