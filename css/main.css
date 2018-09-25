@@ -1932,7 +1932,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff2163;
+  background: #5bf01c;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2790,4 +2790,12 @@ embed {
   font-family: 'Comic Sans MS', sans-serif;
   text-align: center;
   color: #4c618f;
+}
+.brand {
+  position: relative;
+  display: inline-block;
+  padding: 0 40px;
+  color: #fff;
+  background: #643232;
+  border-bottom: none;
 }
