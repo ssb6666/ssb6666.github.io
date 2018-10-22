@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssb6666.github.io/"/>
-  <updated>2018-10-01T08:36:17.848Z</updated>
+  <updated>2018-10-22T11:00:38.650Z</updated>
   <id>https://ssb6666.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python字符编码</title>
+    <link href="https://ssb6666.github.io/2018/10/17/python%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/"/>
+    <id>https://ssb6666.github.io/2018/10/17/python字符编码/</id>
+    <published>2018-10-17T14:51:19.000Z</published>
+    <updated>2018-10-22T11:00:38.650Z</updated>
+    
+    <content type="html"><![CDATA[<p>前言：中文编码问题一直是程序员头疼的问题，而Python2中的字符编码足矣令新手抓狂。本文将尽量用通俗的语言带大家彻底的了解字符编码以及Python2和3中的各种编码问题。</p><h2 id="什么是字符编码。"><a href="#什么是字符编码。" class="headerlink" title="什么是字符编码。"></a>什么是字符编码。</h2><p>要彻底解决字符编码的问题就不能不去了解到底什么是字符编码。计算机从本质上来说只认识二进制中的0和1，可以说任何数据在计算机中实际的物理表现形式也就是0和1，如果你将硬盘拆开，你是看不到所谓的数字0和1的，你能看到的只是一块光滑闪亮的磁盘，如果你用足够大的放大镜你就能看到磁盘的表面有着无数的凹凸不平的元件，凹下去的代表0，突出的代表1，这就是计算机用来表现二进制的方式。</p><h3 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h3><p>现在我们面临了第一个问题：如何让人类语言，比如英文被计算机理解？我们以英文为例，英文中有英文字母（大小写）、标点符号、特殊符号。如果我们将这些字母与符号给予固定的编号，然后将这些编号转变为二进制，那么计算机明显就能够正确读取这些符号，同时通过这些编号，计算机也能够将二进制转化为编号对应的字符再显示给人类去阅读。由此产生了我们最熟知的ASCII码。ASCII 码使用指定的7 位或8 位二进制数组合来表示128 或256 种可能的字符。这样在大部分情况下，英文与二进制的转换就变得容易多了。</p><h3 id="GB2312"><a href="#GB2312" class="headerlink" title="GB2312"></a>GB2312</h3><p>然而，虽然计算机是美国人发明的，但是全世界的人都在使用计算机。现在出现了另一个问题：如何让中文被计算机理解？这下麻烦了，中文不像拉丁语系是由固定的字母排列组成的。ASCII 码显然没办法解决这个问题，为了解决这个问题中国国家标准总局1980年发布《信息交换用汉字编码字符集》提出了GB2312编码，用于解决汉字处理的问题。1995年又颁布了《汉字编码扩展规范》（GBK）。GBK与GB 2312—1980国家标准所对应的内码标准兼容，同时在字汇一级支持ISO/IEC10646—1和GB 13000—1的全部中、日、韩（CJK）汉字，共计20902字。这样我们就解决了计算机处理汉字的问题了。</p><h3 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h3><p>现在英文和中文问题被解决了，但新的问题又出现了。全球有那么多的国家不仅有英文、中文还有阿拉伯语、西班牙语、日语、韩语等等。难不成每种语言都做一种编码？基于这种情况一种新的编码诞生了：Unicode。Unicode又被称为统一码、万国码；它为每种语言中的每个字符设定了统一并且唯一的二进制编码，以满足跨语言、跨平台进行文本转换、处理的要求。Unicode支持欧洲、非洲、中东、亚洲（包括统一标准的东亚象形汉字和韩国表音文字）。这样不管你使用的是英文或者中文，日语或者韩语，在Unicode编码中都有收录，且对应唯一的二进制编码。这样大家都开心了，只要大家都用Unicode编码，那就不存在这些转码的问题了，什么样的字符都能够解析了。</p><h3 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a>UTF-8</h3><p>但是，由于Unicode收录了更多的字符，可想而知它的解析效率相比ASCII码和GB2312的速度要大大降低，而且由于Unicode通过增加一个高字节对ISO Latin-1字符集进行扩展，当这些高字节位为0时，低字节就是ISO Latin-1字符。对可以用ASCII表示的字符使用Unicode并不高效，因为Unicode比ASCII占用大一倍的空间，而对ASCII来说高字节的0对他毫无用处。为了解决这个问题，就出现了一些中间格式的字符集，他们被称为通用转换格式，即UTF（Unicode Transformation Format）。而我们最常用的UTF-8就是这些转换格式中的一种。在这里我们不去研究UTF-8到底是如何提高效率的，你只需要知道他们之间的关系即可。</p><h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><ul><li>为了处理英文字符，产生了ASCII码。</li><li>为了处理中文字符，产生了GB2312。</li><li>为了处理各国字符，产生了Unicode。</li><li>为了提高Unicode存储和传输性能，产生了UTF-8，它是Unicode的一种实现形式。</li></ul><h2 id="Python2中的字符编码"><a href="#Python2中的字符编码" class="headerlink" title="Python2中的字符编码"></a>Python2中的字符编码</h2><h3 id="python2"><a href="#python2" class="headerlink" title="python2"></a>python2</h3><p><strong>Python2中默认的字符编码是ASCII码</strong>，也就是说Python在处理数据时，只要数据没有指定它的编码类型，Python默认将其当做ASCII码来进行处理。<br><img src="/2018/10/17/python字符编码/1.png" alt="1.png"><br>这个问题出现的原因是：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">```text</span><br><span class="line"># -*- encoding: utf-8 -*-</span><br></pre></td></tr></table></figure></p><p>这样，Python在处理这个脚本时，会用UTF-8的编码去处理整个脚本，就能够正确的解析中文字符了。</p><h3 id="总结：-1"><a href="#总结：-1" class="headerlink" title="总结："></a>总结：</h3><ul><li>Python2中默认的字符编码是ASCII码。</li><li>Python2中字符串有str和unicode两种类型。str有各种编码的区别，unicode是没有编码的标准形式。</li><li>Python2中可以直接查看到unicode的字节串。</li></ul><h2 id="decode-与encode-方法"><a href="#decode-与encode-方法" class="headerlink" title="decode()与encode()方法"></a>decode()与encode()方法</h2><p>前面我们说了这么多都是为了这一节做铺垫，现在我们开始来处理Python2中的字符编码问题。我们首先要学习Python为我们提供的两个转换编码的方法decode()与encode()。</p><p><strong>decode()方法将其他编码字符转化为Unicode编码字符。</strong><br><strong>encode()方法将Unicode编码字符转化为其他编码字符。</strong></p><p>chardet模块可以检测字符串编码，没有该模块的可以用pip install chardet安装。</p><p><img src="/2018/10/17/python字符编码/2.png" alt="2.png"><br>首先解释一下为什么name=”小明” 这里的小明是一个utf-8编码的字符。<strong>因为我使用的是win10操作系统，但是终端格式我默认设置utf-8,所以当我在终端将一个中文输入时，系统就会自动将这个中文字符以UTF-8的编码传递给Python。</strong>大多数情况下windows的系统编码默认是gb2312，那么在windows下做上图的测试“小明”这个字符就是gb2312编码。然而现在win10普遍都是ANSI字符集，产生了一个编码方式叫<code>TIS-620</code></p><p>所谓乱码本质上是系统编码与所提供字符的编码不一致导致的，我们举一个例子：</p><p>小明的电脑中存了一个utf-8的字母A，存储在计算机中是1100001；</p><p>小红的电脑中也存了一个gb2312的字母A，存储在计算机中是11000010；</p><p>当小明与小红交换信息时，各自的计算机就不会把对方传递过来的A识别为字母A，可能认为这是字母B。</p><p>所以当我们需要操作系统正确的输出一个字符时，除了要知道该字符的字符编码，也要知道自己系统所使用的字符编码。如果系统使用的是UTF-8编码，处理的却是gb2312的字符就会出现所谓“乱码”。</p><p>一个Tips：</p><p><strong>decode()方法与在字符串前加u的方法实现的效果相同比如u’小明’</strong></p><h3 id="总结：-2"><a href="#总结：-2" class="headerlink" title="总结："></a>总结：</h3><ul><li><p>Python2的对于字符编码的转换要以unicode作为“中间人”进行转化。</p></li><li><p>知道自己系统的字符编码（Linux默认utf-8，Windows默认GB2312），对症下药。</p></li></ul><p>所以我们再次强调：乱码本质上是系统编码与所提供字符的编码不一致导致的</p><p>在Pyhon3中字符编码有了很大改善最主要的有以下几点：</p><ul><li><p>Python 3的源码.py文件 的默认编码方式为UTF-8，所以在Python3中你可以不用在py脚本中写coding声明，并且系统传递给python的字符不再受系统默认编码的影响，统一为unicode编码。</p></li><li><p>将字符串和字节序列做了区别，字符串str是字符串标准形式与2.x中unicode类似，bytes类似2.x中的str有各种编码区别。bytes通过解码转化成str,str通过编码转化成bytes。</p></li></ul><p>PS：有一个小问题被许多新手所困扰，我们来看一下图片:</p><p><img src="/2018/10/17/python字符编码/3.png" alt=""></p><p>我们看到当一个中文字符出现在一个list(或tuple、dict)中时，它并不会被显示为一个中文而是字节串。但当该字符串从list中提取出来再print时就能够正常显示为中文。字节串是所有字符在python中的“本质”形态，所以你可以简单的理解为list中呈现出的字节串是给计算机看的。</p><hr>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;前言：中文编码问题一直是程序员头疼的问题，而Python2中的字符编码足矣令新手抓狂。本文将尽量用通俗的语言带大家彻底的了解字符编码以及Python2和3中的各种编码问题。&lt;/p&gt;
+&lt;h2 id=&quot;什么是字符编码。&quot;&gt;&lt;a href=&quot;#什么是字符编码。&quot; class=&quot;h
+      
+    
+    </summary>
+    
+      <category term="python编程" scheme="https://ssb6666.github.io/categories/python%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="python" scheme="https://ssb6666.github.io/tags/python/"/>
+    
+      <category term="程序基础" scheme="https://ssb6666.github.io/tags/%E7%A8%8B%E5%BA%8F%E5%9F%BA%E7%A1%80/"/>
+    
+  </entry>
   
   <entry>
     <title>python版netcat</title>
