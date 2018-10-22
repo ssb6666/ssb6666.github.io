@@ -1932,7 +1932,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #62d1b3;
+  background: #0a7f34;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3042,4 +3042,19 @@ hr {
   color: #fff;
   background: #643232;
   border-bottom: none;
+}
+body {
+  background: url("https://source.unsplash.com/random/1600x900");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+}
+.main-inner {
+  margin-top: 60px;
+  padding: 60px 60px 60px 60px;
+  background: #fff;
+  min-height: 500px;
+}
+.header {
+  background: #9fa3a8 none repeat scroll !important;
 }
