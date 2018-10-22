@@ -5,9 +5,9 @@
   <subtitle>一个Hack小子的梦想</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://ssb6666.github.io/"/>
+  <link href="http://www.r1ght0us.xyz/"/>
   <updated>2018-10-22T11:00:38.650Z</updated>
-  <id>https://ssb6666.github.io/</id>
+  <id>http://www.r1ght0us.xyz/</id>
   
   <author>
     <name>R1ght0us</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>python字符编码</title>
-    <link href="https://ssb6666.github.io/2018/10/17/python%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/"/>
-    <id>https://ssb6666.github.io/2018/10/17/python字符编码/</id>
+    <link href="http://www.r1ght0us.xyz/2018/10/17/python%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/"/>
+    <id>http://www.r1ght0us.xyz/2018/10/17/python字符编码/</id>
     <published>2018-10-17T14:51:19.000Z</published>
     <updated>2018-10-22T11:00:38.650Z</updated>
     
@@ -35,19 +35,19 @@
     
     </summary>
     
-      <category term="python编程" scheme="https://ssb6666.github.io/categories/python%E7%BC%96%E7%A8%8B/"/>
+      <category term="python编程" scheme="http://www.r1ght0us.xyz/categories/python%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="python" scheme="https://ssb6666.github.io/tags/python/"/>
+      <category term="python" scheme="http://www.r1ght0us.xyz/tags/python/"/>
     
-      <category term="程序基础" scheme="https://ssb6666.github.io/tags/%E7%A8%8B%E5%BA%8F%E5%9F%BA%E7%A1%80/"/>
+      <category term="程序基础" scheme="http://www.r1ght0us.xyz/tags/%E7%A8%8B%E5%BA%8F%E5%9F%BA%E7%A1%80/"/>
     
   </entry>
   
   <entry>
     <title>python版netcat</title>
-    <link href="https://ssb6666.github.io/2018/10/01/python%E7%89%88netcat/"/>
-    <id>https://ssb6666.github.io/2018/10/01/python版netcat/</id>
+    <link href="http://www.r1ght0us.xyz/2018/10/01/python%E7%89%88netcat/"/>
+    <id>http://www.r1ght0us.xyz/2018/10/01/python版netcat/</id>
     <published>2018-10-01T08:25:07.000Z</published>
     <updated>2018-10-01T08:36:17.848Z</updated>
     
@@ -63,19 +63,19 @@
     
     </summary>
     
-      <category term="python编程" scheme="https://ssb6666.github.io/categories/python%E7%BC%96%E7%A8%8B/"/>
+      <category term="python编程" scheme="http://www.r1ght0us.xyz/categories/python%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="netcat" scheme="https://ssb6666.github.io/tags/netcat/"/>
+      <category term="netcat" scheme="http://www.r1ght0us.xyz/tags/netcat/"/>
     
-      <category term="python3" scheme="https://ssb6666.github.io/tags/python3/"/>
+      <category term="python3" scheme="http://www.r1ght0us.xyz/tags/python3/"/>
     
   </entry>
   
   <entry>
     <title>新疆首届知识技能大赛相关writeup</title>
-    <link href="https://ssb6666.github.io/2018/09/16/%E6%96%B0%E7%96%86%E9%A6%96%E5%B1%8A%E7%9F%A5%E8%AF%86%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E7%9B%B8%E5%85%B3writeup/"/>
-    <id>https://ssb6666.github.io/2018/09/16/新疆首届知识技能大赛相关writeup/</id>
+    <link href="http://www.r1ght0us.xyz/2018/09/16/%E6%96%B0%E7%96%86%E9%A6%96%E5%B1%8A%E7%9F%A5%E8%AF%86%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E7%9B%B8%E5%85%B3writeup/"/>
+    <id>http://www.r1ght0us.xyz/2018/09/16/新疆首届知识技能大赛相关writeup/</id>
     <published>2018-09-16T07:56:01.000Z</published>
     <updated>2018-09-17T07:58:05.468Z</updated>
     
@@ -93,21 +93,21 @@
     
     </summary>
     
-      <category term="CTF" scheme="https://ssb6666.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
-      <category term="比赛wp" scheme="https://ssb6666.github.io/tags/%E6%AF%94%E8%B5%9Bwp/"/>
+      <category term="比赛wp" scheme="http://www.r1ght0us.xyz/tags/%E6%AF%94%E8%B5%9Bwp/"/>
     
-      <category term="CRYPTO" scheme="https://ssb6666.github.io/tags/CRYPTO/"/>
+      <category term="CRYPTO" scheme="http://www.r1ght0us.xyz/tags/CRYPTO/"/>
     
-      <category term="MISC" scheme="https://ssb6666.github.io/tags/MISC/"/>
+      <category term="MISC" scheme="http://www.r1ght0us.xyz/tags/MISC/"/>
     
   </entry>
   
   <entry>
     <title>照片里的盲水印</title>
-    <link href="https://ssb6666.github.io/2018/09/02/%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
-    <id>https://ssb6666.github.io/2018/09/02/照片里的盲水印/</id>
+    <link href="http://www.r1ght0us.xyz/2018/09/02/%E7%85%A7%E7%89%87%E9%87%8C%E7%9A%84%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
+    <id>http://www.r1ght0us.xyz/2018/09/02/照片里的盲水印/</id>
     <published>2018-09-02T06:22:38.000Z</published>
     <updated>2018-09-02T07:37:58.527Z</updated>
     
@@ -122,19 +122,19 @@
     
     </summary>
     
-      <category term="CTF" scheme="https://ssb6666.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
-      <category term="MISC" scheme="https://ssb6666.github.io/tags/MISC/"/>
+      <category term="MISC" scheme="http://www.r1ght0us.xyz/tags/MISC/"/>
     
-      <category term="盲水印" scheme="https://ssb6666.github.io/tags/%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
+      <category term="盲水印" scheme="http://www.r1ght0us.xyz/tags/%E7%9B%B2%E6%B0%B4%E5%8D%B0/"/>
     
   </entry>
   
   <entry>
     <title>SQL报错注入</title>
-    <link href="https://ssb6666.github.io/2018/08/17/SQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/"/>
-    <id>https://ssb6666.github.io/2018/08/17/SQL报错注入/</id>
+    <link href="http://www.r1ght0us.xyz/2018/08/17/SQL%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/"/>
+    <id>http://www.r1ght0us.xyz/2018/08/17/SQL报错注入/</id>
     <published>2018-08-17T06:55:49.000Z</published>
     <updated>2018-08-17T07:17:07.788Z</updated>
     
@@ -150,19 +150,19 @@
     
     </summary>
     
-      <category term="CTF" scheme="https://ssb6666.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
-      <category term="SQLinjection" scheme="https://ssb6666.github.io/tags/SQLinjection/"/>
+      <category term="SQLinjection" scheme="http://www.r1ght0us.xyz/tags/SQLinjection/"/>
     
-      <category term="手动注入" scheme="https://ssb6666.github.io/tags/%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
+      <category term="手动注入" scheme="http://www.r1ght0us.xyz/tags/%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
     
   </entry>
   
   <entry>
     <title>SQLMAP-POST注入</title>
-    <link href="https://ssb6666.github.io/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/"/>
-    <id>https://ssb6666.github.io/2018/08/17/SQLMAP-POST注入/</id>
+    <link href="http://www.r1ght0us.xyz/2018/08/17/SQLMAP-POST%E6%B3%A8%E5%85%A5/"/>
+    <id>http://www.r1ght0us.xyz/2018/08/17/SQLMAP-POST注入/</id>
     <published>2018-08-17T05:11:14.000Z</published>
     <updated>2018-08-17T07:20:17.029Z</updated>
     
@@ -178,12 +178,12 @@
     
     </summary>
     
-      <category term="CTF" scheme="https://ssb6666.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
-      <category term="kali" scheme="https://ssb6666.github.io/tags/kali/"/>
+      <category term="kali" scheme="http://www.r1ght0us.xyz/tags/kali/"/>
     
-      <category term="SQLinjection" scheme="https://ssb6666.github.io/tags/SQLinjection/"/>
+      <category term="SQLinjection" scheme="http://www.r1ght0us.xyz/tags/SQLinjection/"/>
     
   </entry>
   
