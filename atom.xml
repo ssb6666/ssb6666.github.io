@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.r1ght0us.xyz/"/>
-  <updated>2018-10-22T11:00:38.650Z</updated>
+  <updated>2018-11-12T13:37:43.931Z</updated>
   <id>http://www.r1ght0us.xyz/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Git 提交出现ssh connection time out</title>
+    <link href="http://www.r1ght0us.xyz/2018/11/12/Git-%E6%8F%90%E4%BA%A4%E5%87%BA%E7%8E%B0ssh-connection-time-out/"/>
+    <id>http://www.r1ght0us.xyz/2018/11/12/Git-提交出现ssh-connection-time-out/</id>
+    <published>2018-11-12T12:48:38.000Z</published>
+    <updated>2018-11-12T13:37:43.931Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="突然的错误"><a href="#突然的错误" class="headerlink" title="突然的错误"></a>突然的错误</h3><p>我今天进行提交新的博文，突然提交不上去，报错如图<br><img src="/2018/11/12/Git-提交出现ssh-connection-time-out/1.png" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prot 22: Operation timed out</span><br></pre></td></tr></table></figure></p><p>初步判断为端口问题，那么除了ssh端口我们还可以用<strong>https 443</strong>端口</p><h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>博主本机为<strong>win10</strong>，那么在<code>/git/etc/ssh/ssh_config</code>文件末尾增加</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User YourEmail@xx.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile ~/.ssh/id_rsa</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure><p>然后保存。<br>然后继续在git bash中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;XXX&quot;</span><br><span class="line">git config --global user.email xxxx@xx.com</span><br></pre></td></tr></table></figure></p><p>刷新就可以生效</p><hr><p><strong>linux</strong>中在<code>~/.ssh</code>新建<code>config</code>输入以下内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User YourEmail@xx.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile ~/.ssh/id_rsa</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure></p><p>后续内容跟上面内容一样更新即可。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;突然的错误&quot;&gt;&lt;a href=&quot;#突然的错误&quot; class=&quot;headerlink&quot; title=&quot;突然的错误&quot;&gt;&lt;/a&gt;突然的错误&lt;/h3&gt;&lt;p&gt;我今天进行提交新的博文，突然提交不上去，报错如图&lt;br&gt;&lt;img src=&quot;/2018/11/12/Git-提交出现
+      
+    
+    </summary>
+    
+      <category term="hexo" scheme="http://www.r1ght0us.xyz/categories/hexo/"/>
+    
+    
+      <category term="hexo常见问题" scheme="http://www.r1ght0us.xyz/tags/hexo%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/"/>
+    
+      <category term="Git" scheme="http://www.r1ght0us.xyz/tags/Git/"/>
+    
+      <category term="debug" scheme="http://www.r1ght0us.xyz/tags/debug/"/>
+    
+  </entry>
   
   <entry>
     <title>python字符编码</title>
@@ -96,11 +125,11 @@
       <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
-      <category term="MISC" scheme="http://www.r1ght0us.xyz/tags/MISC/"/>
-    
       <category term="比赛wp" scheme="http://www.r1ght0us.xyz/tags/%E6%AF%94%E8%B5%9Bwp/"/>
     
       <category term="CRYPTO" scheme="http://www.r1ght0us.xyz/tags/CRYPTO/"/>
+    
+      <category term="MISC" scheme="http://www.r1ght0us.xyz/tags/MISC/"/>
     
   </entry>
   
