@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.r1ght0us.xyz/"/>
-  <updated>2019-01-06T08:57:57.190Z</updated>
+  <updated>2019-01-06T09:56:22.123Z</updated>
   <id>http://www.r1ght0us.xyz/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://www.r1ght0us.xyz/2018/11/12/Git-%E6%8F%90%E4%BA%A4%E5%87%BA%E7%8E%B0ssh-connection-time-out/"/>
     <id>http://www.r1ght0us.xyz/2018/11/12/Git-提交出现ssh-connection-time-out/</id>
     <published>2018-11-12T12:48:38.000Z</published>
-    <updated>2019-01-06T08:57:57.190Z</updated>
+    <updated>2019-01-06T09:56:22.123Z</updated>
     
-    <content type="html"><![CDATA[<p>提交文章发生了奇怪的错误<br><a id="more"></a></p><h3 id="突然的错误"><a href="#突然的错误" class="headerlink" title="突然的错误"></a>突然的错误</h3><p>我今天进行提交新的博文，突然提交不上去，<br>报错如图<br><img src="/2018/11/12/Git-提交出现ssh-connection-time-out/1.png" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prot 22: Operation timed out</span><br></pre></td></tr></table></figure></p><p>初步判断为端口问题，那么除了ssh端口我们还可以用<strong>https 443</strong>端口</p><h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>博主本机为<strong>win10</strong>，那么在<code>/git/etc/ssh/ssh_config</code>文件末尾增加</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User YourEmail@xx.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile ~/.ssh/id_rsa</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure><p>然后保存。<br>然后继续在git bash中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;XXX&quot;</span><br><span class="line">git config --global user.email xxxx@xx.com</span><br></pre></td></tr></table></figure></p><p>刷新就可以生效</p><hr><p><strong>linux</strong>中在<code>~/.ssh</code>新建<code>config</code>输入以下内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User YourEmail@xx.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile ~/.ssh/id_rsa</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure></p><p>后续内容跟上面内容一样更新即可。</p>]]></content>
+    <content type="html"><![CDATA[<p>提交文章发生了奇怪的错误<br><a id="more"></a></p><h3 id="突然的错误"><a href="#突然的错误" class="headerlink" title="突然的错误"></a>突然的错误</h3><p>我今天进行提交新的博文，突然提交不上去，<br>报错如图<br><img src="/2018/11/12/Git-提交出现ssh-connection-time-out/1.png" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prot 22: Operation timed out</span><br></pre></td></tr></table></figure></p><p>初步判断为端口问题，那么除了ssh端口我们还可以用<strong>https 443</strong>端口</p><h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>博主本机为<strong>win10</strong>，那么在<code>/git/etc/ssh/ssh_config</code>文件末尾增加</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User YourEmail@xx.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile ~/.ssh/id_rsa</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure><p>然后保存。<br>然后继续在git bash中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;XXX&quot;</span><br><span class="line">git config --global user.email xxxx@xx.com</span><br></pre></td></tr></table></figure></p><p>刷新就可以生效</p><hr><p><strong>linux</strong>中在<code>~/.ssh</code>新建<code>config</code>输入以下内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User YourEmail@xx.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile ~/.ssh/id_rsa</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure></p><p>后续内容跟上面内容一样更新即可。最后运行<code>ssh -T git@github.com</code>，查看是否连接成功。</p>]]></content>
     
     <summary type="html">
     
@@ -182,9 +182,9 @@
       <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
-      <category term="SQLinjection" scheme="http://www.r1ght0us.xyz/tags/SQLinjection/"/>
-    
       <category term="kali" scheme="http://www.r1ght0us.xyz/tags/kali/"/>
+    
+      <category term="SQLinjection" scheme="http://www.r1ght0us.xyz/tags/SQLinjection/"/>
     
   </entry>
   
