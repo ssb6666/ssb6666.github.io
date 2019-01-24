@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://www.r1ght0us.xyz/2019/01/24/flask%E4%B9%8BWeb%E8%A1%A8%E5%8D%95/</loc>
+    <lastmod>2019-01-24T04:24:06.910Z</lastmod>
+    <data>
+        <display>
+        <title>flask之Web表单</title>
+        <pubTime>2019-01-24T04:22:56.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>flask</tag>
+         
+         
+           
+             
+              <breadCrumb title="python编程" url="http://www.r1ght0us.xyz/categories/python%E7%BC%96%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.r1ght0us.xyz/2019/01/16/flask%E4%B9%8B%E6%A8%A1%E6%9D%BF/</loc>
     <lastmod>2019-01-16T07:20:39.598Z</lastmod>
     <data>
@@ -147,9 +169,9 @@
         <title>SQLMAP-POST注入</title>
         <pubTime>2018-08-17T05:11:14.000Z</pubTime>
         
-        <tag>SQLinjection</tag>
-         
         <tag>kali</tag>
+         
+        <tag>SQLinjection</tag>
          
          
            
