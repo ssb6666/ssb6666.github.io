@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.r1ght0us.xyz/about/index.html</loc>
+    
+    <lastmod>2019-03-04T14:46:41.771Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.r1ght0us.xyz/2019/01/26/flask%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
     
     <lastmod>2019-01-27T02:50:07.917Z</lastmod>
@@ -75,13 +82,6 @@
     <loc>http://www.r1ght0us.xyz/2018/10/17/python%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/</loc>
     
     <lastmod>2019-01-06T08:58:35.812Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.r1ght0us.xyz/about/index.html</loc>
-    
-    <lastmod>2019-01-05T11:01:47.681Z</lastmod>
     
   </url>
   
