@@ -3,7 +3,13 @@
   <entry>
     <title><![CDATA[udf提权]]></title>
     <url>%2F2019%2F05%2F08%2Fudf%E6%8F%90%E6%9D%83%2F</url>
-    <content type="text"></content>
+    <content type="text"><![CDATA[第一次自己出题 打开链接，是一个登陆界面，有signup（注册）链接，点击，发现是一个jsp写的网站。注册完毕，跳转到登陆界面。输入用户名密码登陆。出现如下界面：Ctrl+u：在源码中发现：are you admin 管理员登陆：在注册页面注册用户名为admin的用户，但是注册失败，输入刚刚注册的用户名，依然注册失败，所以得知，注册过的用户再次注册会显示注册失败。于是打开bp，尝试注册一个普通用户，并抓包。发现传入的还有一个id=1，把id=0，send to repeater;返回的状态码为302，可知注册成功。用第二次注册的用户登陆：登陆至主页面。。。点击其中的一个链接，是一个下载图片的链接，url构造如下：http://localhost:8080/XJUSEC/Main?action=download&amp;filename=1.jpg由题目可得知web目录下还存在一个Main文件，构造url:http://localhost:8080/XJUSEC/Main?action=download&amp;filename=.classes/Main.class下载一个_classs_Main.class文件用Luyten进行反编译：得到重要源码：可知数据库的用户名与密码。连接数据库查询数据库并未发现flag;查询数据库相关信息：可以发现secure_file_prive为空，得知不对mysqld 的导入、导出做限制。Udf3.so文件进行16进制编码并上传至数据库目录，创建一个可执行系统命令的函数。获取flag：]]></content>
+      <categories>
+        <category>CTF</category>
+      </categories>
+      <tags>
+        <tag>SQL读写</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[flask之数据库]]></title>
@@ -135,8 +141,8 @@
         <category>CTF</category>
       </categories>
       <tags>
-        <tag>SQLinjection</tag>
         <tag>kali</tag>
+        <tag>SQLinjection</tag>
       </tags>
   </entry>
 </search>

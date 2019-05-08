@@ -172,6 +172,11 @@
 
     
       
+    
+    <div class="metatag cats">
+        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;<a class="categories" href="/categories/CTF/">CTF</a>
+    </div>
+
 
     
 
@@ -190,15 +195,21 @@
 
     <section class="article typo">
       <div class="article-entry" itemprop="articleBody">
-        
+        <p>第一次自己出题<br><a id="more"></a></p>
+<p><img src="/2019/05/08/udf提权/1.png" alt="1"><br>打开链接，是一个登陆界面，有signup（注册）链接，点击，发现是一个jsp写的网站。<br><img src="/2019/05/08/udf提权/2.png" alt="2"><br><img src="/2019/05/08/udf提权/3.png" alt="3"><br>注册完毕，跳转到登陆界面。输入用户名密码登陆。出现如下界面：<br><img src="/2019/05/08/udf提权/4.png" alt="4"><br>Ctrl+u：在源码中发现：are you admin</p>
+<p>管理员登陆：<br>在注册页面注册用户名为admin的用户，但是注册失败，输入刚刚注册的用户名，依然注册失败，所以得知，注册过的用户再次注册会显示注册失败。于是打开bp，尝试注册一个普通用户，并抓包。<br>发现传入的还有一个id=1，把id=0，send to repeater;返回的状态码为302，可知注册成功。<br><img src="/2019/05/08/udf提权/5.png" alt="5"><br><img src="/2019/05/08/udf提权/6.png" alt="6"><br>用第二次注册的用户登陆：<br><img src="/2019/05/08/udf提权/7.png" alt="7"><br>登陆至主页面。。。<br>点击其中的一个链接，是一个下载图片的链接，url构造如下：<br><a href="http://localhost:8080/XJUSEC/Main?action=download&amp;filename=1.jpg" target="_blank" rel="noopener">http://localhost:8080/XJUSEC/Main?action=download&amp;filename=1.jpg</a><br>由题目可得知web目录下还存在一个Main文件，构造url:<br><a href="http://localhost:8080/XJUSEC/Main?action=download&amp;filename=.classes/Main.class" target="_blank" rel="noopener">http://localhost:8080/XJUSEC/Main?action=download&amp;filename=.classes/Main.class</a><br><img src="/2019/05/08/udf提权/8.png" alt="8"><br>下载一个_classs_Main.class文件<br>用Luyten进行反编译：<br><img src="/2019/05/08/udf提权/9.png" alt="9"><br>得到重要源码：可知数据库的用户名与密码。<br><img src="/2019/05/08/udf提权/10.png" alt="10"><br>连接数据库<br><img src="/2019/05/08/udf提权/11.png" alt="11"><br>查询数据库并未发现flag;<br>查询数据库相关信息：<br><img src="/2019/05/08/udf提权/12.png" alt="12"><br>可以发现secure_file_prive为空，得知不对mysqld 的导入、导出做限制。<br><img src="/2019/05/08/udf提权/13.png" alt="13"><br>Udf3.so文件进行16进制编码并上传至数据库目录，创建一个可执行系统命令的函数。<br><img src="/2019/05/08/udf提权/14.png" alt="14"><br><img src="/2019/05/08/udf提权/15.png" alt="15"><br><img src="/2019/05/08/udf提权/16.png" alt="16"><br><img src="/2019/05/08/udf提权/17.png" alt="17"><br>获取flag：<br><img src="/2019/05/08/udf提权/18.png" alt="18"></p>
+
       </div>
         
           <section class="meta" id="footer-meta">
             
-              <time class="metatag time" itemprop="dateUpdated" datetime="2019-05-08T19:52:35+08:00" content="2019-05-08"><i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>
+              <time class="metatag time" itemprop="dateUpdated" datetime="2019-05-08T20:22:32+08:00" content="2019-05-08"><i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>
                 &nbsp;2019-05-08
               </time>
             
+            
+                
+                <div class="metatag tags"><a class="tag" href="/tags/SQL读写/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;SQL读写</a></div>
             
             
               
@@ -207,7 +218,7 @@
     <div class="-mob-share-list share-body">
       
         
-          <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.r1ght0us.xyz/2019/05/08/udf提权/&title=udf提权 | R1ght0us's Blog&summary=">
+          <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.r1ght0us.xyz/2019/05/08/udf提权/&title=udf提权 | R1ght0us's Blog&summary=第一次自己出题">
             
               <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
             
@@ -215,7 +226,7 @@
         
       
         
-          <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.r1ght0us.xyz/2019/05/08/udf提权/&title=udf提权 | R1ght0us's Blog&summary=">
+          <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.r1ght0us.xyz/2019/05/08/udf提权/&title=udf提权 | R1ght0us's Blog&summary=第一次自己出题">
             
               <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
             
@@ -231,7 +242,7 @@
         
       
         
-          <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.r1ght0us.xyz/2019/05/08/udf提权/&title=udf提权 | R1ght0us's Blog&summary=">
+          <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.r1ght0us.xyz/2019/05/08/udf提权/&title=udf提权 | R1ght0us's Blog&summary=第一次自己出题">
             
               <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
             
@@ -413,7 +424,7 @@
     <div class="content pure">
       <ul class="entry">
         
-          <li><a class="flat-box" title="/categories/CTF/" href="/categories/CTF/"><div class="name">CTF</div><div class="badge">(4)</div></a></li>
+          <li><a class="flat-box" title="/categories/CTF/" href="/categories/CTF/"><div class="name">CTF</div><div class="badge">(5)</div></a></li>
         
           <li><a class="flat-box" title="/categories/hexo/" href="/categories/hexo/"><div class="name">hexo</div><div class="badge">(1)</div></a></li>
         
@@ -439,7 +450,7 @@
 </header>
 
     <div class="content pure">
-      <a href="/tags/CRYPTO/" style="font-size: 14px; color: #999">CRYPTO</a> <a href="/tags/Git/" style="font-size: 14px; color: #999">Git</a> <a href="/tags/MISC/" style="font-size: 17.33px; color: #828282">MISC</a> <a href="/tags/SQLinjection/" style="font-size: 17.33px; color: #828282">SQLinjection</a> <a href="/tags/debug/" style="font-size: 14px; color: #999">debug</a> <a href="/tags/flask/" style="font-size: 20.67px; color: #6c6c6c">flask</a> <a href="/tags/hexo常见问题/" style="font-size: 14px; color: #999">hexo常见问题</a> <a href="/tags/kali/" style="font-size: 14px; color: #999">kali</a> <a href="/tags/netcat/" style="font-size: 14px; color: #999">netcat</a> <a href="/tags/python/" style="font-size: 24px; color: #555">python</a> <a href="/tags/python3/" style="font-size: 14px; color: #999">python3</a> <a href="/tags/手动注入/" style="font-size: 14px; color: #999">手动注入</a> <a href="/tags/比赛wp/" style="font-size: 14px; color: #999">比赛wp</a> <a href="/tags/盲水印/" style="font-size: 14px; color: #999">盲水印</a> <a href="/tags/程序基础/" style="font-size: 14px; color: #999">程序基础</a>
+      <a href="/tags/CRYPTO/" style="font-size: 14px; color: #999">CRYPTO</a> <a href="/tags/Git/" style="font-size: 14px; color: #999">Git</a> <a href="/tags/MISC/" style="font-size: 17.33px; color: #828282">MISC</a> <a href="/tags/SQLinjection/" style="font-size: 17.33px; color: #828282">SQLinjection</a> <a href="/tags/SQL读写/" style="font-size: 14px; color: #999">SQL读写</a> <a href="/tags/debug/" style="font-size: 14px; color: #999">debug</a> <a href="/tags/flask/" style="font-size: 20.67px; color: #6c6c6c">flask</a> <a href="/tags/hexo常见问题/" style="font-size: 14px; color: #999">hexo常见问题</a> <a href="/tags/kali/" style="font-size: 14px; color: #999">kali</a> <a href="/tags/netcat/" style="font-size: 14px; color: #999">netcat</a> <a href="/tags/python/" style="font-size: 24px; color: #555">python</a> <a href="/tags/python3/" style="font-size: 14px; color: #999">python3</a> <a href="/tags/手动注入/" style="font-size: 14px; color: #999">手动注入</a> <a href="/tags/比赛wp/" style="font-size: 14px; color: #999">比赛wp</a> <a href="/tags/盲水印/" style="font-size: 14px; color: #999">盲水印</a> <a href="/tags/程序基础/" style="font-size: 14px; color: #999">程序基础</a>
     </div>
   </section>
 
