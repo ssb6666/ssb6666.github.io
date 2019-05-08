@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.r1ght0us.xyz/"/>
-  <updated>2019-01-27T02:50:07.917Z</updated>
+  <updated>2019-05-08T11:52:35.656Z</updated>
   <id>http://www.r1ght0us.xyz/</id>
   
   <author>
@@ -15,6 +15,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>udf提权</title>
+    <link href="http://www.r1ght0us.xyz/2019/05/08/udf%E6%8F%90%E6%9D%83/"/>
+    <id>http://www.r1ght0us.xyz/2019/05/08/udf提权/</id>
+    <published>2019-05-08T11:52:35.000Z</published>
+    <updated>2019-05-08T11:52:35.656Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>flask之数据库</title>
@@ -278,9 +292,9 @@
       <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
-      <category term="kali" scheme="http://www.r1ght0us.xyz/tags/kali/"/>
-    
       <category term="SQLinjection" scheme="http://www.r1ght0us.xyz/tags/SQLinjection/"/>
+    
+      <category term="kali" scheme="http://www.r1ght0us.xyz/tags/kali/"/>
     
   </entry>
   
