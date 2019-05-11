@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.r1ght0us.xyz/"/>
-  <updated>2019-05-08T12:22:32.090Z</updated>
+  <updated>2019-01-27T02:50:07.917Z</updated>
   <id>http://www.r1ght0us.xyz/</id>
   
   <author>
@@ -15,28 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>udf提权</title>
-    <link href="http://www.r1ght0us.xyz/2019/05/08/udf%E6%8F%90%E6%9D%83/"/>
-    <id>http://www.r1ght0us.xyz/2019/05/08/udf提权/</id>
-    <published>2019-05-08T11:52:35.000Z</published>
-    <updated>2019-05-08T12:22:32.090Z</updated>
-    
-    <content type="html"><![CDATA[<p>第一次自己出题<br><a id="more"></a></p><p><img src="/2019/05/08/udf提权/1.png" alt="1"><br>打开链接，是一个登陆界面，有signup（注册）链接，点击，发现是一个jsp写的网站。<br><img src="/2019/05/08/udf提权/2.png" alt="2"><br><img src="/2019/05/08/udf提权/3.png" alt="3"><br>注册完毕，跳转到登陆界面。输入用户名密码登陆。出现如下界面：<br><img src="/2019/05/08/udf提权/4.png" alt="4"><br>Ctrl+u：在源码中发现：are you admin</p><p>管理员登陆：<br>在注册页面注册用户名为admin的用户，但是注册失败，输入刚刚注册的用户名，依然注册失败，所以得知，注册过的用户再次注册会显示注册失败。于是打开bp，尝试注册一个普通用户，并抓包。<br>发现传入的还有一个id=1，把id=0，send to repeater;返回的状态码为302，可知注册成功。<br><img src="/2019/05/08/udf提权/5.png" alt="5"><br><img src="/2019/05/08/udf提权/6.png" alt="6"><br>用第二次注册的用户登陆：<br><img src="/2019/05/08/udf提权/7.png" alt="7"><br>登陆至主页面。。。<br>点击其中的一个链接，是一个下载图片的链接，url构造如下：<br><a href="http://localhost:8080/XJUSEC/Main?action=download&amp;filename=1.jpg" target="_blank" rel="noopener">http://localhost:8080/XJUSEC/Main?action=download&amp;filename=1.jpg</a><br>由题目可得知web目录下还存在一个Main文件，构造url:<br><a href="http://localhost:8080/XJUSEC/Main?action=download&amp;filename=.classes/Main.class" target="_blank" rel="noopener">http://localhost:8080/XJUSEC/Main?action=download&amp;filename=.classes/Main.class</a><br><img src="/2019/05/08/udf提权/8.png" alt="8"><br>下载一个_classs_Main.class文件<br>用Luyten进行反编译：<br><img src="/2019/05/08/udf提权/9.png" alt="9"><br>得到重要源码：可知数据库的用户名与密码。<br><img src="/2019/05/08/udf提权/10.png" alt="10"><br>连接数据库<br><img src="/2019/05/08/udf提权/11.png" alt="11"><br>查询数据库并未发现flag;<br>查询数据库相关信息：<br><img src="/2019/05/08/udf提权/12.png" alt="12"><br>可以发现secure_file_prive为空，得知不对mysqld 的导入、导出做限制。<br><img src="/2019/05/08/udf提权/13.png" alt="13"><br>Udf3.so文件进行16进制编码并上传至数据库目录，创建一个可执行系统命令的函数。<br><img src="/2019/05/08/udf提权/14.png" alt="14"><br><img src="/2019/05/08/udf提权/15.png" alt="15"><br><img src="/2019/05/08/udf提权/16.png" alt="16"><br><img src="/2019/05/08/udf提权/17.png" alt="17"><br>获取flag：<br><img src="/2019/05/08/udf提权/18.png" alt="18"></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;第一次自己出题&lt;br&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
-    
-    
-      <category term="SQL读写" scheme="http://www.r1ght0us.xyz/tags/SQL%E8%AF%BB%E5%86%99/"/>
-    
-  </entry>
   
   <entry>
     <title>flask之数据库</title>
@@ -226,11 +204,11 @@
       <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
+      <category term="MISC" scheme="http://www.r1ght0us.xyz/tags/MISC/"/>
+    
       <category term="比赛wp" scheme="http://www.r1ght0us.xyz/tags/%E6%AF%94%E8%B5%9Bwp/"/>
     
       <category term="CRYPTO" scheme="http://www.r1ght0us.xyz/tags/CRYPTO/"/>
-    
-      <category term="MISC" scheme="http://www.r1ght0us.xyz/tags/MISC/"/>
     
   </entry>
   

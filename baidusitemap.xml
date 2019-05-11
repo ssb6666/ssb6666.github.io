@@ -3,26 +3,6 @@
 
 
     
-  <url>
-    <loc>http://www.r1ght0us.xyz/2019/05/08/udf%E6%8F%90%E6%9D%83/</loc>
-    <lastmod>2019-05-08T12:22:32.090Z</lastmod>
-    <data>
-        <display>
-        <title>udf提权</title>
-        <pubTime>2019-05-08T11:52:35.000Z</pubTime>
-        
-        <tag>SQL读写</tag>
-         
-         
-           
-             
-              <breadCrumb title="CTF" url="http://www.r1ght0us.xyz/categories/CTF/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
     
   <url>
     <loc>http://www.r1ght0us.xyz/2019/01/26/flask%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
@@ -166,11 +146,11 @@
         <title>新疆首届知识技能大赛相关writeup</title>
         <pubTime>2018-09-16T07:56:01.000Z</pubTime>
         
+        <tag>MISC</tag>
+         
         <tag>比赛wp</tag>
          
         <tag>CRYPTO</tag>
-         
-        <tag>MISC</tag>
          
          
            
