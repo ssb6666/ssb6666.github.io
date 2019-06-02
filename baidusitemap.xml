@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://www.r1ght0us.xyz/2019/06/01/xml%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%E4%BB%A5%E5%8F%8AXXE%E6%BC%8F%E6%B4%9E/</loc>
-    <lastmod>2019-06-01T17:33:26.247Z</lastmod>
+    <lastmod>2019-06-02T14:51:59.184Z</lastmod>
     <data>
         <display>
         <title>xml基本知识以及XXE漏洞</title>
@@ -214,9 +214,9 @@
         <title>SQLMAP-POST注入</title>
         <pubTime>2018-08-17T05:11:14.000Z</pubTime>
         
-        <tag>SQLinjection</tag>
-         
         <tag>kali</tag>
+         
+        <tag>SQLinjection</tag>
          
          
            
