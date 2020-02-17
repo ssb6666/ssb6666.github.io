@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>DVWA靶场-常见漏洞原理以及防御 | R1ght0us&#39;s Blog</title>
+  
+  
+  <meta name="description" content="贪财好色，一身正气">
+  
+
+  <link rel="alternate" href="/atom.xml" title="R1ght0us's Blog">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+  <!-- link -->
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+
+  
+
+  
+  <link rel="stylesheet" href="/style.css">
+  
+
+  
+
+
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fd2b3186d71bc76ab3732304151f34a0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+    <div id="loading-bar-wrapper">
+  <div id="loading-bar" class="pure"></div>
+</div>
+
+    <script>setLoadingBarProgress(20)</script>
+    <header class="l_header pure">
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          R1ght0us's Blog
+        
+      </a>
+			<div class="menu">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a id="home" class="nav flat-box" href="/">
+									<i class="fas fa-home fa-fw"></i>&nbsp;主页
+								</a>
+							</li>
+      			
+  						<li>
+								<a id="archives" class="nav flat-box" href="/archives/">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+  						<li>
+								<a id="about" class="nav flat-box" href="/about/">
+									<i class="fas fa-user fa-fw"></i>&nbsp;关于我
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<span class="icon"><i class="fas fa-search fa-fw"></i></span>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+				<li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu">
+      <ul>
+          
+              
+                  <li>
+										<a id="home" class="nav flat-box" href="/">
+											<i class="fas fa-home fa-fw"></i>&nbsp;主页
+										</a>
+                  </li>
+              
+                  <li>
+										<a id="archives" class="nav flat-box" href="/archives/">
+											<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+										</a>
+                  </li>
+              
+                  <li>
+										<a id="about" class="nav flat-box" href="/about/">
+											<i class="fas fa-user fa-fw"></i>&nbsp;关于我
+										</a>
+                  </li>
+              
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+    <div class="l_body">
+    <div class='container clearfix'>
+        <div class='l_main'>
+            <article id="post" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
+  
+<section class="meta">
+  
+  <div class="meta" id="header-meta">
+    
+      
+          <h1 class="title">DVWA靶场-常见漏洞原理以及防御</h1>
+      
+    
+
+    
+      <time class="metatag time">
+        <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2020-02-17
+      </time>
+    
+
+    
+      
+    
+    <div class="metatag cats">
+        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;<a class="categories" href="/categories/靶场/">靶场</a>
+    </div>
+
+
+    
+
+    
+      
+        <div class="metatag browse busuanzi"><i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+          &nbsp;<span id="busuanzi_value_page_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+        </div>
+      
+    
+
+    
+
+  </div>
+</section>
+
+    <section class="article typo">
+      <div class="article-entry" itemprop="articleBody">
+        <p>本文章可做DVWA普及课件所用<br><a id="more"></a></p>
+<h1 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h1><h2 id="low"><a href="#low" class="headerlink" title="low"></a>low</h2><p>查看代码可知，代码中并没有任何防护手段，没有防爆破措施，比如验证码或者是错误登录限制措施，仅仅是设置login参数是否存在。<br>存在暴力破解和<strong>SQL注入</strong>。</p>
+<p>演示自行使用BP以及自带字典。</p>
+<h2 id="medium"><a href="#medium" class="headerlink" title="medium"></a>medium</h2><p>比较代码看出，username和password参数都是经过一次<code>mysql_real_escape_string</code>函数转换。查阅手册可知<img src="/2020/02/17/DVWA靶场-常见漏洞原理以及防御/1.png" alt="">，这个只是减小了sql注入的可能性但是并不影响暴力破解</p>
+<p>演示自行使用BP以及自带字典。</p>
+<h2 id="high"><a href="#high" class="headerlink" title="high"></a>high</h2><p>这个级别的代码加入了CSRF-Token机制，通过抓包可以看到比前面两个等级多了一个参数<code>user_token</code>。查看提交页面，我们发现form表单里还存在一个hidden类型的参数。用户每次都要提交这个参数，服务器收到请求后会优先检查token是否匹配。<br><img src="/2020/02/17/DVWA靶场-常见漏洞原理以及防御/2.png" alt=""><br>并且检查username和password参数时又加了一个函数：<code>stripslashes</code>进行去除字符串中的反斜线，然后使用<code>mysql_real_escape_string</code>进一步的防止SQL注入。</p>
+<h2 id="impossible"><a href="#impossible" class="headerlink" title="impossible"></a>impossible</h2><p>查看代码可知，使用可靠的登录次数和频繁登录将会锁定账户，以及在进行SQL查询时使用了预编译，预编译基本上已经杜绝了大部分SQL注入的可能性。</p>
+<h1 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h1><h2 id="low-1"><a href="#low-1" class="headerlink" title="low"></a>low</h2><p>查看代码看到两个函数介绍一下：<br><img src="/2020/02/17/DVWA靶场-常见漏洞原理以及防御/3.png" alt=""><br><img src="/2020/02/17/DVWA靶场-常见漏洞原理以及防御/4.png" alt=""><br>代码逻辑判断就是ping4次，因为Linux系统默认时无限次数ping的。</p>
+<p>演示见具体的操作。</p>
+<h2 id="medium-1"><a href="#medium-1" class="headerlink" title="medium"></a>medium</h2><p>这里需要注意的是”&amp;&amp;”与” &amp;”的区别：</p>
+<ul>
+<li><strong>Command 1&amp;&amp;Command 2</strong>。先执行Command 1，执行成功后执行Command 2，否则不执行Command 2。</li>
+<li><strong>Command 1&amp;Command 2</strong>。先执行Command 1，不管是否成功，都会执行Command 2</li>
+</ul>
+<p>payload:<code>127.0.0.1&amp;;&amp;ipconfig</code></p>
+<p>详情见具体演示</p>
+<h2 id="high-1"><a href="#high-1" class="headerlink" title="high"></a>high</h2><p><strong>Command 1 | Command 2</strong>。“|”是管道符，表示将Command 1的输出作为Command 2的输入，并且只打印Command 2执行的结果。</p>
+<h2 id="impossible-1"><a href="#impossible-1" class="headerlink" title="impossible"></a>impossible</h2><p><code>explode</code>将一个字符串变成数组。<br><code>is_numeric</code>判断是否为数字。</p>
+<h1 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h1><p>CSRF，全称Cross-site request forgery，翻译过来就是跨站请求伪造，是指利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或者访问包含攻击代码的页面，在受害人不知情的情况下以受害者的身份向（身份认证信息所对应的）服务器发送请求，从而完成非法操作（如转账、改密等）。CSRF与XSS最大的区别就在于，CSRF并没有盗取cookie而是直接利用。</p>
+<h2 id="low-2"><a href="#low-2" class="headerlink" title="low"></a>low</h2><p>见具体演示。</p>
+<h2 id="medium-2"><a href="#medium-2" class="headerlink" title="medium"></a>medium</h2><p>多了这么一行代码防止CSRF攻击<br><code>eregi( $_SERVER[ &#39;SERVER_NAME&#39; ], $_SERVER[ &#39;HTTP_REFERER&#39; ] )</code> ，就是判断http包里的referer字段包含主机名。</p>
+<p>payload：“将1.php改成xxxxxx.php（xxxx为被攻击服务器的主机名）”</p>
+<h2 id="high-amp-amp-impossible"><a href="#high-amp-amp-impossible" class="headerlink" title="high &amp;&amp; impossible"></a>high &amp;&amp; impossible</h2><p>把这两个放到一块，是因为high这个加入了token，预想情况也是在css中请求修改密码的页面，然后获取其token。但是问题来了，牵涉到了跨域问题，现在的市面上的浏览器是不允许进行跨域请求的。基本就在浏览器层次杜绝了csrf攻击，然后impossible层次中加入了需要原密码才能够修改。</p>
+<h1 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h1><p>指当服务器开启<code>allow_url_include</code>选项时，就可以通过php的某些特性函数（include()，require()和include_once()，require_once()）利用url去动态包含文件，此时如果没有对文件来源进行严格审查，就会导致任意文件读取或者任意命令执行。文件包含漏洞分为本地文件包含漏洞与远程文件包含漏洞，远程文件包含漏洞是因为开启了php配置中的<code>allow_url_fopen</code>选项（选项开启之后，服务器允许包含一个远程的文件）。</p>
+<h2 id="low-3"><a href="#low-3" class="headerlink" title="low"></a>low</h2><p>未作任何过滤，直接打就行</p>
+<h2 id="medium-3"><a href="#medium-3" class="headerlink" title="medium"></a>medium</h2><p><code>str_replace</code>函数就进行了一次，双写绕过直接打。</p>
+<h2 id="high-2"><a href="#high-2" class="headerlink" title="high"></a>high</h2><p>出现了一个新函数<br><img src="/2020/02/17/DVWA靶场-常见漏洞原理以及防御/5.png" alt=""><br>这个等级配合文件上传打组合拳。</p>
+<h2 id="impossible-2"><a href="#impossible-2" class="headerlink" title="impossible"></a>impossible</h2><p>直接白名单了，没辙</p>
+<h1 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h1><h2 id="low-4"><a href="#low-4" class="headerlink" title="low"></a>low</h2><p>无任何过滤，直接上马菜刀连。</p>
+<h2 id="medium-4"><a href="#medium-4" class="headerlink" title="medium"></a>medium</h2><p>基本操作，BP劫包然后改type</p>
+<h2 id="high-3"><a href="#high-3" class="headerlink" title="high"></a>high</h2><p>结合文件包含打组合拳</p>
+<h2 id="impossible-3"><a href="#impossible-3" class="headerlink" title="impossible"></a>impossible</h2><p>ext检测文件格式直接白名单格式锁死</p>
+<h1 id="不安全的验证码"><a href="#不安全的验证码" class="headerlink" title="不安全的验证码"></a>不安全的验证码</h1><p>因为在本地测试，无法fq去访问到Google的验证码。因此无法进行测试验证。</p>
+<h1 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h1><p>基本步骤：</p>
+<ol>
+<li><p>判断是否存在注入，注入是字符型还是数字型</p>
+</li>
+<li><p>猜解SQL查询语句中的字段数</p>
+</li>
+<li><p>确定显示的字段顺序</p>
+</li>
+<li><p>获取当前数据库</p>
+</li>
+<li><p>获取数据库中的表</p>
+</li>
+<li><p>获取表中的字段名</p>
+</li>
+<li><p>下载数据</p>
+</li>
+</ol>
+<h2 id="low-5"><a href="#low-5" class="headerlink" title="low"></a>low</h2><p>没有任何过滤，hackbar打开一把梭。</p>
+<h2 id="medium-5"><a href="#medium-5" class="headerlink" title="medium"></a>medium</h2><p>数字型注入，那么这个<code>mysql_real_escape_string</code>就基本失去了作用。<br>payload：</p>
+<p><code>1 union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()</code></p>
+<p><code>1 union select 1,group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;</code></p>
+<h2 id="high-4"><a href="#high-4" class="headerlink" title="high"></a>high</h2><p>High级别的查询提交页面与查询结果显示页面不是同一个，也没有执行302跳转，这样做的目的是为了防止一般的sqlmap注入，因为sqlmap在注入过程中，无法在查询提交页面上获取查询的结果，没有了反馈，也就没办法进一步注入。<br>所以说手工永远是机器无法代替的基本功。</p>
+<p>在代码逻辑中添加了一个<code>limit 1</code>，但是使用注释符#就注释了，不会产生影响。</p>
+<h2 id="impossible-4"><a href="#impossible-4" class="headerlink" title="impossible"></a>impossible</h2><p>PDO预编译天下第一！！！</p>
+<h1 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h1><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入<span class="number">1</span>’ <span class="keyword">and</span> <span class="built_in">length</span>(database())=<span class="number">1</span> <span class="comment">#，显示不存在；</span></span><br><span class="line"></span><br><span class="line">输入<span class="number">1</span>’ <span class="keyword">and</span> <span class="built_in">length</span>(database())=<span class="number">2</span> <span class="comment">#，显示不存在；</span></span><br><span class="line"></span><br><span class="line">输入<span class="number">1</span>’ <span class="keyword">and</span> <span class="built_in">length</span>(database())=<span class="number">3</span> <span class="comment">#，显示不存在；</span></span><br><span class="line"></span><br><span class="line">输入<span class="number">1</span>’ <span class="keyword">and</span> <span class="built_in">length</span>(database())=<span class="number">4</span> <span class="comment">#，显示存在：</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">输入<span class="number">1</span>’ and ascii(substr(databse(),<span class="number">1</span>,<span class="number">1</span>))&gt;<span class="number">97</span> #，显示存在，说明数据库名的第一个字符的ascii值大于<span class="number">97</span>（小写字母a的ascii值）；</span><br><span class="line"></span><br><span class="line">输入<span class="number">1</span>’ and ascii(substr(databse(),<span class="number">1</span>,<span class="number">1</span>))&lt;<span class="number">122</span> #，显示存在，说明数据库名的第一个字符的ascii值小于<span class="number">122</span>（小写字母z的ascii值）；</span><br><span class="line"></span><br><span class="line">输入<span class="number">1</span>’ and ascii(substr(databse(),<span class="number">1</span>,<span class="number">1</span>))&lt;<span class="number">109</span> #，显示存在，说明数据库名的第一个字符的ascii值小于<span class="number">109</span>（小写字母m的ascii值）；</span><br><span class="line"></span><br><span class="line">输入<span class="number">1</span>’ and ascii(substr(databse(),<span class="number">1</span>,<span class="number">1</span>))&lt;<span class="number">103</span> #，显示存在，说明数据库名的第一个字符的ascii值小于<span class="number">103</span>（小写字母g的ascii值）；</span><br><span class="line"></span><br><span class="line">输入<span class="number">1</span>’ and ascii(substr(databse(),<span class="number">1</span>,<span class="number">1</span>))&lt;<span class="number">100</span> #，显示不存在，说明数据库名的第一个字符的ascii值不小于<span class="number">100</span>（小写字母d的ascii值）；</span><br><span class="line"></span><br><span class="line">输入<span class="number">1</span>’ and ascii(substr(databse(),<span class="number">1</span>,<span class="number">1</span>))&gt;<span class="number">100</span> #，显示不存在，说明数据库名的第一个字符的ascii值不大于<span class="number">100</span>（小写字母d的ascii值），所以数据库名的第一个字符的ascii值为<span class="number">100</span>，即小写字母d。</span><br></pre></td></tr></table></figure>
+<p>以此类推即可。</p>
+<h1 id="XSS（反射）"><a href="#XSS（反射）" class="headerlink" title="XSS（反射）"></a>XSS（反射）</h1><p>XSS，全称Cross Site Scripting，即跨站脚本攻击，某种意义上也是一种注入攻击，是指攻击者在页面中注入恶意的脚本代码，当受害者访问该页面时，恶意代码会在其浏览器上执行，需要强调的是，XSS不仅仅限于JavaScript，还包括flash等其它脚本语言。根据恶意代码是否存储在服务器中，XSS可以分为存储型的XSS与反射型的XSS。</p>
+<p>DOM型的XSS由于其特殊性，常常被分为第三种，这是一种基于DOM树的XSS。例如服务器端经常使用document.boby.innerHtml等函数动态生成html页面，如果这些函数在引用某些变量时没有进行过滤或检查，就会产生DOM型的XSS。DOM型XSS可能是存储型，也有可能是反射型。</p>
+<h2 id="low-6"><a href="#low-6" class="headerlink" title="low"></a>low</h2><p>payload:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/xss/</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="medium-6"><a href="#medium-6" class="headerlink" title="medium"></a>medium</h2><p>大小写混合绕过。</p>
+<h2 id="high-5"><a href="#high-5" class="headerlink" title="high"></a>high</h2><p><code>preg_replace()</code>函数用于正则表达式的搜索和替换，这使得双写绕过、大小写混淆绕过（<strong>正则表达式中i表示不区分大小写</strong>）不再有效。<br>payload:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img <span class="attribute">src</span>=1 <span class="attribute">onerror</span>=alert(/xss/)&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="impossible-5"><a href="#impossible-5" class="headerlink" title="impossible"></a>impossible</h2><p>重点函数<code>htmlspecialchars</code><br><img src="/2020/02/17/DVWA靶场-常见漏洞原理以及防御/6.png" alt=""><br>在 HTML 中，某些字符是预留的。<br>在 HTML 中不能使用小于号（&lt;）和大于号（&gt;），这是因为浏览器会误认为它们是标签。<br>如果希望正确地显示预留字符，我们必须在 HTML 源代码中使用字符实体（character entities）。</p>
+<h1 id="XSS-存储"><a href="#XSS-存储" class="headerlink" title="XSS(存储)"></a>XSS(存储)</h1><p>原理上跟反射一样，只是将输入的payload存到了数据库里，还是一把梭没啥说的。</p>
+
+      </div>
+        
+          <section class="meta" id="footer-meta">
+            
+              <time class="metatag time" itemprop="dateUpdated" datetime="2020-02-17T23:40:58+08:00" content="2020-02-17"><i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>
+                &nbsp;2020-02-17
+              </time>
+            
+            
+                
+                <div class="metatag tags"><a class="tag" href="/tags/DVWA/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;DVWA</a></div> <div class="metatag tags"><a class="tag" href="/tags/基础课件/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;基础课件</a></div>
+            
+            
+              
+  <div class="metatag share -mob-share-list">
+    <i class="left fas fa-share-alt fa-fw" aria-hidden="true"></i>
+    <div class="-mob-share-list share-body">
+      
+        
+          <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.r1ght0us.xyz/2020/02/17/DVWA靶场-常见漏洞原理以及防御/&title=DVWA靶场-常见漏洞原理以及防御 | R1ght0us's Blog&summary=本文章可做DVWA普及课件所用">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
+            
+          </a>
+        
+      
+        
+          <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.r1ght0us.xyz/2020/02/17/DVWA靶场-常见漏洞原理以及防御/&title=DVWA靶场-常见漏洞原理以及防御 | R1ght0us's Blog&summary=本文章可做DVWA普及课件所用">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
+            
+          </a>
+        
+      
+        
+          <a class="qrcode" rel="external nofollow noopener noreferrer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADKElEQVR42u3awW7bQAwE0Pz/T7vXFK7cGdIGos3TyTDild4W6Ijkfn3F1+Pp+v798+erb16vlt/99X3fdmFjY2PfhP14eeU3nm3N8wqvv3+9uYkFGxsb+1T21aO0y81ibBaZ7bZiY2NjY+fInDorS/J4w8bGxsZO4iRntM2gvATCxsbGxp614PNmUFveJJGWt7ewsbGxz2bnU9Gf//kj821sbGzsH8x+jK68OMkHt5uwqZ8fGxsb+yD25lhMWx5shgr54KEoSLCxsbGPY+fD3fxXr3mzCKzHAMlUBBsbG/u27PwgThtmeWglJUoSjcVmYWNjYx/Knh27aTclb/e3pUWxrdjY2NgHsd8bQnkx0xY8+QghP2yEjY2NfRJ71o5vQysf5bZ3nJUl2NjY2GewNzHQlih5WG7iLYo9bGxs7OPYm4Z73irKI+29EfiPz9jY2NgHsduWfVKotIdpklDM/3nyrcfGxsY+iT17rU+GspuV29Vm4wRsbGzsu7Pb+MlbS+02tYPh9rfY2NjYZ7PzB20fK4/J/abkzSxsbGzsk9gz2CyokuxIaqZN2VPMKLCxsbFvxW7LgNnjtqu9d7vrE6bY2NjYN2G3N9v8Kh/35sPgFnxZgWFjY2Pflr05QJkHYVJa5K2o2Rz7P6UINjY29s3ZsxJi9m4/G9y2BUnkwsbGxv4F7H2JkoRfMtzdFDOXq2FjY2Mfx84XbRv6+Zi2HSfko+g6k7GxsbFvwp4VGDNeWwXko9x88PzXVAQbGxv7CPbmdT+Plg01HwPUo2hsbGzsI9ibqMijbv/+vy+TLrto2NjY2Ddn56XCLHjyu7RD4k15g42NjX0Se9ay2R/Tedfmzp4ZGxsb+yR2/kdtgbEfBrdNq/rCxsbGPoI9a8fvi422uf/eiMXGxsY+if2J//Pz0ULeHvr04AEbGxv77uycsRmv5qPcdtDbRiM2Njb2qezZ8cq2qJgdxMyP7BRbiY2Njf0r2fkjbjYxL2PakMPGxsbGTh503zbK158dHsLGxsY+lb1pCV3dbBaN7ZYNCydsbGzsg9h5a2bfmt+H0KYIwcbGxj6O/Qdrv/OHBbQ37gAAAABJRU5ErkJggg==">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/wechat.png">
+          
+          </a>
+        
+      
+        
+          <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.r1ght0us.xyz/2020/02/17/DVWA靶场-常见漏洞原理以及防御/&title=DVWA靶场-常见漏洞原理以及防御 | R1ght0us's Blog&summary=本文章可做DVWA普及课件所用">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
+            
+          </a>
+        
+      
+    </div>
+  </div>
+
+
+            
+          </section>
+        
+
+        
+            <div class="prev-next">
+                
+                
+                    <section class="next">
+                        <span class="art-item-right" aria-hidden="true">
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h4>
+                                <a href="/2019/06/01/xml基本知识以及XXE漏洞/" rel="prev" title="xml基本知识以及XXE漏洞">
+                                    
+                                        xml基本知识以及XXE漏洞
+                                    
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/tags/XML/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>XML</a> <a class="tag" href="/tags/XXE/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>XXE</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+            </div>
+        
+
+    </section>
+
+</article>
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+<br>
+
+<!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+
+      
+        
+
+    <div class="recommended_posts">
+        <h4><i class="fas fa-bookmark fa-fw" aria-hidden="true"></i>&nbsp;相关文章</h4>
+        <ul>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/06/01/xml基本知识以及XXE漏洞/">xml基本知识以及XXE漏洞</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/01/26/flask之数据库/">flask之数据库</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/01/24/flask之Web表单/">flask之Web表单</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/01/16/flask之模板/">flask之模板</a></li>
+            
+        </ul>
+    </div>
+
+
+      
+
+      
+        <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+        
+        
+        
+          
+            <section id="comments">
+              <div id="valine_container" class="valine_thread">
+                <i class="fas fa-spinner fa-spin fa-fw"></i>
+              </div>
+            </section>
+          
+        
+      
+    </section>
+  </article>
+
+
+
+<script>
+    window.subData = {
+        title: 'DVWA靶场-常见漏洞原理以及防御',
+        tools: true
+    }
+</script>
+
+
+        </div>
+        <aside class='l_side'>
+            
+  
+  
+    
+      
+      
+        <section class="author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="/images/header.png">
+      </div>
+    
+    
+      <div class="text">
+        
+        
+        
+          <p><span id="jinrishici-sentence">R1ght0us's Blog</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="https://github.com/ssb6666" class="social flat-btn" target="_blank" rel="external"><i class="social fab fa-github" aria-hidden="true"></i></a>
+          
+        
+          
+            <a href="https://blog.csdn.net/qq_39495209" class="social flat-btn" target="_blank" rel="external"><i class="social fas fa-flag" aria-hidden="true"></i></a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        <section class="plain">
+  
+<header class="pure">
+  <div><i class="fas fa-bullhorn fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;</div>
+  
+</header>
+
+  <div class="content pure">
+    <p>但愿这里能让你获益颇多</p>
+
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;所有分类</div>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/categories/CTF/" href="/categories/CTF/"><div class="name">CTF</div><div class="badge">(4)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/XML注入/" href="/categories/XML注入/"><div class="name">XML注入</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/hexo/" href="/categories/hexo/"><div class="name">hexo</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/python编程/" href="/categories/python编程/"><div class="name">python编程</div><div class="badge">(6)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/靶场/" href="/categories/靶场/"><div class="name">靶场</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/tags/CRYPTO/" style="font-size: 14px; color: #999">CRYPTO</a> <a href="/tags/DVWA/" style="font-size: 14px; color: #999">DVWA</a> <a href="/tags/Git/" style="font-size: 14px; color: #999">Git</a> <a href="/tags/MISC/" style="font-size: 17.33px; color: #828282">MISC</a> <a href="/tags/SQLinjection/" style="font-size: 17.33px; color: #828282">SQLinjection</a> <a href="/tags/XML/" style="font-size: 14px; color: #999">XML</a> <a href="/tags/XXE/" style="font-size: 14px; color: #999">XXE</a> <a href="/tags/debug/" style="font-size: 14px; color: #999">debug</a> <a href="/tags/flask/" style="font-size: 20.67px; color: #6c6c6c">flask</a> <a href="/tags/hexo常见问题/" style="font-size: 14px; color: #999">hexo常见问题</a> <a href="/tags/kali/" style="font-size: 14px; color: #999">kali</a> <a href="/tags/netcat/" style="font-size: 14px; color: #999">netcat</a> <a href="/tags/python/" style="font-size: 24px; color: #555">python</a> <a href="/tags/python3/" style="font-size: 14px; color: #999">python3</a> <a href="/tags/基础课件/" style="font-size: 14px; color: #999">基础课件</a> <a href="/tags/手动注入/" style="font-size: 14px; color: #999">手动注入</a> <a href="/tags/比赛wp/" style="font-size: 14px; color: #999">比赛wp</a> <a href="/tags/盲水印/" style="font-size: 14px; color: #999">盲水印</a> <a href="/tags/程序基础/" style="font-size: 14px; color: #999">程序基础</a>
+    </div>
+  </section>
+
+
+      
+    
+  
+    
+      
+      
+        <section class="list">
+  
+<header class="pure">
+  <div><i class="fas fa-link fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;友链</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="entry">
+      
+        <li><a class="flat-box" title="http://xjusec.club:886" href="http://xjusec.club:886">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;XJUSEC_CTF
+          </div>
+          
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章目录</div>
+  
+    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#暴力破解"><span class="toc-text">暴力破解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#low"><span class="toc-text">low</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium"><span class="toc-text">medium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high"><span class="toc-text">high</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impossible"><span class="toc-text">impossible</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#命令注入"><span class="toc-text">命令注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#low-1"><span class="toc-text">low</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium-1"><span class="toc-text">medium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high-1"><span class="toc-text">high</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impossible-1"><span class="toc-text">impossible</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSRF"><span class="toc-text">CSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#low-2"><span class="toc-text">low</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium-2"><span class="toc-text">medium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high-amp-amp-impossible"><span class="toc-text">high &amp;&amp; impossible</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件包含"><span class="toc-text">文件包含</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#low-3"><span class="toc-text">low</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium-3"><span class="toc-text">medium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high-2"><span class="toc-text">high</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impossible-2"><span class="toc-text">impossible</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件上传"><span class="toc-text">文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#low-4"><span class="toc-text">low</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium-4"><span class="toc-text">medium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high-3"><span class="toc-text">high</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impossible-3"><span class="toc-text">impossible</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#不安全的验证码"><span class="toc-text">不安全的验证码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL注入"><span class="toc-text">SQL注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#low-5"><span class="toc-text">low</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium-5"><span class="toc-text">medium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high-4"><span class="toc-text">high</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impossible-4"><span class="toc-text">impossible</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL盲注"><span class="toc-text">SQL盲注</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XSS（反射）"><span class="toc-text">XSS（反射）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#low-6"><span class="toc-text">low</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium-6"><span class="toc-text">medium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high-5"><span class="toc-text">high</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impossible-5"><span class="toc-text">impossible</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XSS-存储"><span class="toc-text">XSS(存储)</span></a></li></ol>
+    </div>
+  </section>
+
+
+      
+    
+  
+
+
+        </aside>
+        <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+    <footer id="footer" class="clearfix">
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="https://github.com/ssb6666" class="social fab fa-github flat-btn" target="_blank" rel="external"></a>
+        
+      
+        
+          <a href="https://blog.csdn.net/qq_39495209" class="social fas fa-flag flat-btn" target="_blank" rel="external"></a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>本站使用 <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a> 作为主题，总访问量为 <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span> 次。
+  </div>
+</footer>
+
+    <script>setLoadingBarProgress(80);</script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+
+  
+    <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        const $reveal = $('.reveal');
+    		if ($reveal.length === 0) return;
+    		const sr = ScrollReveal({ distance: 0 });
+    		sr.reveal('.reveal');
+      });
+    </script>
+  
+  
+    <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        Waves.attach('.flat-btn', ['waves-button']);
+        Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+        Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+        Waves.attach('.flat-box', ['waves-block']);
+        Waves.attach('.float-box', ['waves-block', 'waves-float']);
+        Waves.attach('.waves-image');
+        Waves.init();
+      });
+    </script>
+  
+  
+    <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+  
+  
+  
+
+
+  
+  
+  
+    
+      
+      
+      
+        
+          <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+          
+            
+              <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1/js/volantis.min.js"></script>
+            
+          
+          <script>
+          var GUEST_INFO = ['nick','mail','link'];
+          var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+          });
+          var notify = 'false' == true;
+          var verify = 'false' == true;
+          var valine = new Valine();
+          valine.init({
+            el: '#valine_container',
+            notify: notify,
+            verify: verify,
+            guest_info: guest_info,
+            
+            appId: "oss58Ms641c57OCAYSuXAwDF-MdYXbMMI",
+            appKey: "oNW9OxduWTRga9cS7i1PL8Jt",
+            placeholder: "交流使人进步",
+            pageSize:'10',
+            avatar:'monsterid',
+            lang:'zh-cn',
+            highlight:''
+          })
+          </script>
+        
+      
+    
+  
+  
+    <script src="/js/app.js"></script>
+<script src="/js/search.js"></script>
+  
+
+
+
+
+
+
+    <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

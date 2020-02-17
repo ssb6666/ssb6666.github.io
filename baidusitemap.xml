@@ -3,6 +3,28 @@
 
 
     
+  <url>
+    <loc>http://www.r1ght0us.xyz/2020/02/17/DVWA%E9%9D%B6%E5%9C%BA-%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E9%98%B2%E5%BE%A1/</loc>
+    <lastmod>2020-02-17T15:40:58.086Z</lastmod>
+    <data>
+        <display>
+        <title>DVWA靶场-常见漏洞原理以及防御</title>
+        <pubTime>2020-02-17T07:51:45.000Z</pubTime>
+        
+        <tag>DVWA</tag>
+         
+        <tag>基础课件</tag>
+         
+         
+           
+             
+              <breadCrumb title="靶场" url="http://www.r1ght0us.xyz/categories/%E9%9D%B6%E5%9C%BA/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>http://www.r1ght0us.xyz/2019/06/01/xml%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%E4%BB%A5%E5%8F%8AXXE%E6%BC%8F%E6%B4%9E/</loc>
@@ -168,11 +190,11 @@
         <title>新疆首届知识技能大赛相关writeup</title>
         <pubTime>2018-09-16T07:56:01.000Z</pubTime>
         
-        <tag>MISC</tag>
-         
         <tag>比赛wp</tag>
          
         <tag>CRYPTO</tag>
+         
+        <tag>MISC</tag>
          
          
            
