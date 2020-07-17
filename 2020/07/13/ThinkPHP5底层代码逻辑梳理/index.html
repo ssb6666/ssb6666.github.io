@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>ThinkPHP5底层代码逻辑梳理 | R1ght0us&#39;s Blog</title>
+  
+  
+  <meta name="description" content="贪财好色，一身正气">
+  
+
+  <link rel="alternate" href="/atom.xml" title="R1ght0us's Blog">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+  <!-- link -->
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+
+  
+
+  
+  <link rel="stylesheet" href="/style.css">
+  
+
+  
+
+
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fd2b3186d71bc76ab3732304151f34a0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+    <div id="loading-bar-wrapper">
+  <div id="loading-bar" class="pure"></div>
+</div>
+
+    <script>setLoadingBarProgress(20)</script>
+    <header class="l_header pure">
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          R1ght0us's Blog
+        
+      </a>
+			<div class="menu">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a id="home" class="nav flat-box" href="/">
+									<i class="fas fa-home fa-fw"></i>&nbsp;主页
+								</a>
+							</li>
+      			
+  						<li>
+								<a id="archives" class="nav flat-box" href="/archives/">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+  						<li>
+								<a id="about" class="nav flat-box" href="/about/">
+									<i class="fas fa-user fa-fw"></i>&nbsp;关于我
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<span class="icon"><i class="fas fa-search fa-fw"></i></span>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+				<li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu">
+      <ul>
+          
+              
+                  <li>
+										<a id="home" class="nav flat-box" href="/">
+											<i class="fas fa-home fa-fw"></i>&nbsp;主页
+										</a>
+                  </li>
+              
+                  <li>
+										<a id="archives" class="nav flat-box" href="/archives/">
+											<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+										</a>
+                  </li>
+              
+                  <li>
+										<a id="about" class="nav flat-box" href="/about/">
+											<i class="fas fa-user fa-fw"></i>&nbsp;关于我
+										</a>
+                  </li>
+              
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+    <div class="l_body">
+    <div class='container clearfix'>
+        <div class='l_main'>
+            <article id="post" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
+  
+<section class="meta">
+  
+  <div class="meta" id="header-meta">
+    
+      
+          <h1 class="title">ThinkPHP5底层代码逻辑梳理</h1>
+      
+    
+
+    
+      <time class="metatag time">
+        <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2020-07-13
+      </time>
+    
+
+    
+      
+    
+    <div class="metatag cats">
+        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;<a class="categories" href="/categories/代码审计/">代码审计</a>
+    </div>
+
+
+    
+
+    
+      
+        <div class="metatag browse busuanzi"><i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+          &nbsp;<span id="busuanzi_value_page_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+        </div>
+      
+    
+
+    
+
+  </div>
+</section>
+
+    <section class="article typo">
+      <div class="article-entry" itemprop="articleBody">
+        <p>梳理一遍TP代码底层逻辑，为后面的漏洞总结做准备<br><a id="more"></a></p>
+<h1 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h1><p>以TP5.0.22为例（为下次的TP-RCE环境做好准备）+ PHP 5.6.27-NTS</p>
+<h1 id="目录架构"><a href="#目录架构" class="headerlink" title="目录架构"></a>目录架构</h1><p>根据类的命名空间可以快速定位文件位置，在ThinkPHP5.0的规范里面，命名空间其实对应了文件的所在目录，app命名空间通常代表了文件的起始目录为application，而think命名空间则代表了文件的其实目录为thinkphp/library/think，后面的命名空间则表示从起始目录开始的子目录，如下图所示：<br><img src="/2020/07/13/ThinkPHP5底层代码逻辑梳理/1.png" alt=""></p>
+<h1 id="框架流程"><a href="#框架流程" class="headerlink" title="框架流程"></a>框架流程</h1><p>我们先进入到默认的入口文件（public/index.php）<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义应用目录</span></span><br><span class="line">define(<span class="string">'APP_PATH'</span>, <span class="keyword">__DIR__</span> . <span class="string">'/../application/'</span>);</span><br><span class="line"><span class="comment">// 加载框架引导文件</span></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/../thinkphp/start.php'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>引入start.php进入到里面看看有什么</p>
+<h2 id="框架引导文件（thinkphp-start-php）"><a href="#框架引导文件（thinkphp-start-php）" class="headerlink" title="框架引导文件（thinkphp/start.php）"></a>框架引导文件（thinkphp/start.php）</h2><p>进入框架引导文件看到两行代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ThinkPHP 引导文件</span></span><br><span class="line"><span class="comment">// 1. 加载基础文件</span></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/base.php'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 执行应用</span></span><br><span class="line">App::run()-&gt;send();</span><br></pre></td></tr></table></figure></p>
+<h3 id="基础文件（thinkphp-base-php）"><a href="#基础文件（thinkphp-base-php）" class="headerlink" title="基础文件（thinkphp/base.php）"></a>基础文件（thinkphp/base.php）</h3><p>在此文件首先看到全面大段的是定义常量或者是检查常量是否存在，主要是以下几点需要重点注意</p>
+<ul>
+<li>将Loader类引入</li>
+<li>注册自动加载机制<ul>
+<li>注册系统自动加载，<code>spl_autoload_register</code>将函数注册到SPL __autoload函数队列中。如果该队列中的函数尚未激活，则激活它们。此函数可以注册任意数量的自动加载器，当使用尚未被定义的类（class）和接口（interface）时自动去加载。通过注册自动加载器，脚本引擎在 PHP 出错失败前有了最后一个机会加载所需的类。 </li>
+<li>Composer 自动加载支持</li>
+<li>注册命名空间定义:<code>think=&gt;thinkphp/library/think，behavior=&gt;thinkphp/library/behavior，traits=&gt;thinkphp/library/traits</code></li>
+<li>加载类库映射文件</li>
+<li>自动加载 extend 目录</li>
+</ul>
+</li>
+<li>注册异常处理机制</li>
+<li>加载惯例配置</li>
+</ul>
+<h3 id="执行应用（thinkphp-library-think-App-php）"><a href="#执行应用（thinkphp-library-think-App-php）" class="headerlink" title="执行应用（thinkphp/library/think/App.php）"></a>执行应用（thinkphp/library/think/App.php）</h3><p>首先返回一个request实例，将应用初始化返回配置信息。<br>之后进行如下的操作：</p>
+<ul>
+<li>查看是否存在模块控制器绑定</li>
+<li>对于request的实例根据设置的过滤规则进行过滤</li>
+<li>加载语言包</li>
+<li>监听app_dispatch</li>
+<li>进行URL路由检测（routecheck后面细讲）</li>
+<li>记录当前调度信息，路由以及请求信息到日志中</li>
+<li>请求缓存检查并进行<code>$data = self::exec($dispatch, $config);</code>，根据$dispatch进行不同的调度，返回$data</li>
+<li>清除类的实例化</li>
+<li>输出数据到客户端，<code>$response = $data;</code>，返回一个Response类实例</li>
+<li>调用<strong>Response-&gt;send()</strong>方法将数据返回值客户端</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>画个图过一遍整个流程<br><img src="/2020/07/13/ThinkPHP5底层代码逻辑梳理/2.png" alt=""></p>
+<h2 id="根据PATH-INFO进行URL路由检测（App-routeCheck）"><a href="#根据PATH-INFO进行URL路由检测（App-routeCheck）" class="headerlink" title="根据PATH_INFO进行URL路由检测（App::routeCheck）"></a>根据PATH_INFO进行URL路由检测（App::routeCheck）</h2><p>通过<code>$path   = $request-&gt;path()</code>可以获得到请求的path_info，<code>$depr</code>是定义的分隔符，默认时:<strong>/</strong>，之后进行路由检测步骤如下</p>
+<ul>
+<li>查看是否存在路由缓存，存在就包含</li>
+<li>读取应用所在的路由文件，一般默认为route.php</li>
+<li>导入路由配置</li>
+<li><code>Route::check</code> （根据路由定义返回不同的URL调度）<ul>
+<li>检查解析缓存</li>
+<li>替换分隔符，将”/“换成了”|”</li>
+<li>获取当前请求类型的路由规则，由于在之前的<strong>Composer 自动加载支持</strong>，在vendortopthink/think-captcha/src/helper.php中注册了路由，所以在<code>$rules = isset(self::$rules[$method]) ? self::$rules[$method] : [];</code>中的Route::$rules[‘get’]已经存在了相应的路由规则<img src="/2020/07/13/ThinkPHP5底层代码逻辑梳理/3.png" alt=""></li>
+<li>检测域名部署</li>
+<li>检测URL绑定</li>
+<li>静态路由规则检查</li>
+<li>路由规则检查<code>self::checkRoute($request, $rules, $url, $depr)</code><ul>
+<li>检查参数有效性</li>
+<li>替换掉路由ext参数</li>
+<li>检查分组路由</li>
+<li>检查指定特殊路由，例如：<code>__miss__</code>和<code>__atuo__</code></li>
+<li>检查路由规则<code>checkRule</code><ul>
+<li>检查完整规则定义</li>
+<li>检查路由的参数分隔符</li>
+<li>检查是否完整匹配路由</li>
+</ul>
+</li>
+<li>最终未被匹配路由的进入到<code>self::parseRule(&#39;&#39;, $miss[&#39;route&#39;], $url, $miss[&#39;option&#39;])</code>进行处理，这就牵涉到TP对于路由的多种定义<img src="/2020/07/13/ThinkPHP5底层代码逻辑梳理/4.png" alt=""></li>
+</ul>
+</li>
+<li>检查是否强制使用路由<code>$must   = !is_null(self::$routeMust) ? self::$routeMust : $config[&#39;url_route_must&#39;]</code></li>
+<li>路由无效，将自动解析模块的URL地址会进入到<code>Route::parseUrl($path, $depr, $config[&#39;controller_auto_search&#39;])</code>（后面的RCE会用到这一点，将会在后续文章进行详细分析）</li>
+</ul>
+</li>
+<li>最终将结果记录到调度信息</li>
+</ul>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>首先看看路由定义：</p>
+<table>
+<thead>
+<tr>
+<th>定义方式</th>
+<th>定义格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>方式1：路由到模块/控制器</td>
+<td>(模块/控制器/操作)?额外参数1=值1&amp;额外参数2=值2…</td>
+<td></td>
+</tr>
+<tr>
+<td>方式2：路由到重定向地址</td>
+<td>‘外部地址’（默认301重定向） 或者 (‘外部地址’,’重定向代码’)</td>
+</tr>
+<tr>
+<td>方式3：路由到控制器的方法</td>
+<td>‘@(模块/控制器/)操作’</td>
+</tr>
+<tr>
+<td>方式4：路由到类的方法</td>
+<td>‘\完整的命名空间类::静态方法’ 或者 ‘\完整的命名空间类@动态方法’</td>
+</tr>
+<tr>
+<td>方式5：路由到闭包函数</td>
+<td>闭包函数定义（支持参数传入）</td>
+</tr>
+</tbody>
+</table>
+<p>具体链接可以看看这个<a href="https://www.kancloud.cn/manual/thinkphp5/118037" target="_blank" rel="noopener">开发手册</a>    </p>
+<p>在画个图过一遍整个路由流程<br><img src="/2020/07/13/ThinkPHP5底层代码逻辑梳理/5.png" alt=""></p>
+<h1 id="小章总结"><a href="#小章总结" class="headerlink" title="小章总结"></a>小章总结</h1><p>TP大概就到这里重要的流程就走完了，后续我会直接复盘RCE漏洞，如果再有什么新增的知识点我会更新章节在本文。</p>
+<blockquote>
+<p>如果文章哪里有错误，恳请大家联系我一起讨论。</p>
+</blockquote>
+
+      </div>
+        
+          <section class="meta" id="footer-meta">
+            
+              <time class="metatag time" itemprop="dateUpdated" datetime="2020-07-17T12:57:40+08:00" content="2020-07-17"><i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>
+                &nbsp;2020-07-17
+              </time>
+            
+            
+                
+                <div class="metatag tags"><a class="tag" href="/tags/ThinkPHP/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;ThinkPHP</a></div> <div class="metatag tags"><a class="tag" href="/tags/PHP/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;PHP</a></div>
+            
+            
+              
+  <div class="metatag share -mob-share-list">
+    <i class="left fas fa-share-alt fa-fw" aria-hidden="true"></i>
+    <div class="-mob-share-list share-body">
+      
+        
+          <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.r1ght0us.xyz/2020/07/13/ThinkPHP5底层代码逻辑梳理/&title=ThinkPHP5底层代码逻辑梳理 | R1ght0us's Blog&summary=梳理一遍TP代码底层逻辑，为后面的漏洞总结做准备">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
+            
+          </a>
+        
+      
+        
+          <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.r1ght0us.xyz/2020/07/13/ThinkPHP5底层代码逻辑梳理/&title=ThinkPHP5底层代码逻辑梳理 | R1ght0us's Blog&summary=梳理一遍TP代码底层逻辑，为后面的漏洞总结做准备">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
+            
+          </a>
+        
+      
+        
+          <a class="qrcode" rel="external nofollow noopener noreferrer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsklEQVR42u3ay24cMQwEQP//T2+AnHLIrLtFypsApVMQzEM1BkRti19f8Xj9Hk///+d4uv7pyvdvfP/MtYGHh4d3NPWn8fSyhNF+iOTefM54eHh4t3nvi8EZI3nLWXFK5oyHh4f3L/DaF+TX58UADw8P73/ktVNpt+D5Fh8PDw/vs7z8cXkQsMX+oawFDw8PL+ZNgoBP/fvi+R4eHh7e4FS9LRX5djxfyl+DgYeHh3eDdxY63DgSO2tfiLbseHh4eBd4bcCa33sWN+QxR9GagIeHh7fEO7u5LRvt1vn9JyiasfDw8PAu8Nof/8mL84qUPzl/wjefEg8PD2/Maxf3tk1qPulR+wIeHh7ej/AmpSJPPvJQo21owMPDw7vNmyzredDQHrNN7n38G+Lh4eEt8XYPribxax3IJj8A8PDw8K7xWlLOyJuoclgRguDh4eFd4LUdSsmWOgkv2oaqhQgDDw8Pb4nXRrRtJJG3FEwO1eqUBQ8PD2/Ay9fSdpluR9sjdhgr4+Hh4V3j5VvYZOnPQ4e2NaHdlOPh4eFt8c6C0TxsPTvcyp9ZFwM8PDy8Jd77hXsevOYlpy0hRT6Nh4eHN+blB/ktoP0o7SFZtHHHw8PDu8BrX9YWknZC+V1rRQIPDw+v5G0d2LeNApMWrmKTjYeHh3eBd7bBbac4CXnXChIeHh7eEi8vDEkePG+QagtD9CsBDw8Pb5WXb0m3AtmF1OSoDQsPDw9vi/cqxySKbWOLtsD85V14eHh4F3jtsnt25aQMzD8KHh4e3g1essTPY4tJ+cmDiW9O+fDw8PBWebttWO1h/yiiTY7B8PDw8D7KOzugOgsp5lEFHh4e3md5Z/j2RO4M9vhGPDw8vGu8Noxo44ZoKmWbQlRO8PDw8C7wzn7qT46mzpoDzoJgPDw8vFXeL89q0HVYXlsbAAAAAElFTkSuQmCC">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/wechat.png">
+          
+          </a>
+        
+      
+        
+          <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.r1ght0us.xyz/2020/07/13/ThinkPHP5底层代码逻辑梳理/&title=ThinkPHP5底层代码逻辑梳理 | R1ght0us's Blog&summary=梳理一遍TP代码底层逻辑，为后面的漏洞总结做准备">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
+            
+          </a>
+        
+      
+    </div>
+  </div>
+
+
+            
+          </section>
+        
+
+        
+            <div class="prev-next">
+                
+                
+                    <section class="next">
+                        <span class="art-item-right" aria-hidden="true">
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h4>
+                                <a href="/2020/05/27/2018西普杯铁三流量分析/" rel="prev" title="2018西普杯铁三流量分析">
+                                    
+                                        2018西普杯铁三流量分析
+                                    
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/tags/比赛WP/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>比赛WP</a> <a class="tag" href="/tags/MISC/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>MISC</a> <a class="tag" href="/tags/流量分析/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>流量分析</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+            </div>
+        
+
+    </section>
+
+</article>
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+<br>
+
+<!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+
+      
+        
+
+    <div class="recommended_posts">
+        <h4><i class="fas fa-bookmark fa-fw" aria-hidden="true"></i>&nbsp;相关文章</h4>
+        <ul>
+            
+                <li><a href="http://www.r1ght0us.xyz/2020/05/27/2018西普杯铁三流量分析/">2018西普杯铁三流量分析</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2020/02/17/DVWA靶场-常见漏洞原理以及防御/">DVWA靶场-常见漏洞原理以及防御</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/06/01/xml基本知识以及XXE漏洞/">xml基本知识以及XXE漏洞</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2019/01/26/flask之数据库/">flask之数据库</a></li>
+            
+        </ul>
+    </div>
+
+
+      
+
+      
+        <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+        
+        
+        
+          
+            <section id="comments">
+              <div id="valine_container" class="valine_thread">
+                <i class="fas fa-spinner fa-spin fa-fw"></i>
+              </div>
+            </section>
+          
+        
+      
+    </section>
+  </article>
+
+
+
+<script>
+    window.subData = {
+        title: 'ThinkPHP5底层代码逻辑梳理',
+        tools: true
+    }
+</script>
+
+
+        </div>
+        <aside class='l_side'>
+            
+  
+  
+    
+      
+      
+        <section class="author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="/images/header.png">
+      </div>
+    
+    
+      <div class="text">
+        
+        
+        
+          <p><span id="jinrishici-sentence">R1ght0us's Blog</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="https://github.com/ssb6666" class="social flat-btn" target="_blank" rel="external"><i class="social fab fa-github" aria-hidden="true"></i></a>
+          
+        
+          
+            <a href="https://blog.csdn.net/qq_39495209" class="social flat-btn" target="_blank" rel="external"><i class="social fas fa-flag" aria-hidden="true"></i></a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        <section class="plain">
+  
+<header class="pure">
+  <div><i class="fas fa-bullhorn fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;</div>
+  
+</header>
+
+  <div class="content pure">
+    <p>但愿这里能让你获益颇多</p>
+
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;所有分类</div>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/categories/CTF/" href="/categories/CTF/"><div class="name">CTF</div><div class="badge">(5)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/XML注入/" href="/categories/XML注入/"><div class="name">XML注入</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/hexo/" href="/categories/hexo/"><div class="name">hexo</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/python编程/" href="/categories/python编程/"><div class="name">python编程</div><div class="badge">(6)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/代码审计/" href="/categories/代码审计/"><div class="name">代码审计</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/靶场/" href="/categories/靶场/"><div class="name">靶场</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/tags/CRYPTO/" style="font-size: 14px; color: #999">CRYPTO</a> <a href="/tags/DVWA/" style="font-size: 14px; color: #999">DVWA</a> <a href="/tags/Git/" style="font-size: 14px; color: #999">Git</a> <a href="/tags/MISC/" style="font-size: 19px; color: #777">MISC</a> <a href="/tags/PHP/" style="font-size: 14px; color: #999">PHP</a> <a href="/tags/SQLinjection/" style="font-size: 16.5px; color: #888">SQLinjection</a> <a href="/tags/ThinkPHP/" style="font-size: 14px; color: #999">ThinkPHP</a> <a href="/tags/XML/" style="font-size: 14px; color: #999">XML</a> <a href="/tags/XXE/" style="font-size: 14px; color: #999">XXE</a> <a href="/tags/debug/" style="font-size: 14px; color: #999">debug</a> <a href="/tags/flask/" style="font-size: 21.5px; color: #666">flask</a> <a href="/tags/hexo常见问题/" style="font-size: 14px; color: #999">hexo常见问题</a> <a href="/tags/kali/" style="font-size: 14px; color: #999">kali</a> <a href="/tags/netcat/" style="font-size: 14px; color: #999">netcat</a> <a href="/tags/python/" style="font-size: 24px; color: #555">python</a> <a href="/tags/python3/" style="font-size: 14px; color: #999">python3</a> <a href="/tags/基础课件/" style="font-size: 14px; color: #999">基础课件</a> <a href="/tags/手动注入/" style="font-size: 14px; color: #999">手动注入</a> <a href="/tags/比赛WP/" style="font-size: 14px; color: #999">比赛WP</a> <a href="/tags/比赛wp/" style="font-size: 14px; color: #999">比赛wp</a> <a href="/tags/流量分析/" style="font-size: 14px; color: #999">流量分析</a> <a href="/tags/盲水印/" style="font-size: 14px; color: #999">盲水印</a> <a href="/tags/程序基础/" style="font-size: 14px; color: #999">程序基础</a>
+    </div>
+  </section>
+
+
+      
+    
+  
+    
+      
+      
+        <section class="list">
+  
+<header class="pure">
+  <div><i class="fas fa-link fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;友链</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="entry">
+      
+        <li><a class="flat-box" title="http://xjusec.club:886" href="http://xjusec.club:886">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;XJUSEC_CTF
+          </div>
+          
+        </a></li>
+      
+        <li><a class="flat-box" title="https://blog.csdn.net/qq_40648358/" href="https://blog.csdn.net/qq_40648358/">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;RDD_NULL
+          </div>
+          
+        </a></li>
+      
+        <li><a class="flat-box" title="http://www.kittener.top" href="http://www.kittener.top">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;KITTENER
+          </div>
+          
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章目录</div>
+  
+    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境部署"><span class="toc-text">环境部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#目录架构"><span class="toc-text">目录架构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#框架流程"><span class="toc-text">框架流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#框架引导文件（thinkphp-start-php）"><span class="toc-text">框架引导文件（thinkphp/start.php）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础文件（thinkphp-base-php）"><span class="toc-text">基础文件（thinkphp/base.php）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行应用（thinkphp-library-think-App-php）"><span class="toc-text">执行应用（thinkphp/library/think/App.php）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根据PATH-INFO进行URL路由检测（App-routeCheck）"><span class="toc-text">根据PATH_INFO进行URL路由检测（App::routeCheck）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#总结-1"><span class="toc-text">总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#小章总结"><span class="toc-text">小章总结</span></a></li></ol>
+    </div>
+  </section>
+
+
+      
+    
+  
+
+
+        </aside>
+        <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+    <footer id="footer" class="clearfix">
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="https://github.com/ssb6666" class="social fab fa-github flat-btn" target="_blank" rel="external"></a>
+        
+      
+        
+          <a href="https://blog.csdn.net/qq_39495209" class="social fas fa-flag flat-btn" target="_blank" rel="external"></a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>本站使用 <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a> 作为主题，总访问量为 <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span> 次。
+  </div>
+</footer>
+
+    <script>setLoadingBarProgress(80);</script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+
+  
+    <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        const $reveal = $('.reveal');
+    		if ($reveal.length === 0) return;
+    		const sr = ScrollReveal({ distance: 0 });
+    		sr.reveal('.reveal');
+      });
+    </script>
+  
+  
+    <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        Waves.attach('.flat-btn', ['waves-button']);
+        Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+        Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+        Waves.attach('.flat-box', ['waves-block']);
+        Waves.attach('.float-box', ['waves-block', 'waves-float']);
+        Waves.attach('.waves-image');
+        Waves.init();
+      });
+    </script>
+  
+  
+    <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+  
+  
+  
+
+
+  
+  
+  
+    
+      
+      
+      
+        
+          <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+          
+            
+              <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1/js/volantis.min.js"></script>
+            
+          
+          <script>
+          var GUEST_INFO = ['nick','mail','link'];
+          var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+          });
+          var notify = 'false' == true;
+          var verify = 'false' == true;
+          var valine = new Valine();
+          valine.init({
+            el: '#valine_container',
+            notify: notify,
+            verify: verify,
+            guest_info: guest_info,
+            
+            appId: "oss58Ms641c57OCAYSuXAwDF-MdYXbMMI",
+            appKey: "oNW9OxduWTRga9cS7i1PL8Jt",
+            placeholder: "交流使人进步",
+            pageSize:'10',
+            avatar:'monsterid',
+            lang:'zh-cn',
+            highlight:''
+          })
+          </script>
+        
+      
+    
+  
+  
+    <script src="/js/app.js"></script>
+<script src="/js/search.js"></script>
+  
+
+
+
+
+
+
+    <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
