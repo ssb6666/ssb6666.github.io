@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://www.r1ght0us.xyz/2020/07/21/Thinkphp5-x-RCE%E5%A4%8D%E7%8E%B0/</loc>
-    <lastmod>2020-08-07T07:50:53.717Z</lastmod>
+    <lastmod>2020-08-07T07:55:33.463Z</lastmod>
     <data>
         <display>
         <title>Thinkphp5.x_RCE复现</title>
@@ -22,21 +22,6 @@
              
               <breadCrumb title="代码审计" url="http://www.r1ght0us.xyz/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.r1ght0us.xyz/2020/07/30/test/</loc>
-    <lastmod>2020-08-04T18:10:55.977Z</lastmod>
-    <data>
-        <display>
-        <title></title>
-        <pubTime>2020-07-30T07:35:34.458Z</pubTime>
-        
-         
-           
         </display>
     </data>
     </url>
