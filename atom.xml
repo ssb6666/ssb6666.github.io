@@ -422,9 +422,9 @@
       <category term="CTF" scheme="http://www.r1ght0us.xyz/categories/CTF/"/>
     
     
-      <category term="kali" scheme="http://www.r1ght0us.xyz/tags/kali/"/>
-    
       <category term="SQLinjection" scheme="http://www.r1ght0us.xyz/tags/SQLinjection/"/>
+    
+      <category term="kali" scheme="http://www.r1ght0us.xyz/tags/kali/"/>
     
   </entry>
   
