@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>TP诸多限制条件下如何getshell | R1ght0us&#39;s Blog</title>
+  
+  
+  <meta name="description" content="贪财好色，一身正气">
+  
+
+  <link rel="alternate" href="/atom.xml" title="R1ght0us's Blog">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+  <!-- link -->
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+
+  
+
+  
+  <link rel="stylesheet" href="/style.css">
+  
+
+  
+
+
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fd2b3186d71bc76ab3732304151f34a0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+</head>
+
+<body>
+    <div id="loading-bar-wrapper">
+  <div id="loading-bar" class="pure"></div>
+</div>
+
+    <script>setLoadingBarProgress(20)</script>
+    <header class="l_header pure">
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          R1ght0us's Blog
+        
+      </a>
+			<div class="menu">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a id="home" class="nav flat-box" href="/">
+									<i class="fas fa-home fa-fw"></i>&nbsp;主页
+								</a>
+							</li>
+      			
+  						<li>
+								<a id="archives" class="nav flat-box" href="/archives/">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+  						<li>
+								<a id="about" class="nav flat-box" href="/about/">
+									<i class="fas fa-user fa-fw"></i>&nbsp;关于我
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<span class="icon"><i class="fas fa-search fa-fw"></i></span>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+				<li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu">
+      <ul>
+          
+              
+                  <li>
+										<a id="home" class="nav flat-box" href="/">
+											<i class="fas fa-home fa-fw"></i>&nbsp;主页
+										</a>
+                  </li>
+              
+                  <li>
+										<a id="archives" class="nav flat-box" href="/archives/">
+											<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+										</a>
+                  </li>
+              
+                  <li>
+										<a id="about" class="nav flat-box" href="/about/">
+											<i class="fas fa-user fa-fw"></i>&nbsp;关于我
+										</a>
+                  </li>
+              
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+    <div class="l_body">
+    <div class='container clearfix'>
+        <div class='l_main'>
+            <article id="post" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
+  
+<section class="meta">
+  
+  <div class="meta" id="header-meta">
+    
+      
+          <h1 class="title">TP诸多限制条件下如何getshell</h1>
+      
+    
+
+    
+      <time class="metatag time">
+        <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2020-10-30
+      </time>
+    
+
+    
+      
+    
+    <div class="metatag cats">
+        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;<a class="categories" href="/categories/代码审计/">代码审计</a>
+    </div>
+
+
+    
+
+    
+      
+        <div class="metatag browse busuanzi"><i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+          &nbsp;<span id="busuanzi_value_page_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+        </div>
+      
+    
+
+    
+
+  </div>
+</section>
+
+    <section class="article typo">
+      <div class="article-entry" itemprop="articleBody">
+        <p>2020_n1CTF的web题Easy_tp5复现总结</p>
+<p>这个题在保留thinkphp的RCE点的同时，并且RCE中ban掉许多危险函数，只能允许单参数的函数执行。对于现在在网络中流传的文件包含的点也增加了限制。</p>
+<p><strong>smile yyds!</strong><br><a id="more"></a></p>
+<p>本文首发于公众号：<a href="https://mp.weixin.qq.com/s/LaTNNjwDT1VzN6uA0Gq0-Q" target="_blank" rel="noopener">酒仙桥六号部队</a></p>
+<p>先说一下这个题限制条件：</p>
+<ul>
+<li>thinkphp版本：5.0.0</li>
+<li>php版本：7</li>
+<li>对于包含文件增加了限制<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/1.png" alt=""></li>
+<li>ban掉所有的单参数危险函数<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/2.png" alt=""></li>
+<li>设置open_basedir为web目录<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/3.png" alt=""></li>
+<li>设置仅在public目录下可写<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/4.png" alt=""></li>
+</ul>
+<p>在TP5.0.0的中，目前公布的只是存在利用Request类其中变量被覆盖导致RCE。如果ban掉单参数可利用函数那么只能用文件包含，但是文件包含做了限制不能包含log文件，所以只能从别的方面入手。</p>
+<p>这些限制都太大了，所以需要想办法去上传一个shell来完成后续绕disable_function。</p>
+<p>首先TP5.0.0目前只存在通过覆盖Request中的某些变量导致RCE，其余细节不再赘述，我们看看大概代码执行点在哪里<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/5.jpg" alt=""></p>
+<p>call_user_func是代码执行点，我们基本上所有PHP自带的可利用函数基本被ban掉，所以我们需要从自写的函数调用来入手，首先我们需要看下这个点。可回调函数不仅仅指的是简单函数，还可以是一些对象的方法，包括静态方法<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/7.png" alt=""></p>
+<h2 id="预期解（thinkphp-library-think-Build-module）"><a href="#预期解（thinkphp-library-think-Build-module）" class="headerlink" title="预期解（thinkphp\library\think\Build::module）"></a>预期解（thinkphp\library\think\Build::module）</h2><p>我们可以这样通过调用这个类的静态方法module，来实现写文件的操作<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/6.png" alt=""></p>
+<p>我们先看看这个该怎么走，我们看到这个mkdir是在application创建目录，但是由于权限问题肯定无法创建。根据TP报错即退出的机制从而中断执行。那么我们可以通过<code>../public/test</code>来创建目录</p>
+<p>我们会进入到buildhello函数中<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/9.jpg" alt=""></p>
+<p>走完流程发现我们可以在public创建了一个test模块，同样看到<code>test/controller/Index.php</code>中我们所写的<code>../public/test</code>保存了下来那么我们就绕过，但是执行完之后会发现一些语法错误导致代码不能执行<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/10.jpg" alt=""></p>
+<p>由于这部分内容可控那我们就把他变得符合语法执行，我们可以这么做<code>test;eval($_POST[a]);#/../../public/test;</code>，这样就符合语法<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/11.png" alt=""><br>但是还有一个问题需要解决，就是我们这样的payload会设置一个不存在目录从而可以符合语法并且加入eval函数。但是现在还存在一个跨越不存在目录的问题。<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/12.png" alt=""></p>
+<ul>
+<li>linux环境<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/13.png" alt=""></li>
+<li>win环境<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/14.jpg" alt=""></li>
+</ul>
+<p>在Linux中不能创建不存在的目录，但是在win下就可以。但是报错是warning，并不会中断执行，并且在bindhello函数中我们会看到<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/15.jpg" alt=""><br>其中mkdir函数存在recursive参数为true，允许递归创建多级嵌套的目录。这样就可以使mkdir中使用不存在的目录就可以进行绕过。但是现在有个问题：前面的mkdir中的warning报错被TP捕获到直接会退出无法执行后面的内容，那么我们就需要使用一些办法进行抑制报错。我们经常做题会用到一个函数<code>error_reporting</code>，我们可以使用<code>error_reporting(0)</code>抑制报错。</p>
+<p>我们再回到代码执行点，我们发现call_user_func函数执行完的值会执行循环再次回到call_user_func()中当回调函数的参数进行使用。因此需要考虑一下怎么调整才能让我们执行并且抑制报错。</p>
+<ol>
+<li>如果我们将<code>error_reporting</code>放在前面执行，无论参数是什么都会返回0从而导致后面执行代码不可控。</li>
+<li>如果我们将<code>think\Build::module</code>放前面，那么thinkphp报错也不能执行成功。<ol>
+<li>但是如果我们放入一个中间值，在第一次执行能够成功创建目录，并且<code>error_reporting</code>还能成功执行，这时候就需要用到PHP弱类型比较，<strong>PHP中 0 == null，0 == 非数字开头的字符串</strong> </li>
+</ol>
+</li>
+</ol>
+<p>payload如下可示：<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/16.png" alt=""><br><img src="/2020/10/30/TP诸多限制条件下如何getshell/17.png" alt=""></p>
+<h2 id="非预期解1（使用注释符绕过语法产生的错误）"><a href="#非预期解1（使用注释符绕过语法产生的错误）" class="headerlink" title="非预期解1（使用注释符绕过语法产生的错误）"></a>非预期解1（使用注释符绕过语法产生的错误）</h2><p>payload如下：<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/18.jpg" alt=""><br>这样就会使用注释符注释掉后面的语法错误，然后使用<code>?&gt;</code>包裹住，后面跟上自己用的payload即可。但是这样会产生一个问题，无法在win环境下使用，win下文件夹中不能带这些字符<figure class="highlight plain"><figcaption><span>\ : * ? " < > | ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 非预期解2 （文件包含&amp;php伪协议）</span><br><span class="line"></span><br><span class="line">这种操作就是，我们通过之前的`think\Build::module`写文件进去，写入的内容是我们rot13编码过的。然后通过`think\__include_file`调用我们写入文件的内容，因为这个过滤不够完全，可以让我们包含我们所写的内容。</span><br><span class="line"></span><br><span class="line">![](TP诸多限制条件下如何getshell/19.jpg)</span><br><span class="line">![](TP诸多限制条件下如何getshell/20.jpg)</span><br><span class="line"></span><br><span class="line">## 非预期解3 （覆盖日志路径写入）</span><br><span class="line"></span><br><span class="line">**因为题目将error_log函数ban掉了，所以这个非预期解是在不ban掉error_log函数的情况下所实现的**</span><br><span class="line"></span><br><span class="line">payload具体如下：</span><br><span class="line">![](TP诸多限制条件下如何getshell/21.png)</span><br><span class="line"></span><br><span class="line">1. 通过`json_decode`使得我们传入的`&#123;&quot;type&quot;:&quot;File&quot;, &quot;path&quot;:&quot;/var/www/html/null/public/logs&quot;&#125;`转换成内置类stdClass的一个对象</span><br><span class="line">2. 再通过`get_object_vars`将其转换成数组传入到`think\Log::init`中</span><br><span class="line">3. 在其中会new了一个`\think\log\driver\File`，并且传入的参数是我们的`&apos;path&apos;=&gt;/var/www/html/null/public/logs`，那么会触发类中的__construct，将其默认的path给覆盖掉</span><br><span class="line">![](TP诸多限制条件下如何getshell/22.jpg)</span><br><span class="line">![](TP诸多限制条件下如何getshell/23.jpg)</span><br><span class="line">4. 最后因为我们触发漏洞点的特殊性，肯定会报错使得报错信息可以被计入到log文件里</span><br><span class="line">![](TP诸多限制条件下如何getshell/24.png)</span><br><span class="line">![](TP诸多限制条件下如何getshell/25.png)</span><br><span class="line"></span><br><span class="line">5. 之后再通过`think\Lang::load`包含</span><br><span class="line">![](TP诸多限制条件下如何getshell/26.png)</span><br><span class="line">![](TP诸多限制条件下如何getshell/28.jpg)</span><br><span class="line">![](TP诸多限制条件下如何getshell/27.jpg)</span><br><span class="line"></span><br><span class="line">## 非预期解4 (::竟然可以调用非静态方法)</span><br><span class="line"></span><br><span class="line">下面是个简单的例子</span><br><span class="line">```php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">class A&#123;</span><br><span class="line"></span><br><span class="line">    public function test1($a)&#123;</span><br><span class="line">        echo &quot;test1&quot;.$a;</span><br><span class="line">    &#125;</span><br><span class="line">    static function test2($a)&#123;</span><br><span class="line">        echo &quot;test2&quot;.$a;</span><br><span class="line">    &#125;</span><br><span class="line">    public function test3($a)&#123;</span><br><span class="line">        $this-&gt;b = $a;</span><br><span class="line">        echo &quot;test3&quot;.$this-&gt;b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">call_user_func(&quot;A::test1&quot;,&quot;x&quot;);</span><br><span class="line">echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">call_user_func(&quot;A::test2&quot;,&quot;x&quot;);</span><br><span class="line">echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">call_user_func(&quot;A::test3&quot;,&quot;x&quot;);</span><br><span class="line">echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">//$xxx=new A();</span><br><span class="line">//call_user_func(array($xxx,&apos;test3&apos;),&quot;x&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>我们看看会怎么执行<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/30.jpg" alt=""><br>会发现使用::调用了public类的方法并且能够成功执行，但是会报错。并且::仅仅适合在方法中没有写<code>$this</code>的情况，因为<code>$this</code>指代的是这个对象，找不到对象自然会报错。那么我们看一下下面的payload就会一眼明白，payload其实用了跟上面预期解抑制错误的另一种方法，然后抑制报错让TP不会遇错停止执行</p>
+<p>这个题解的payload如下<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/29.jpg" alt=""></p>
+<ol>
+<li>因为PHP本身的错误处理被thinkphp所替代进行处理，所以上面就是将thinkphp所替代错误进行处理的方法给覆盖掉导致没有办法正常执行</li>
+<li>调用<code>self::path</code>方法，可以抛弃掉我们上一个执行的返回值，并且返回我们所输入的<code>path</code>。为什么会返回path，path为什么是我们输入的值，这个就是之前提到的代码执行点他是覆盖了Request类的参数，所以方法返回的是<code>$this-&gt;path</code>，这个我们可以控制。<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/31.jpg" alt=""></li>
+<li>之后调用base64_decode，返回值就是我们base64解码的内容</li>
+<li>解码后的返回值就会进入<code>\think\view\driver\Php::Display</code>中，然后进入eval执行代码<br><img src="/2020/10/30/TP诸多限制条件下如何getshell/32.jpg" alt=""></li>
+</ol>
+<p><img src="/2020/10/30/TP诸多限制条件下如何getshell/33.jpg" alt=""></p>
+
+      </div>
+        
+          <section class="meta" id="footer-meta">
+            
+              <time class="metatag time" itemprop="dateUpdated" datetime="2020-12-28T15:39:21+08:00" content="2020-12-28"><i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>
+                &nbsp;2020-12-28
+              </time>
+            
+            
+                
+                <div class="metatag tags"><a class="tag" href="/tags/ThinkPHP/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;ThinkPHP</a></div> <div class="metatag tags"><a class="tag" href="/tags/PHP/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;PHP</a></div> <div class="metatag tags"><a class="tag" href="/tags/比赛复现/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>&nbsp;比赛复现</a></div>
+            
+            
+              
+  <div class="metatag share -mob-share-list">
+    <i class="left fas fa-share-alt fa-fw" aria-hidden="true"></i>
+    <div class="-mob-share-list share-body">
+      
+        
+          <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.r1ght0us.xyz/2020/10/30/TP诸多限制条件下如何getshell/&title=TP诸多限制条件下如何getshell | R1ght0us's Blog&summary=2020_n1CTF的web题Easy_tp5复现总结
+这个题在保留thinkphp的RCE点的同时，并且RCE中ban掉许多危险函数，只能允许单参数的函数执行。对于现在在网络中流传的文件包含的点也增加了限制。
+smile yyds!">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
+            
+          </a>
+        
+      
+        
+          <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.r1ght0us.xyz/2020/10/30/TP诸多限制条件下如何getshell/&title=TP诸多限制条件下如何getshell | R1ght0us's Blog&summary=2020_n1CTF的web题Easy_tp5复现总结
+这个题在保留thinkphp的RCE点的同时，并且RCE中ban掉许多危险函数，只能允许单参数的函数执行。对于现在在网络中流传的文件包含的点也增加了限制。
+smile yyds!">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
+            
+          </a>
+        
+      
+        
+          <a class="qrcode" rel="external nofollow noopener noreferrer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuUlEQVR42u3aQW7jMAwF0N7/0pntAIWVT1JMs3heFY5R6cmAKJP8+Ymv13/X+dffzzzd+f38+T88jX7hwsPDwxtM/TxwPt0zMhnlPG4yZzw8PLxt3tOOWt36k6U5h4R8Pudn8PDw8L6Tl8CqB+VecMLDw8P7Tl5+gK6mMM73k8M3Hh4e3ud5STLinEhNEri95GwSci7kWvDw8PBiXl5F+p6/V+p7eHh4eOOqeh4qeqWyPEXbnCceHh7eAq+6KVeP1HNYr1ULDw8Pb5uXJxR6H/wboaK3xHh4eHhzXmFLjQtm+a/VpqtmBgUPDw9vjVct5PdKX70nq6/hTa4FDw8Pb8ybJwISwK0Fan4f4OHh4V3i9TbuvAzWu5+3LJRbr/Dw8PDGvMlnfz6hasPBPJOAh4eH93letfWqeiifjFXuKcPDw8P7CC+fevX+vFkhfyV4eHh4G7x5umFSxKoGjN4RHw8PD2+DN9msk4RsNa2QTHTUpIWHh4c34FWHqZavqqWsfNGTxcLDw8Pb4+Wbcr7FVw+7eYDJU8B4eHh4G7y8cFW9Xw0Dd0cpZJTx8PDwWrzeJCbpg16SotqOgIeHh7fHq6Zl83Rqr2B2N7Tg4eHhbfDyVqfqBt2MUa1A8iZE4eHh4V3iVctO1bp8tbmqmtR4s7h4eHh4C7y8ZJUfiPMmg0kDQaGbDA8PD+8qrzrRXotAtdWgd+B+TODi4eHhXeWNEqNBwMhDy94c8PDw8O7O4VW88kPtq3VV07hvAgYeHh7eAi+/eg0EeRGr1/KVFMbw8PDwNni9YJAPnx+v81BRGB0PDw9vjddLNMwbs/JF6QUtPDw8vL/l9Z7MA8w80fB4pMbDw8P7I17eCFUtfVVbFvK54eHh4e3x5smI5pF3kDiOXhgeHh7eAi8fLL/TGz5J6eYhBw8PD2+B9w89lF6TiRFODwAAAABJRU5ErkJggg==">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/wechat.png">
+          
+          </a>
+        
+      
+        
+          <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=http://www.r1ght0us.xyz/2020/10/30/TP诸多限制条件下如何getshell/&title=TP诸多限制条件下如何getshell | R1ght0us's Blog&summary=2020_n1CTF的web题Easy_tp5复现总结
+这个题在保留thinkphp的RCE点的同时，并且RCE中ban掉许多危险函数，只能允许单参数的函数执行。对于现在在网络中流传的文件包含的点也增加了限制。
+smile yyds!">
+            
+              <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
+            
+          </a>
+        
+      
+    </div>
+  </div>
+
+
+            
+          </section>
+        
+
+        
+            <div class="prev-next">
+                
+                    <section class="prev">
+                        <span class="art-item-left">
+                            <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
+                            <h4>
+                                <a href="/2020/12/28/hello-world/" rel="prev" title="Hello World">
+                                  
+                                      Hello World
+                                  
+                                </a>
+                            </h4>
+                            
+                        </span>
+                    </section>
+                
+                
+                    <section class="next">
+                        <span class="art-item-right" aria-hidden="true">
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h4>
+                                <a href="/2020/09/16/2020天山固网杯wp/" rel="prev" title="2020天山固网杯wp">
+                                    
+                                        2020天山固网杯wp
+                                    
+                                </a>
+                            </h4>
+                            
+                                
+                                <h6 class="tags">
+                                    <a class="tag" href="/tags/比赛wp/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>比赛wp</a>
+                                </h6>
+                            
+                        </span>
+                    </section>
+                
+            </div>
+        
+
+    </section>
+
+</article>
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+<br>
+
+<!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+
+      
+        
+
+    <div class="recommended_posts">
+        <h4><i class="fas fa-bookmark fa-fw" aria-hidden="true"></i>&nbsp;相关文章</h4>
+        <ul>
+            
+                <li><a href="http://www.r1ght0us.xyz/2020/12/28/hello-world/">Hello World</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2020/09/16/2020天山固网杯wp/">2020天山固网杯wp</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2020/07/21/Thinkphp5-x-RCE复现/">Thinkphp5.x_RCE复现</a></li>
+            
+                <li><a href="http://www.r1ght0us.xyz/2020/07/13/ThinkPHP5底层代码逻辑梳理/">ThinkPHP5底层代码逻辑梳理</a></li>
+            
+        </ul>
+    </div>
+
+
+      
+
+      
+        <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+        
+        
+        
+          
+            <section id="comments">
+              <div id="valine_container" class="valine_thread">
+                <i class="fas fa-spinner fa-spin fa-fw"></i>
+              </div>
+            </section>
+          
+        
+      
+    </section>
+  </article>
+
+
+
+<script>
+    window.subData = {
+        title: 'TP诸多限制条件下如何getshell',
+        tools: true
+    }
+</script>
+
+
+        </div>
+        <aside class='l_side'>
+            
+  
+  
+    
+      
+      
+        <section class="author">
+  <div class="content pure">
+    
+      <div class="avatar">
+        <img class="avatar" src="/images/header.png">
+      </div>
+    
+    
+      <div class="text">
+        
+        
+        
+          <p><span id="jinrishici-sentence">R1ght0us's Blog</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="https://github.com/ssb6666" class="social flat-btn" target="_blank" rel="external"><i class="social fab fa-github" aria-hidden="true"></i></a>
+          
+        
+          
+            <a href="https://blog.csdn.net/qq_39495209" class="social flat-btn" target="_blank" rel="external"><i class="social fas fa-flag" aria-hidden="true"></i></a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        <section class="plain">
+  
+<header class="pure">
+  <div><i class="fas fa-bullhorn fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;</div>
+  
+</header>
+
+  <div class="content pure">
+    <p>但愿这里能让你获益颇多</p>
+
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;所有分类</div>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/categories/CTF/" href="/categories/CTF/"><div class="name">CTF</div><div class="badge">(5)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/XML注入/" href="/categories/XML注入/"><div class="name">XML注入</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/hexo/" href="/categories/hexo/"><div class="name">hexo</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/python编程/" href="/categories/python编程/"><div class="name">python编程</div><div class="badge">(6)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/代码审计/" href="/categories/代码审计/"><div class="name">代码审计</div><div class="badge">(3)</div></a></li>
+        
+          <li><a class="flat-box" title="/categories/靶场/" href="/categories/靶场/"><div class="name">靶场</div><div class="badge">(1)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="tagcloud">
+    
+<header class="pure">
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  
+</header>
+
+    <div class="content pure">
+      <a href="/tags/CRYPTO/" style="font-size: 14px; color: #999">CRYPTO</a> <a href="/tags/DVWA/" style="font-size: 14px; color: #999">DVWA</a> <a href="/tags/Git/" style="font-size: 14px; color: #999">Git</a> <a href="/tags/MISC/" style="font-size: 19px; color: #777">MISC</a> <a href="/tags/PHP/" style="font-size: 19px; color: #777">PHP</a> <a href="/tags/RCE复现/" style="font-size: 14px; color: #999">RCE复现</a> <a href="/tags/SQLinjection/" style="font-size: 16.5px; color: #888">SQLinjection</a> <a href="/tags/ThinkPHP/" style="font-size: 19px; color: #777">ThinkPHP</a> <a href="/tags/XML/" style="font-size: 14px; color: #999">XML</a> <a href="/tags/XXE/" style="font-size: 14px; color: #999">XXE</a> <a href="/tags/debug/" style="font-size: 14px; color: #999">debug</a> <a href="/tags/flask/" style="font-size: 21.5px; color: #666">flask</a> <a href="/tags/hexo常见问题/" style="font-size: 14px; color: #999">hexo常见问题</a> <a href="/tags/kali/" style="font-size: 14px; color: #999">kali</a> <a href="/tags/netcat/" style="font-size: 14px; color: #999">netcat</a> <a href="/tags/python/" style="font-size: 24px; color: #555">python</a> <a href="/tags/python3/" style="font-size: 14px; color: #999">python3</a> <a href="/tags/基础课件/" style="font-size: 14px; color: #999">基础课件</a> <a href="/tags/手动注入/" style="font-size: 14px; color: #999">手动注入</a> <a href="/tags/比赛wp/" style="font-size: 19px; color: #777">比赛wp</a> <a href="/tags/比赛复现/" style="font-size: 14px; color: #999">比赛复现</a> <a href="/tags/流量分析/" style="font-size: 14px; color: #999">流量分析</a> <a href="/tags/盲水印/" style="font-size: 14px; color: #999">盲水印</a> <a href="/tags/程序基础/" style="font-size: 14px; color: #999">程序基础</a>
+    </div>
+  </section>
+
+
+      
+    
+  
+    
+      
+      
+        <section class="list">
+  
+<header class="pure">
+  <div><i class="fas fa-link fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;友链</div>
+  
+</header>
+
+  <div class="content pure">
+    <ul class="entry">
+      
+        <li><a class="flat-box" title="http://xjusec.club" href="http://xjusec.club">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;XJUSEC_CTF
+          </div>
+          
+        </a></li>
+      
+        <li><a class="flat-box" title="http://rdd.xjusec.club" href="http://rdd.xjusec.club">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;RDD_NULL
+          </div>
+          
+        </a></li>
+      
+        <li><a class="flat-box" title="http://www.kittener.top" href="http://www.kittener.top">
+          <div class="name">
+            
+              <i class="fas fa-external-link-square fa-fw" aria-hidden="true"></i>
+            
+            &nbsp;&nbsp;KITTENERs
+          </div>
+          
+        </a></li>
+      
+    </ul>
+  </div>
+</section>
+
+      
+    
+  
+    
+      
+      
+        
+  <section class="toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章目录</div>
+  
+    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#预期解（thinkphp-library-think-Build-module）"><span class="toc-text">预期解（thinkphp\library\think\Build::module）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非预期解1（使用注释符绕过语法产生的错误）"><span class="toc-text">非预期解1（使用注释符绕过语法产生的错误）</span></a></li></ol>
+    </div>
+  </section>
+
+
+      
+    
+  
+
+
+        </aside>
+        <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+    <footer id="footer" class="clearfix">
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="https://github.com/ssb6666" class="social fab fa-github flat-btn" target="_blank" rel="external"></a>
+        
+      
+        
+          <a href="https://blog.csdn.net/qq_39495209" class="social fas fa-flag flat-btn" target="_blank" rel="external"></a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>本站使用 <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a> 作为主题，总访问量为 <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span> 次。
+  </div>
+</footer>
+
+    <script>setLoadingBarProgress(80);</script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+
+  
+    <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        const $reveal = $('.reveal');
+    		if ($reveal.length === 0) return;
+    		const sr = ScrollReveal({ distance: 0 });
+    		sr.reveal('.reveal');
+      });
+    </script>
+  
+  
+    <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        Waves.attach('.flat-btn', ['waves-button']);
+        Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+        Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+        Waves.attach('.flat-box', ['waves-block']);
+        Waves.attach('.float-box', ['waves-block', 'waves-float']);
+        Waves.attach('.waves-image');
+        Waves.init();
+      });
+    </script>
+  
+  
+    <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+  
+  
+  
+
+
+  
+  
+  
+    
+      
+      
+      
+        
+          <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+          
+            
+              <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1/js/volantis.min.js"></script>
+            
+          
+          <script>
+          var GUEST_INFO = ['nick','mail','link'];
+          var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+          });
+          var notify = '' == true;
+          var verify = '' == true;
+          var valine = new Valine();
+          valine.init({
+            el: '#valine_container',
+            notify: notify,
+            verify: verify,
+            guest_info: guest_info,
+            
+            appId: "oss58Ms641c57OCAYSuXAwDF-MdYXbMMI",
+            appKey: "oNW9OxduWTRga9cS7i1PL8Jt",
+            placeholder: "交流使人进步",
+            pageSize:'10',
+            avatar:'monsterid',
+            lang:'zh-cn',
+            highlight:''
+          })
+          </script>
+        
+      
+    
+  
+  
+    <script src="/js/app.js"></script>
+<script src="/js/search.js"></script>
+  
+
+
+
+
+
+
+    <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
